@@ -815,9 +815,15 @@ var ngLightbox = {
 	}, // findImageLinkPosition()
 
 	getNextPosition : function() {
-		var pos = ngLightbox.currentImagePosition + ngLightbox.lastMove;
-		if (pos < 0) pos = ngLightbox.allImageLinks.length - 1;
-		if (ngLightbox.allImageLinks.length <= pos) pos = 0;
+		var allImageLinks = ngLightbox.allImageLinks;
+		var firstPos = ngLightbox.currentImagePosition;
+		var href = allImageLinks[firstPos]['link'].href;
+		var pos = firstPos;
+		do {
+			pos += ngLightbox.lastMove;
+			if (pos < 0) pos = ngLightbox.allImageLinks.length - 1;
+			if (ngLightbox.allImageLinks.length <= pos) pos = 0;
+		} while (allImageLinks[pos]['link'].href == href && pos != firstPos);
 		return pos;
 	}, // getNextPosition()
 
