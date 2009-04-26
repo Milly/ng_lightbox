@@ -70,6 +70,7 @@ var ngLightbox = {
 	currentCaption : null,
 	currentExLinks : null,
 	prefetchedImage : null,
+	currentRotate : 0,
 
 	// initialized flags
 	controlsInitialized : false,
@@ -552,12 +553,14 @@ var ngLightbox = {
 		var link = ngLightbox.checkEventAndLink(event, link);
 		if (!link) return;
 
+		ngLightbox.currentImagePosition = ngLightbox.findImageLinkPosition(link);
 		ngLightbox.isShowing      = true;
 		ngLightbox.currentAddress = link.href;
 		ngLightbox.currentImage   = img || link.href;
 		ngLightbox.currentContext = context;
 		ngLightbox.currentCaption = caption || ngLightbox.makeCaption(link);
 		ngLightbox.currentExLinks = exLinks;
+		ngLightbox.currentRotate  = ngLightbox.allImageLinks[ngLightbox.currentImagePosition]['rotate'] || 0;
 		ngLightbox.initControls();
 		ngLightbox.showLightboxOverlay();
 
@@ -578,7 +581,6 @@ var ngLightbox = {
 		}
 
 		if (ngLightbox.allImageLinks.length > 1) {
-			ngLightbox.currentImagePosition = ngLightbox.findImageLinkPosition(link);
 			ngLightbox.prefetchNextImage();
 		}
 	}, // show()
@@ -588,7 +590,7 @@ var ngLightbox = {
 
 		if ('block' != objOverlay.style.display) {
 			objOverlay.style.display = 'block';
-			ngLightbox.hideOverlays();
+			ngLightbox.setOverlaysVisibility(false);
 		}
 	}, // showLightboxOverlay()
 
@@ -710,7 +712,7 @@ var ngLightbox = {
 	hide : function() {
 		ngLightbox.isShowing = false;
 		ngLightbox.stopSlideShow();
-		ngLightbox.showOverlays();
+		ngLightbox.setOverlaysVisibility(true);
 
 		var elements = [
 			'ngLightboxLoading',
@@ -783,23 +785,16 @@ var ngLightbox = {
 		return '';
 	}, // makeCaption()
 
-	// Hides flash movies that peek through the overlay
-	hideOverlays : function() {
-		var obtrusives = document.evaluate('//object|//embed|//iframe', document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+	// Show Hide flash movies that peek through the overlay
+	setOverlaysVisibility : function(visible) {
+		var visibility = visible ? 'visible' : 'hidden';
+		const xpath = '//object[not(starts-with(@id,"ngLightbox"))]|//embed|//iframe';
+		var obtrusives = document.evaluate(xpath, document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
 		for (var i = 0; i < obtrusives.snapshotLength; i++) {
 			var thisObtrusive = obtrusives.snapshotItem(i);
-			thisObtrusive.style.visibility = 'hidden';
+			thisObtrusive.style.visibility = visibility;
 		}
-	}, // hideOverlays()
-
-	// Show flash movies again
-	showOverlays : function() {
-		var obtrusives = document.evaluate('//object|//embed|//iframe', document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-		for (var i = 0; i < obtrusives.snapshotLength; i++) {
-			var thisObtrusive = obtrusives.snapshotItem(i);
-			thisObtrusive.style.visibility = 'visible';
-		}
-	},
+	}, // setOverlaysVisibility()
 
 	findImageLinkPosition : function(link) {
 		var allImageLinks = ngLightbox.allImageLinks;
@@ -848,6 +843,7 @@ var ngLightbox = {
 	resize : function(resizeByAmount, notShowImageAmount) {
 		var objLightbox = document.getElementById('ngLightboxBox');
 		var objImage    = document.getElementById('ngLightboxImage');
+		var objImageSvg = document.getElementById('ngLightboxImageSvg');
 		var view        = ngLightbox.getView();
 
 		function resizeByWidth(width) {
@@ -861,21 +857,23 @@ var ngLightbox = {
 			objImage.height = width * ngLightbox.aspectRatio;
 		}
 
+		objImage.style.display       = 'block';
+		objImageSvg.style.display    = 'none';
+
 		if (!resizeByAmount) { // default size
 			objImage.removeAttribute('width');
 			objImage.removeAttribute('height');
+			ngLightbox.rotate();
 			ngLightbox.center(objImage, { container:objLightbox, view:view });
 		} else if (resizeByAmount == '=') { // fit to screen
-			objImage.removeAttribute('width');
-			objImage.removeAttribute('height');
-			var newWidth     = objImage.width;
-			var marginHeight = objLightbox.offsetHeight - objImage.height;
-			var marginWidth  = objLightbox.offsetWidth  - objImage.width;
-			if (objImage.height > view.height - marginHeight)
-				newWidth = (view.height - marginHeight) / ngLightbox.aspectRatio;
-			if (newWidth > view.width - marginWidth)
-				newWidth = view.width - marginWidth;
+			var newWidth  = ngLightbox.originalWidth;
+			var viewSides = (ngLightbox.currentRotate % 180) ? [view.width, view.height] : [view.height, view.width];
+			if (objImage.height > viewSides[0])
+				newWidth = viewSides[0] / ngLightbox.aspectRatio;
+			if (newWidth > viewSides[1])
+				newWidth = viewSides[1];
 			resizeByWidth(newWidth);
+			ngLightbox.rotate();
 			ngLightbox.center(objLightbox, { minLeft:0, minTop:0, view:view });
 		} else { // resize by amount
 			var amount   = (resizeByAmount < 0) ? 100 / (100 - resizeByAmount) : (100 + resizeByAmount) / 100;
@@ -894,6 +892,7 @@ var ngLightbox = {
 			var centerY = screenCenterY - (objLightbox.offsetTop  + objImage.offsetTop);
 			resizeByWidth(newWidth);
 			amount = objImage.width / oldWidth;
+			ngLightbox.rotate();
 			objLightbox.style.left = (screenCenterX - objImage.offsetLeft - centerX * amount) + 'px';
 			objLightbox.style.top  = (screenCenterY - objImage.offsetTop  - centerY * amount) + 'px';
 		}
@@ -902,6 +901,49 @@ var ngLightbox = {
 			ngLightbox.showImageAmount();
 		}
 	}, // resize()
+
+	rotate : function(angle) {
+		var objImage     = document.getElementById('ngLightboxImage');
+		var objImageSvg  = document.getElementById('ngLightboxImageSvg');
+		var svgRoot      = objImageSvg.contentDocument.rootElement;
+		var svgContainer = svgRoot.getElementsByTagName('g')[0];
+		var svgImage     = svgRoot.getElementsByTagName('image')[0];
+
+		angle = (undefined === angle) ? ngLightbox.currentRotate : angle;
+		angle = (Math.round(angle / 90) * 90) % 360;
+		ngLightbox.currentRotate = angle;
+		ngLightbox.allImageLinks[ngLightbox.currentImagePosition]['rotate'] = angle;
+		if (0 == angle) {
+			objImageSvg.style.display = 'none';
+			objImage.style.display    = 'block';
+			return;
+		}
+
+		var width   = objImage.width;
+		var height  = objImage.height;
+		var sides   = (angle % 180) ? [height, width] : [width, height];
+		var rotateData = ({
+			90  : [90, height / 2, height / 2],
+			180 : [180, width / 2, height / 2],
+			270 : [270, width / 2, width / 2],
+		})[angle];
+
+		objImageSvg.style.width  = sides[0] + 'px';
+		objImageSvg.style.height = sides[1] + 'px';
+		svgContainer.setAttribute('transform', 'rotate(' + rotateData.join(',') + ')');
+		svgContainer.setAttribute('width',  sides[0]  + 'px');
+		svgContainer.setAttribute('height', sides[1] + 'px');
+		svgImage.setAttribute('width',  width  + 'px');
+		svgImage.setAttribute('height', height + 'px');
+
+		objImage.style.display    = 'none';
+		objImageSvg.style.display = 'block';
+	}, // rotate()
+
+	rotateAndResize : function(angle, resizeByAmount, notShowImageAmount) {
+		ngLightbox.currentRotate = angle;
+		ngLightbox.resize(resizeByAmount, notShowImageAmount);
+	}, // rotateAndResize()
 
 	showImageAmount : function() {
 		if (ngLightbox.animationEnabled && ngLightbox.timerEnabled) {
@@ -1243,6 +1285,7 @@ var ngLightbox = {
 							   onmouseup:listeners.imageDragEnd,
 							   onDOMMouseScroll:listeners.imageMouseScroll,
 							   onclick:ngLightbox.stopEvents } ],
+					[ 'object', { id:'ngLightboxImageSvg', data:ngLightbox.data.svgImageContainer } ],
 					[ 'div', { id:'ngLightboxLeftArrow',
 							   title:_('next'),
 							   onclick:listeners.nextButtonClick },
@@ -1335,6 +1378,11 @@ var ngLightbox = {
 						GM_openInTab(ngLightbox.currentAddress);
 						handled = true;
 						break;
+					// rotate right
+					case 'r':
+						ngLightbox.rotateAndResize((ngLightbox.currentRotate + 90) % 360, '=');
+						handled = true;
+						break;
 				} // end switch
 			}
 
@@ -1363,6 +1411,11 @@ var ngLightbox = {
 					case 40:    // <DOWN> (firefox)
 					case 63233: // <DOWN> (safari)
 						ngLightbox.imageScrollTo({ top:100, relative:true, steps:1 });
+						handled = true;
+						break;
+					// rotate left
+					case 'r':
+						ngLightbox.rotateAndResize((ngLightbox.currentRotate + 270) % 360, '=');
 						handled = true;
 						break;
 				} // end switch
@@ -1630,10 +1683,13 @@ var ngLightbox = {
 				var objLightbox = document.getElementById('ngLightboxBox');
 				var objImage    = document.getElementById('ngLightboxImage');
 				var objPreload  = document.getElementById('ngLightboxPreload');
+				var objImageSvg = document.getElementById('ngLightboxImageSvg');
+				var svgImage    = objImageSvg.contentDocument.rootElement.getElementsByTagName('image')[0];
 
 				function done() {
 					objLightbox.style.display = 'none';
 					objImage.src = ngLightbox.currentImage;
+					svgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', ngLightbox.currentImage);
 					objPreload.removeAttribute('src');
 				}
 
@@ -1698,7 +1754,8 @@ var ngLightbox = {
 				objImage.removeAttribute('height');
 
 				objLightbox.style.visibility = 'hidden';
-				objLightbox.style.display = 'block';
+				objLightbox.style.display    = 'block';
+				objImage.style.display       = 'block';
 
 				ngLightbox.aspectRatio    = objImage.height / objImage.width;
 				ngLightbox.originalHeight = objImage.height;
@@ -1870,6 +1927,17 @@ ngLightbox.data = {
 		'Jh62gftM3X96RhoX6mzOCEnaLyGVT1MO7X3WOJx7yxkJ9ft99fSpxqK/jyb0+jW8KT3T4FPOhV6v',
 		'NziXT+pSPKH3H6XuPkgdspBIyblGy0QVkpuJjEiJkBawiSb0okXA27ebqEJC95FGxy6iCS3Vaz9D',
 		'QfyfQkvROnyngkkENVef5TMVTOLP+PELLJ+AmbEcGlQAAAAASUVORK5CYII='
+	].join(''),
+
+	svgImageContainer : [
+		'data:image/svg+xml,',
+		'<?xml version="1.0" standalone="no"?>',
+		'<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
+		'<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">',
+		'<g transform="rotate(0,0,0)">',
+		'<image x="0" y="0" xlink:href="" />',
+		'</g>',
+		'</svg>'
 	].join('')
 
 } // ngLightbox.data
