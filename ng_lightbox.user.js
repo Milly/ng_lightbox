@@ -1242,10 +1242,11 @@ var ngLightbox = {
 		var listeners = ngLightbox.eventListeners;
 		build([ document.body, {},
 			[ 'div', { id:'ngLightboxOverlay',
-					   onclick:function() { ngLightbox.hide(); },
+					   onclick:ngLightbox.hide,
 					   onmousemove:listeners.imageDragMove },
 				[ 'div', { id:'ngLightboxBackground' } ],
-				[ 'div', { id:'ngLightboxMenu', onclick:ngLightbox.stopEvents },
+				[ 'div', { id:'ngLightboxMenu',
+						   onclick:listeners.menuBarClick },
 					[ 'div', { id:'ngLightboxCaption' } ],
 					[ 'div', { id:'ngLightboxButtons' },
 						[ 'a', { id:'ngLightboxButtonPlus',
@@ -1268,8 +1269,7 @@ var ngLightbox = {
 								 title:_('previous'),
 								 onclick:listeners.previousButtonClick }, '\u2192' ],
 						'\u00a0\u00a0', // &nbsp;&nbsp;
-						[ 'a', { id:'ngLightboxButtonContext',
-								 onclick:listeners.contextButtonClick }, _('context') ] ],
+						[ 'a', { id:'ngLightboxButtonContext' }, _('context') ] ],
 					[ 'div', { id:'ngLightboxExButtons' } ] ],
 				[ 'div', { id:'ngLightboxLoading' },
 					[ 'img', { src:ngLightbox.data.loadingIcon } ],
@@ -1581,16 +1581,21 @@ var ngLightbox = {
 			ngLightbox.toggleSlideShow();
 		}, // slideShowButtonClick()
 
-		contextButtonClick : function(event) {
+		menuBarClick : function(event) {
 			ngLightbox.stopEvents(event);
-			ngLightbox.stopSlideShow();
-			if (event.ctrlKey) {
-				event.target.blur();
-				GM_openInTab(event.target.href);
-			} else {
-				window.location.href = event.target.href;
+			event.target.blur();
+
+			// open link, if exists href attribute
+			if ('A' == event.target.nodeName.toUpperCase()
+					&& event.target.getAttribute('href')) {
+				ngLightbox.stopSlideShow();
+				if (event.ctrlKey) {
+					GM_openInTab(event.target.href);
+				} else {
+					window.location.href = event.target.href;
+				}
 			}
-		}, // contextButtonClick()
+		}, // menuBarClick()
 
 		// Start image dragging.
 		imageDragStart : function(event) {
