@@ -1349,6 +1349,8 @@ var ngLightbox = {
 		captureKeypress : function(event) {
 			if (!ngLightbox.isShowing || event.altKey) return true;
 
+			const HANDLED        = 1;
+			const STOP_SLIDESHOW = 2;
 			var handled = false;
 			var charcode = event.which;
 			var key = String.fromCharCode(charcode).toLowerCase();
@@ -1361,35 +1363,35 @@ var ngLightbox = {
 					case 37:    // <LEFT> (firefox)
 					case 63234: // <LEFT> (safari)
 						ngLightbox.imageScrollTo({ left:100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to view right
 					case 39:    // <RIGHT> (firefox)
 					case 63235: // <RIGHT> (safari)
 						ngLightbox.imageScrollTo({ left:-100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to view up
 					case 38:    // <UP> (firefox)
 					case 63232: // <UP> (safari)
 						ngLightbox.imageScrollTo({ top:100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to view down
 					case 40:    // <DOWN> (firefox)
 					case 63233: // <DOWN> (safari)
 						ngLightbox.imageScrollTo({ top:-100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// open original page
 					case 13:    // <ENTER>
 						GM_openInTab(ngLightbox.currentAddress);
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// rotate right
 					case 'r':
 						ngLightbox.rotateAndResize(90, '=', true);
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 				} // end switch
 			}
@@ -1401,30 +1403,30 @@ var ngLightbox = {
 					case 37:    // <LEFT> (firefox)
 					case 63234: // <LEFT> (safari)
 						ngLightbox.imageScrollTo({ left:-100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to image right
 					case 39:    // <RIGHT> (firefox)
 					case 63235: // <RIGHT> (safari)
 						ngLightbox.imageScrollTo({ left:100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to image up
 					case 38:    // <UP> (firefox)
 					case 63232: // <UP> (safari)
 						ngLightbox.imageScrollTo({ top:-100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to image down
 					case 40:    // <DOWN> (firefox)
 					case 63233: // <DOWN> (safari)
 						ngLightbox.imageScrollTo({ top:100, relative:true, steps:1 });
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// rotate left
 					case 'r':
 						ngLightbox.rotateAndResize(-90, '=', true);
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 				} // end switch
 			}
@@ -1435,12 +1437,10 @@ var ngLightbox = {
 					// close lightbox
 					case 'x':
 					case 27:    // <ESC>
-						if (ngLightbox.isSlideShow) {
-							ngLightbox.stopSlideShow();
-						} else {
+						if (!ngLightbox.isSlideShow) {
 							ngLightbox.hide();
 						}
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// increase size
 					case '+':
@@ -1448,87 +1448,85 @@ var ngLightbox = {
 					case ';':   // '+' key without shift at japanese K/B
 					case 38:    // <UP> (firefox)
 					case 63232: // <UP> (safari)
-						ngLightbox.stopSlideShow();
 						ngLightbox.resize(15);
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// decrease size
 					case '-':
 					case 40:    // <DOWN> (firefox)
 					case 63233: // <DOWN> (safari)
-						ngLightbox.stopSlideShow();
 						ngLightbox.resize(-15);
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// set to screen fit size
 					case '0':
-						ngLightbox.stopSlideShow();
 						ngLightbox.resize('=');
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// set to default size
 					case '1':
-						ngLightbox.stopSlideShow();
 						ngLightbox.resize();
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to next
 					case 'n':
 					case 37:    // <LEFT> (firefox)
 					case 63234: // <LEFT> (safari)
-						ngLightbox.stopSlideShow();
 						ngLightbox.showNext(-1);
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to previous
 					case 'p':
 					case 39:    // <RIGHT> (firefox)
 					case 63235: // <RIGHT> (safari)
-						ngLightbox.stopSlideShow();
 						ngLightbox.showNext(1);
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to last direction
 					case ' ':   // <SPACE>
-						ngLightbox.stopSlideShow();
 						ngLightbox.showNext();
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// start or stop slide show
 					case 's':
 						ngLightbox.toggleSlideShow();
-						handled = true;
+						handled = HANDLED;
 						break;
 					// move to image top or left
 					case 36:    // <HOME>
 						ngLightbox.imageScrollTo('head');
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to image bottom or right
 					case 35:    // <END>
 						ngLightbox.imageScrollTo('last');
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to image up or left
 					case 33:    // <PAGEUP>
 						ngLightbox.imageScrollTo('down');
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// move to image down or right
 					case 34:    // <PAGEDOWN>
 						ngLightbox.imageScrollTo('up');
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 					// open original page
 					case 13:    // <ENTER>
 						window.location.href = ngLightbox.currentAddress;
-						handled = true;
+						handled = STOP_SLIDESHOW;
 						break;
 				}
 			}
 
-			if (handled) ngLightbox.stopEvents(event);
-			return handled;
+			if (handled) {
+				if (STOP_SLIDESHOW == handled)
+					ngLightbox.stopSlideShow();
+				ngLightbox.stopEvents(event);
+				return true;
+			}
+			return false;
 		}, // captureKeypress()
 
 		// Handle global mouse click.
