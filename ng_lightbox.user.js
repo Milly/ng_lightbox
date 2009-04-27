@@ -1260,6 +1260,12 @@ var ngLightbox = {
 						[ 'a', { id:'ngLightboxButtonDefaultSize',
 								 title:_('defaultSize'),
 								 onclick:listeners.defaultSizeButtonClick }, '1:1' ],
+						[ 'a', { id:'ngLightboxButtonRotateLeft',
+								 title:_('rotateLeft'),
+								 onclick:listeners.rotateLeftButtonClick }, '\u21ba' ],
+						[ 'a', { id:'ngLightboxButtonRotateRight',
+								 title:_('rotateRight'),
+								 onclick:listeners.rotateRightButtonClick }, '\u21bb' ],
 						'\u00a0\u00a0', // &nbsp;&nbsp;
 						[ 'a', { id:'ngLightboxButtonLeft',
 								 title:_('next'),
@@ -1565,6 +1571,18 @@ var ngLightbox = {
 			ngLightbox.stopSlideShow();
 			ngLightbox.resize(0);
 		}, // defaultSizeButtonClick()
+
+		rotateLeftButtonClick : function(event) {
+			ngLightbox.stopEvents(event);
+			ngLightbox.stopSlideShow();
+			ngLightbox.rotateAndResize(-90, '=', true);
+		}, // rotateLeftButtonClick()
+
+		rotateRightButtonClick : function(event) {
+			ngLightbox.stopEvents(event);
+			ngLightbox.stopSlideShow();
+			ngLightbox.rotateAndResize(90, '=', true);
+		}, // rotateRightButtonClick()
 
 		nextButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
@@ -1964,6 +1982,8 @@ ngLightbox.text = {
 			shrink			: "Shrink image (- key)",
 			defaultSize		: "Shown at actual size (1 key)",
 			fitToScreen		: "Fit to screen (= key)",
+			rotateLeft		: "Rotate left (<CTRL>+<SHIFT>+R)",
+			rotateRight		: "Rotate right (<CTRL>+R)",
 			update			: "Update available",
 			slideshow		: "Start/stop slideshow"
 		}
@@ -2110,6 +2130,8 @@ ngLightbox.text = {
 			shrink			: "\u753B\u50CF\u3092\u7E2E\u5C0F (-)",
 			defaultSize		: "\u5b9f\u30b5\u30a4\u30ba\u3067\u8868\u793a (1)",
 			fitToScreen		: "\u753b\u9762\u306b\u53ce\u3081\u308b (=)",
+			rotateLeft		: "\u5de6\u56de\u8ee2 (<CTRL>+<SHIFT>+R)",
+			rotateRight		: "\u53f3\u56de\u8ee2 (<CTRL>+R)",
 			update			: "\u65B0\u3057\u3044\u66F4\u65B0\u304C\u3042\u308A\u307E\u3059",
 			slideshow		: "\u30B9\u30E9\u30A4\u30C9\u30B7\u30E7\u30FC\u3092\u958B\u59CB\u002F\u505C\u6B62"
 		}
@@ -2223,6 +2245,8 @@ ngLightbox.text = {
 			previous		: "",
 			magnify			: "",
 			shrink			: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			update			: "",
 			slideshow		: ""
 		}
