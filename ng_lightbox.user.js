@@ -1464,16 +1464,16 @@ var ngLightbox = {
 						ngLightbox.resize();
 						handled = true;
 						break;
-					// move to previous
-					case 'p':
+					// move to next
+					case 'n':
 					case 37:    // <LEFT> (firefox)
 					case 63234: // <LEFT> (safari)
 						ngLightbox.stopSlideShow();
 						ngLightbox.showNext(-1);
 						handled = true;
 						break;
-					// move to next
-					case 'n':
+					// move to previous
+					case 'p':
 					case 39:    // <RIGHT> (firefox)
 					case 63235: // <RIGHT> (safari)
 						ngLightbox.stopSlideShow();
