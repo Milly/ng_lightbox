@@ -868,7 +868,7 @@ var ngLightbox = {
 		} else if (resizeByAmount == '=') { // fit to screen
 			var newWidth  = ngLightbox.originalWidth;
 			var viewSides = (ngLightbox.currentRotate % 180) ? [view.width, view.height] : [view.height, view.width];
-			if (objImage.height > viewSides[0])
+			if (ngLightbox.originalHeight > viewSides[0])
 				newWidth = viewSides[0] / ngLightbox.aspectRatio;
 			if (newWidth > viewSides[1])
 				newWidth = viewSides[1];
