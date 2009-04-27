@@ -1984,7 +1984,6 @@ ngLightbox.text = {
 			fitToScreen		: "Fit to screen (= key)",
 			rotateLeft		: "Rotate left (<CTRL>+<SHIFT>+R)",
 			rotateRight		: "Rotate right (<CTRL>+R)",
-			update			: "Update available",
 			slideshow		: "Start/stop slideshow"
 		}
 	], // english
@@ -2000,7 +1999,10 @@ ngLightbox.text = {
 			previous		: "Anterior imagen (tecla izquierda)",
 			magnify			: "Aumentar imagen (tecla +)",
 			shrink			: "Reducir imagen (tecla -)",
-			update			: "Actualizaci\u00f3n disponible",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: ""
 		}
 	], // spanish
@@ -2016,7 +2018,10 @@ ngLightbox.text = {
 			previous		: "Imagem anterior (tecle na seta da esquerda)",
 			magnify			: "Aumente o zoom (tecle +)",
 			shrink			: "Diminua o zoom (tecle -)",
-			update			: "Atualiza\u00e7\u00e3o dispon\u00edvel",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "Iniciar/cancelar apresenta\u00e7\u00e3o"
 		}
 	], // portuguese
@@ -2032,7 +2037,10 @@ ngLightbox.text = {
 			previous		: "Vorheriges Bild (Pfeil links)",
 			magnify			: "Bild vergr\u00f6\u00dfern (+ Taste)",
 			shrink			: "Bild verkleinern (- Taste)",
-			update			: "Aktualisierung verf\u00fcgbar",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "Diashow starten/beenden"
 		}
 	], // german
@@ -2048,7 +2056,10 @@ ngLightbox.text = {
 			previous		: "Image précédente (Touche fléche gauche)",
 			magnify			: "Agrandir l'image (Touche +)",
 			shrink			: "Reduire l'image (Touche -)",
-			update			: "Mise \u00e0 jour disponible",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: ""
 		}
 	], // french
@@ -2064,7 +2075,10 @@ ngLightbox.text = {
 			previous		: "Vorig plaatje (linker pijltjestoets)",
 			magnify			: "Vergoot plaatje (+ toets)",
 			shrink			: "Verklein plaatje (- toets)",
-			update			: "Update beschikbaar",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "Start/stop diavoorstelling"
 		}
 	], // dutch
@@ -2080,7 +2094,10 @@ ngLightbox.text = {
 			previous		: "Precedente (tasto freccia a sinistra)",
 			magnify			: "Ingrandisci (tasto +)",
 			shrink			: "Riduci zoom (tasto -)",
-			update			: "Aggiornamento disponibile",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "Avvia/ferma presentazione"
 		}
 	], // italian
@@ -2096,7 +2113,10 @@ ngLightbox.text = {
 			previous		: "El\u0150z\u0150 k\u00E9p (balra gomb)",
 			magnify			: "Nagy\u00EDt\u00E1s (+ gomb)",
 			shrink			: "Kicsiny\u00EDt\u00E9s (- gomb)",
-			update			: "El\u00E9rhet\u0150 az \u00FAjabb verzi\u00F3",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: ""
 		}
 	], // hungarian
@@ -2112,7 +2132,10 @@ ngLightbox.text = {
 			previous 		: "Edellinen kuva (vasen nuolin\u00e4pp\u00e4in)",
 			magnify  		: "Suurenna kuvaa (+ n\u00e4pp\u00e4in)",
 			shrink   		: "Pienenn\u00e4 kuvaa (- n\u00e4pp\u00e4in)",
-			update   		: "P\u00e4ivitys saatavilla",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "K\u00e4ynnist\u00e4/Pys\u00e4yt\u00e4 dia esitys"
 	  }
 	], // finnish
@@ -2132,7 +2155,6 @@ ngLightbox.text = {
 			fitToScreen		: "\u753b\u9762\u306b\u53ce\u3081\u308b (=)",
 			rotateLeft		: "\u5de6\u56de\u8ee2 (<CTRL>+<SHIFT>+R)",
 			rotateRight		: "\u53f3\u56de\u8ee2 (<CTRL>+R)",
-			update			: "\u65B0\u3057\u3044\u66F4\u65B0\u304C\u3042\u308A\u307E\u3059",
 			slideshow		: "\u30B9\u30E9\u30A4\u30C9\u30B7\u30E7\u30FC\u3092\u958B\u59CB\u002F\u505C\u6B62"
 		}
 	], // japanese
@@ -2148,7 +2170,10 @@ ngLightbox.text = {
 			previous		: "\u524D\u4E00\u4E2A\u56FE\u7247 (\u56FE\u7247)",
 			magnify			: "\u653E\u5927\u56FE\u7247 (+\u952E)",
 			shrink			: "\u7F29\u5C0F\u56FE\u7247 (-\u952E)",
-			update			: "\u53EF\u63D0\u4F9B\u66F4\u65B0",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: ""
 		}
 	], // chinese (simplified)
@@ -2164,7 +2189,10 @@ ngLightbox.text = {
 			previous		: "\u4E0A\u4E00\u5F35\u5716 (\u5DE6\u9375)",
 			magnify			: "\u653E\u5927\u5716\u7247 (+\u9375)",
 			shrink			: "\u7E2E\u5C0F\u5716\u7247 (-\u9375)",
-			update			: "\u6709\u66F4\u65B0\u7248\u672C",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "\u958B\u59CB/\u505C\u6B62\u5FAA\u5E8F\u64AD\u653E"
 		}
 	], // chinese (traditional)
@@ -2180,7 +2208,10 @@ ngLightbox.text = {
 			previous		: "Poprzedni obraz (klawisz \u2190)",
 			magnify			: "Powi\u0119ksz obraz (klawisz +)",
 			shrink			: "Zmniejsz obraz (klawisz -)",
-			update			: "Dost\u0119pna nowa wersja",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "Uruchom/zatrzymaj pokaz slajd\u00F3w"
 		}
 	], // polish
@@ -2196,7 +2227,10 @@ ngLightbox.text = {
 			previous		: "P\u0159edchoz\u00ed obr\u00E1zek (\u0161ipka doleva)",
 			magnify			: "P\u0159ibl\u00ed\u017eit obr\u00E1zek (kl\u00E1vesa +)",
 			shrink			: "Odd\u00E1lit obr\u00E1zek (kl\u00E1vesa -)",
-			update			: "Je dostupn\u00E1 aktualizace",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "Spustit/zastavit slideshow"
 		}
 	], // czech
@@ -2212,7 +2246,10 @@ ngLightbox.text = {
 			previous		: "Predch\u00E1dzaj\u00faci obr\u00E1zok (\u0161\u00edpka do\u013eava)",
 			magnify			: "Pribl\u00ed\u017ei\u0165 obr\u00E1zok (kl\u00E1vesa +)",
 			shrink			: "Oddiali\u0165 obr\u00E1zok (kl\u00E1vesa -)",
-			update			: "Je dostupn\u00E1 aktualiz\u00E1cia",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: ""
 		}
 	], // slovak
@@ -2228,7 +2265,10 @@ ngLightbox.text = {
 			previous		: "F\u00f6reg\u00e5ende bild (v\u00e4nster piltangent)",
 			magnify			: "F\u00f6rstora bild (+ tangent)",
 			shrink			: "F\u00f6rminska bild (- tangent)",
-			update			: "Ny uppdatering tillg\u00e4nglig",
+			defaultSize		: "",
+			fitToScreen		: "",
+			rotateLeft		: "",
+			rotateRight		: "",
 			slideshow		: "Starta/stoppa bildspel"
 		}
 	], // swedish
@@ -2245,9 +2285,10 @@ ngLightbox.text = {
 			previous		: "",
 			magnify			: "",
 			shrink			: "",
+			defaultSize		: "",
+			fitToScreen		: "",
 			rotateLeft		: "",
 			rotateRight		: "",
-			update			: "",
 			slideshow		: ""
 		}
 	], // lang
