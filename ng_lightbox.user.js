@@ -909,8 +909,10 @@ var ngLightbox = {
 		var svgContainer = svgRoot.getElementsByTagName('g')[0];
 		var svgImage     = svgRoot.getElementsByTagName('image')[0];
 
-		angle = (undefined === angle) ? ngLightbox.currentRotate : angle;
-		angle = (Math.round(angle / 90) * 90) % 360;
+		// adjust to 0, 90, 180, 270
+		angle = ngLightbox.currentRotate + (angle || 0);
+		angle = (Math.round((angle) / 90) * 90) % 360;
+		if (angle < 0) angle += 360;
 		ngLightbox.currentRotate = angle;
 		ngLightbox.allImageLinks[ngLightbox.currentImagePosition]['rotate'] = angle;
 		if (0 == angle) {
@@ -941,7 +943,7 @@ var ngLightbox = {
 	}, // rotate()
 
 	rotateAndResize : function(angle, resizeByAmount, notShowImageAmount) {
-		ngLightbox.currentRotate = angle;
+		ngLightbox.currentRotate += angle;
 		ngLightbox.resize(resizeByAmount, notShowImageAmount);
 	}, // rotateAndResize()
 
@@ -1380,7 +1382,7 @@ var ngLightbox = {
 						break;
 					// rotate right
 					case 'r':
-						ngLightbox.rotateAndResize((ngLightbox.currentRotate + 90) % 360, '=');
+						ngLightbox.rotateAndResize(90, '=', true);
 						handled = true;
 						break;
 				} // end switch
@@ -1415,7 +1417,7 @@ var ngLightbox = {
 						break;
 					// rotate left
 					case 'r':
-						ngLightbox.rotateAndResize((ngLightbox.currentRotate + 270) % 360, '=');
+						ngLightbox.rotateAndResize(-90, '=', true);
 						handled = true;
 						break;
 				} // end switch
