@@ -1239,9 +1239,19 @@ var ngLightbox = {
 				}
 			}
 			return element;
-		}
-		
+		} // build()
+
 		var listeners = ngLightbox.eventListeners;
+
+		function svgContainerLoaded(event) {
+			// add events to svg
+			var svgRoot = event.target.contentDocument.rootElement;
+			build([svgRoot, { onmousedown:listeners.imageDragStart,
+							  onmouseup:listeners.imageDragEnd,
+							  onmousemove:listeners.imageDragMove,
+							  onDOMMouseScroll:listeners.imageMouseScroll } ]);
+		} // svgContainerLoaded()
+
 		build([ document.body, {},
 			[ 'div', { id:'ngLightboxOverlay',
 					   onclick:ngLightbox.hide,
@@ -1293,7 +1303,9 @@ var ngLightbox = {
 							   onmouseup:listeners.imageDragEnd,
 							   onDOMMouseScroll:listeners.imageMouseScroll,
 							   onclick:ngLightbox.stopEvents } ],
-					[ 'object', { id:'ngLightboxImageSvg', data:ngLightbox.data.svgImageContainer } ],
+					[ 'object', { id:'ngLightboxImageSvg',
+								  data:ngLightbox.data.svgImageContainer,
+								  onload:svgContainerLoaded } ],
 					[ 'div', { id:'ngLightboxLeftArrow',
 							   title:_('next'),
 							   onclick:listeners.nextButtonClick },
@@ -1629,8 +1641,8 @@ var ngLightbox = {
 			var objLightbox = document.getElementById('ngLightboxBox');
 			var objImage    = document.getElementById('ngLightboxImage');
 			var view        = ngLightbox.getView();
-			var pageX = event.pageX || (view.left + event.clientX);
-			var pageY = event.pageY || (view.top  + event.clientY);
+			var pageX = view.left + (event.screenX || event.clientX);
+			var pageY = view.top  + (event.screenY || event.clientY);
 			var offset = ngLightbox.getElementOffset(objLightbox);
 			ngLightbox.dragData = {
 				X : pageX - offset.left,
@@ -1667,8 +1679,8 @@ var ngLightbox = {
 
 			var objLightbox = document.getElementById('ngLightboxBox');
 			var view = ngLightbox.getView();
-			var pageX = event.pageX || (view.left + event.clientX);
-			var pageY = event.pageY || (view.top  + event.clientY);
+			var pageX = view.left + (event.screenX || event.clientX);
+			var pageY = view.top  + (event.screenY || event.clientY);
 			var dragData = ngLightbox.dragData;
 			if (ngLightbox.isDragMoved || 2 < Math.abs(dragData.pageX - pageX) || 2 < Math.abs(dragData.pageY - pageY)) {
 				objLightbox.style.left = (pageX - dragData.X) + 'px';
