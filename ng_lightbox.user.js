@@ -1270,6 +1270,9 @@ var ngLightbox = {
 						[ 'a', { id:'ngLightboxButtonDefaultSize',
 								 title:_('defaultSize'),
 								 onclick:listeners.defaultSizeButtonClick }, '1:1' ],
+						[ 'a', { id:'ngLightboxButtonFitToScreen',
+								 title:_('fitToScreen'),
+								 onclick:listeners.fitToScreenButtonClick }, '\u2750' ],
 						[ 'a', { id:'ngLightboxButtonRotateLeft',
 								 title:_('rotateLeft'),
 								 onclick:listeners.rotateLeftButtonClick }, '\u21ba' ],
@@ -1282,7 +1285,9 @@ var ngLightbox = {
 								 onclick:listeners.nextButtonClick }, '\u2190' ],
 						[ 'a', { id:'ngLightboxButtonSlide',
 								 title:_('slideshow'),
-								 onclick:listeners.slideShowButtonClick }, '\u3000' ],
+								 onclick:listeners.slideShowButtonClick },
+							[ 'span', { id:'ngLightboxSlideStart' }, '\u25b6' ],
+							[ 'span', { id:'ngLightboxSlideStop' }, '\u25ae\u25ae' ] ],
 						[ 'a', { id:'ngLightboxButtonRight',
 								 title:_('previous'),
 								 onclick:listeners.previousButtonClick }, '\u2192' ],
@@ -1582,6 +1587,12 @@ var ngLightbox = {
 			ngLightbox.resize(0);
 		}, // defaultSizeButtonClick()
 
+		fitToScreenButtonClick : function(event) {
+			ngLightbox.stopEvents(event);
+			ngLightbox.stopSlideShow();
+			ngLightbox.resize('=');
+		}, // fitToScreenButtonClick()
+
 		rotateLeftButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
@@ -1826,11 +1837,13 @@ ngLightbox.data = {
 		'.ngLightboxSlideShow #ngLightboxMenu { opacity:0; }',
 		'#ngLightboxMenu:hover { bottom:0; opacity:0.9; }',
 		'#ngLightboxCaption { width:100%; height:18px; line-height:18px; font-size:12px; z-index:10000400; overflow:hidden; text-align:center; color:#aaa; white-space:nowrap; }',
-		'#ngLightboxButtons, #ngLightboxExButtons { display:inline-block; height:35px; line-height:33px; z-index:10000400; font-size:14px; font-weight:bold; }',
+		'#ngLightboxButtons, #ngLightboxExButtons { display:inline-block; height:35px; line-height:33px; z-index:10000400; }',
+		'#ngLightboxButtons { font-size:18px; }',
+		'#ngLightboxExButtons, #ngLightboxButtonContext { font-size:14px; }',
 		'#ngLightboxButtons a, #ngLightboxExButtons a { display:inline-block; min-width:33px; height:33px; border:1px solid #000; -moz-border-radius:5px; cursor:pointer; text-align:center; color:#aaa; text-decoration:none; z-index:10000450; }',
 		'#ngLightboxButtons a:hover, #ngLightboxExButtons a:hover { border-color:orange; background-color:#333; color:#fff; }',
-		'a#ngLightboxButtonSlide { background:url("$startIcon$") no-repeat center center; }',
-		'.ngLightboxSlideShow a#ngLightboxButtonSlide { background-image:url("$stopIcon$"); }',
+		'#ngLightboxSlideStop, .ngLightboxSlideShow #ngLightboxSlideStart { display: none; }',
+		'.ngLightboxSlideShow #ngLightboxSlideStop { display: inline; }',
 		'a#ngLightboxButtonContext, #ngLightboxExButtons a { padding:0 0.5em; }',
 		'#ngLightboxLoading { position:fixed; z-index:10000070; background-color:#000; color:#fff; padding:10px; border:1px solid #444; -moz-border-radius:10px; font-weight:bold; font-family:"Trebuchet MS", Tahoma, Arial, Verdana, sans-serif; text-align:center; line-height:2em; opacity:0.8; }',
 		'#ngLightboxLoading img { width:64px; height:64px; }',
@@ -1853,21 +1866,6 @@ ngLightbox.data = {
 		'#ngLightboxRightArrow .ngLightboxArrowTip { border-left-color:#fff; border-right-width:0; }',
 		'#ngLightboxBox, #ngLightboxOverlay, #ngLightboxError, #ngLightboxLoading, #ngLightboxSize, #ngLightboxPreload, #ngLightboxPrefetch, a#ngLightboxButtonSlide { display:none; }',
 		'a[rel$="ngLightbox"] { cursor:url("$lightboxCursor$") 5 0, auto !important; }'
-	].join(''),
-
-	// Start slideshow icon.
-	startIcon : [
-		'data:image/png;base64,',
-		'iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAP0lEQVQoz2P4//8/AxD7QGmCGMYA',
-		'gYfEaETW8J8Yjdg04NWITwNWjcRogIFlII000UC0k4j2NNHBSlLEEZ00AOqj7BL9AOsSAAAAAElF',
-		'TkSuQmCC'
-	].join(''),
-
-	// Stop slideshow icon.
-	stopIcon : [
-		'data:image/png;base64,',
-		'iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAIElEQVQoz2NgIAf8//+fKIyuARlg',
-		'FRvVQBcNxEccKQAAf6hatK6diA0AAAAASUVORK5CYII='
 	].join(''),
 
 	// Loading animation icon.
