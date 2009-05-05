@@ -857,8 +857,8 @@ var ngLightbox = {
 			objImage.height = width * ngLightbox.aspectRatio;
 		}
 
-		objImage.style.display       = 'block';
-		objImageSvg.style.display    = 'none';
+		objImage.style.display = 'block';
+		objImageSvg.style.display = 'none';
 
 		if (!resizeByAmount) { // default size
 			objImage.removeAttribute('width');
@@ -903,11 +903,12 @@ var ngLightbox = {
 	}, // resize()
 
 	rotate : function(angle) {
-		var objImage     = document.getElementById('ngLightboxImage');
 		var objImageSvg  = document.getElementById('ngLightboxImageSvg');
+		if (!objImageSvg.contentDocument) return;
 		var svgRoot      = objImageSvg.contentDocument.rootElement;
 		var svgContainer = svgRoot.getElementsByTagName('g')[0];
 		var svgImage     = svgRoot.getElementsByTagName('image')[0];
+		var objImage     = document.getElementById('ngLightboxImage');
 
 		// adjust to 0, 90, 180, 270
 		angle = ngLightbox.currentRotate + (angle || 0);
@@ -1730,12 +1731,14 @@ var ngLightbox = {
 				var objImage    = document.getElementById('ngLightboxImage');
 				var objPreload  = document.getElementById('ngLightboxPreload');
 				var objImageSvg = document.getElementById('ngLightboxImageSvg');
-				var svgImage    = objImageSvg.contentDocument.rootElement.getElementsByTagName('image')[0];
+				if (objImageSvg.contentDocument)
+					var svgImage = objImageSvg.contentDocument.rootElement.getElementsByTagName('image')[0];
 
 				function done() {
 					objLightbox.style.display = 'none';
 					objImage.src = ngLightbox.currentImage;
-					svgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', ngLightbox.currentImage);
+					if (svgImage)
+						svgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', ngLightbox.currentImage);
 					objPreload.removeAttribute('src');
 				}
 
