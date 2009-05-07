@@ -1708,8 +1708,8 @@ var ngLightbox = {
 		imageMouseScroll : function(event) {
 			if (ngLightbox.isShowing) {
 				ngLightbox.stopEvents(event);
-				var wheel = (event.detail / 3) || (event.wheelDelta / 120);
-				ngLightbox.resize((wheel < 0) ? -15 : 15);
+				var wheel = (-event.detail) || (event.wheelDelta / 40);
+				ngLightbox.resize(wheel);
 				return false;
 			}
 			return true;
