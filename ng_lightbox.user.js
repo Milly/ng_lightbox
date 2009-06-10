@@ -109,252 +109,6 @@ var ngLightbox = {
 	// initialized by init().
 	searchDefsToUse : [],
 
-	// searchDefs stores regular expressions used to find and execute functions for image links within the page.
-	// these are executed in the order that they appear.
-	//
-	// name = self-explanitory, must be unique (used for internal references)
-	// includeRegExp = regular expression that window.location.href needs to match
-	// linkRegExp = regular expression that link must match
-	// excludeLinkRegExp = regular expression that link must not match
-	// findImageRegExp = regular expression that image must match for replaceString
-	// replaceString = replace string used with findRegExp (required with findImageRegExp, optional with linkRegExp)
-	// showFunction = function that is called when link is clicked
-	//
-	// for links that reveal larger images use name, includeRegExp, linkRegExp, and showfunction(replaceString and excludeLinkRegExp are optional)
-	// for images that reveal larger images use name, includeRegExp, linkRegExp, findImageRegExp, replaceString, and showfunction(excludeLinkRegExp is optional)
-	searchDefs : [
-		// wikipedia (needs to come before 'show')
-		{
-			name				: 'wikipedia',
-			includeRegExp		: /^https?:\/\/(.*?\.)?wikipedia\.org/i,
-			linkRegExp			: /.*?\/(Fi(le?|xter|txategi|gura|n?ch(ier|eiro))|Fa(il|sciculus)|Dat(oteka|ei)|Delwedd|Dosiero|Be(stand|rkas)|Billede|Skeudenn|Soubor|Slika|Pilt|Archivo|Mynd|Vaizdas|Tiedosto|Larawan|Resim|%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB|%ED%8C%8C%EC%9D%BC|%D7%A7%D7%95%D7%91%D7%A5):.*\.(jpe?g|gif|png)$/i,
-			findImageRegExp		: /(.+?)\/thumb\/(.+?)\.(jpe?g|gif|png).*$/i,
-			replaceString		: '$1/$2.$3',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'wikipedia'); return false; }
-		}, // wikipedia
-
-		// imagesocket (needs to come before 'show')
-		{
-			name				: 'imagesocket',
-			includeRegExp		: /./, // used on every page
-			linkRegExp			: /^(https?:\/\/)(.*?\.)?imagesocket\.com\/(view|thumbs)\/(.*?\.(jpe?g|gif|png))$/i,
-			replaceString		: '$1content.imagesocket.com/images/$4',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'imagesocket'); return false; }
-		}, // imagesocket
-
-		// imagesocket site (needs to come before 'show')
-		{
-			name				: 'imagesocketSite',
-			includeRegExp		: /^https?:\/\/(.*?\.)?imagesocket\.com/i,
-			linkRegExp			: /^\/view\/(.*?\.(jpe?g|gif|png))$/i,
-			replaceString		: 'http://content.imagesocket.com/images/$1',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'imagesocketSite'); return false; }
-		}, // imagesocket site
-
-		// blogger/blogspot (needs to come before 'show')
-		{
-			name				: 'blogger',
-			includeRegExp		: /^https?:\/\/(.*?\.)?blog(ger|spot)\.com/i,
-			linkRegExp			: /^(https?:\/\/.*?\.blogger\.com\/.*?\/.*?\/.*?\/.*?)\/.*?-h(\/.*?\.(jpe?g|gif|png))$/i,
-			replaceString		: '$1$2',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'blogger'); return false; }
-		}, // blogger/blogspot
-
-		// regular links to images
-		{
-			name				: 'show',
-			includeRegExp		: /./, // used on every page
-			linkRegExp			: /.*?\.(jpe?g|gif|png)$/i,
-			excludeLinkRegExp	: /\?/i,
-			showFunction		: function(event) { ngLightbox.show(event); return false; }
-		}, // regular links to images
-
-		// javascript link
-		{
-			name				: 'javascript',
-			includeRegExp		: /./, // used on every page
-			linkRegExp			: /^javascript:.*'([^']*?\.(?:jpe?g|gif|png))'.*$/i,
-			replaceString		: '$1',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'javascript'); return false; }
-		}, // javascript link
-
-		// search engine images (google, yahoo, ask jeeves, blingo)
-		{
-			name				: 'search',
-			includeRegExp		: /^https?:\/\/(.*?\.)?(google\..*|search\.yahoo\.com|blingo\.com\/images)/i,
-			linkRegExp			: /.*?(image|img)(ur[il]|src)=(http(s?):\/\/)?(.*?)&.*/i,
-			replaceString		: 'http$4://$5',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'search'); return false; }
-		}, // search engine images
-
-		// flickr
-		{
-			name				: 'flickr',
-			includeRegExp		: /^https?:\/\/(.*?\.)?flickr\.com/i,
-			linkRegExp			: /\/photos\/[^\/]+\/[0-9]+/i,
-			findImageRegExp		: /_[tsm]\.jpg/i,
-			replaceString		: '.jpg',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'flickr'); return false; }
-		}, // flickr
-
-		// myspace1
-		{
-			name				: 'myspace1',
-			includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
-			linkRegExp			: /imageID=[0-9]+/i,
-			findImageRegExp		: /m_(.+)\.jpg/i,
-			replaceString		: 'l_$1.jpg',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'myspace1'); return false; }
-		},  // myspace1
-
-		// myspace2
-		{
-			name				: 'myspace2',
-			includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
-			linkRegExp			: /imageID/i,
-			findImageRegExp		: /_m/i,
-			replaceString		: '_l',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'myspace2'); return false; }
-		},  // myspace2
-
-		// deviantart
-		{
-			name				: 'deviantart',
-			includeRegExp		: /^https?:\/\/(.*?\.)?deviantart\.com/i,
-			linkRegExp			: /deviantart\.com\/(deviation|print|art)\/.+/i,
-			findImageRegExp		: /^http(s)?:\/\/.*?\.deviantart\.com\/([^\/]*)\/[^\/]*\/(.*?)\.(jpe?g|gif|png)$/i,
-			replaceString		: 'http$1://fc01.deviantart.com/$2/$3.$4',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'deviantart'); return false; }
-		}, // deviantart
-
-		// subvariance
-		{
-			name				: 'subvariance',
-			includeRegExp		: /^https?:\/\/(.*?\.)?subvariance\.com/i,
-			linkRegExp			: /\/view\/[0-9]+/i,
-			findImageRegExp		: /\/items\/thumbs\/(.*?)\.jpg/i,
-			replaceString		: '/items/$1.jpg',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'subvariance'); return false; }
-		}, // subvariance
-
-		// gmail
-		{
-			name				: 'gmail',
-			includeRegExp		: /^https?:\/\/mail\.google\./i,
-			linkRegExp			: /^(\/mail\/\?view=att&(amp;)?disp=)inline/i,
-			replaceString		: 'http://' + window.location.host + '$1emb',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'gmail'); return false; }
-		}, // gmail
-
-		// imagefap
-		{
-			name				: 'imagefap',
-			includeRegExp		: /^https?:\/\/(.*?\.)?imagefap\.com/i,
-			linkRegExp			: /(image.php\?id=|gallery\/)[0-9]+/i,
-			findImageRegExp		: /\/images\/(thumb|mini)\/([0-9]+)\/([0-9]+)\/([0-9]+)\.jpg/i,
-			replaceString		: '/full/$2/$3/$4.jpg',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'imagefap'); return false; }
-		},
-
-		// ffffound!
-		{
-			name				: 'ffffound',
-			includeRegExp		: /^https?:\/\/(.*?\.)?ffffound\.com/i,
-			linkRegExp			: /\/image\/[\w]+$/i,
-			findImageRegExp		: /img(-thumb)?\.ffffound\.com\/static-data\/assets\/([\w\/]+?)_[\w]+\.(jpe?g|gif|png)$/i,
-			replaceString		: 'img.ffffound.com/static-data/assets/$2.$3',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'ffffound'); return false; }
-		},
-
-		// Yahoo! Auction Japan
-		{
-			name				: 'yauctionjp',
-			includeRegExp		: /^http:\/\/(?:[^\/]*?\.)?auctions\.yahoo\.co\.jp\/(?:jp\/)?(?:user|(?:str)?search|.*-category\.html)/i,
-			linkRegExp			: /^http:\/\/(?:.*?\.)?auctions\.yahoo\.co\.jp\/jp\//,
-			findImageRegExp		: /\.yimg\.(?:jp|com)\/.+\.auctions\.yahoo\.co\.jp\/.+\.jpg$/,
-			captionXPath		: '../../td[2]/a/text()',
-			imageInPageRegExp	: /<img(?= )(?=[^>]* id="imgsrc\d")(?=[^>]* src="([^"]+)").*?>/gm,
-			replaceString		: '$1',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'yauctionjp'); return false; }
-		},
-
-		// Yahoo! Photos Japan
-		{
-			name				: 'yphotojp',
-			includeRegExp		: /^http:\/\/photos\.yahoo\.co\.jp\/ph\//i,
-			linkRegExp		    : /^http:\/\/photos\.yahoo\.co\.jp\/ph\/[^\/]*\/vwp\?.*/i,
-			findImageRegExp		: /(?:)/,
-			getImageFunction	: function(linkData, listener) {
-				var url = linkData['link'].href + '&.hires=t';
-				var def = {
-					imageInPageRegExp : /<img(?= )(?=[^>]* src="(http:\/\/proxy\.[\w.]*\.yahoofs\.jp\/users\/[^"]+)").*?>/,
-					replaceString     : '$1'
-				};
-				ngLightbox.loadPageAndFindImage(url, def, listener);
-			},
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'yphotojp'); return false; }
-		},
-
-		// Yahoo! Blog Japan
-		{
-			name				: 'yblogjp',
-			includeRegExp		: /^http:\/\/blogs\.yahoo\.co\.jp\//i,
-			linkRegExp		    : /^javascript:popup(?:ImgGal|_img_view)/i,
-			findImageRegExp		: /^(?:(.*)_thumb)?(.*)$/,
-			replaceString		: '$1$2',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'yblogjp'); return false; }
-		},
-
-		// danbooru
-		{
-			name				: 'danbooru',
-			includeRegExp		: /^http:\/\/danbooru\.donmai\.us(\/|$)/i,
-			linkRegExp			: /^\/post\/show\/\d+/i,
-			imageInPageRegExp	: /href="(http:\/\/danbooru\.donmai\.us\/data\/(?!preview)[^"]+)"/,
-			replaceString		: '$1',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'danbooru'); return false; }
-		},
-
-		// Pixiv
-		{
-			name				: 'pixiv',
-			includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
-			linkRegExp			: /^member_illust\.php/i,
-			findImageRegExp		: /_[sm](?=\.\w+$)/i,
-			replaceString		: '',
-			captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()',
-			getExLinksFunction  : function(linkData) {
-				var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
-				return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
-			},
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'pixiv'); return false; }
-		},
-
-		// Impress
-		{
-			name				: 'impress',
-			includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
-			linkRegExp			: /^\/cda\/parts\/image_for_link\/|^image\/|^\/img\/|^[^\/]*_\d+r\.html$/,
-			findImageRegExp		: /^(?:(\/cda\/static\/image\/.*?)([-_]?s)?\.(jpg|gif)|(image\/.*?|\/img\/.*?|[^\/]*_\d+)(_?s)?\.(gif|jpg))(?:\?.*)?$/i,
-			replaceString		: function(s, a1, a2, a3, b1, b2, b3) {
-				if (a1) return a1 + ((a2 || a3 == 'gif') ? '' : 'l') + '.' + a3.replace('gif', 'jpg');
-				if (b1) return b1 + ((0 <= b1.indexOf('/')) ? '' : 'r') + '.' + b3.replace('gif', 'jpg');
-			},
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'impress'); return false; }
-		},
-
-		// NikkeiBP
-		{
-			name				: 'nikkeibp',
-			includeRegExp		: /^http:\/\/(?:.*\.)?nikkeibp\.co\.jp\//,
-			linkRegExp			: /\?SS=/,
-			findImageRegExp		: /^thumb_\d+_(.*)\.(jpg)$/i,
-			replaceString		: '$1.$2',
-			showFunction		: function(event) { ngLightbox.showFrom(event, 'nikkeibp'); return false; }
-		}
-
-	], // searchDefs[]
-
 	getSearchDef : function(name) {
 		var searchDefs = ngLightbox.searchDefs;
 		for (var i = 0; i < searchDefs.length; i++) {
@@ -1828,6 +1582,271 @@ var ngLightbox = {
 	}
 
 } // ngLightbox
+
+// searchDefs stores regular expressions used to find and execute functions for image links within the page.
+// these are executed in the order that they appear.
+//
+// **require fields
+//  name               : self-explanitory, must be unique (used for internal references)
+//  includeRegExp      : regular expression that window.location.href needs to match
+//  linkRegExp         : regular expression that link must match
+//  showFunction       : function that is called when link is clicked
+//
+// **optional fields
+//  excludeLinkRegExp  : regular expression that link must not match
+//  findImageRegExp    : regular expression that image must match for replaceString
+//  imageInPageRegExp  : regular expression that image-url must sub-match in html
+//                       ex.) /<img src="(image/.*?\.jpg)"/
+//  getImageFunction   : function that called when find image
+//                       ex.) function(linkData, listener) {
+//                              GM_xmlhttpRequest({
+//                                method : 'GET',
+//                                url    : linkData.href + '?mode=ajax',
+//                                onload : function(r) { listener(r.responseText); }
+//                              });
+//                            }
+//  replaceString      : replace string used by imageInPageRegExp, findImageRegExp or linkRegExp
+//  captionXPath       : XPath that caption-text match
+//                       ex.) '../div[@class="caption"]/text()'
+//  getExLinksFunction : function that create additional link buttons data
+//                       ex.) function(linkData) {
+//                              return [ {href:linkData.href+'?q=new', text:'New', title:'Open New'} ];
+//                            }
+//
+// (high priority) getImageFunction > imageInPageRegExp > findImageRegExp (low priority)
+ngLightbox.searchDefs = [
+
+	// wikipedia (needs to come before 'show')
+	{
+		name				: 'wikipedia',
+		includeRegExp		: /^https?:\/\/(.*?\.)?wikipedia\.org/i,
+		linkRegExp			: /.*?\/(Fi(le?|xter|txategi|gura|n?ch(ier|eiro))|Fa(il|sciculus)|Dat(oteka|ei)|Delwedd|Dosiero|Be(stand|rkas)|Billede|Skeudenn|Soubor|Slika|Pilt|Archivo|Mynd|Vaizdas|Tiedosto|Larawan|Resim|%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB|%ED%8C%8C%EC%9D%BC|%D7%A7%D7%95%D7%91%D7%A5):.*\.(jpe?g|gif|png)$/i,
+		findImageRegExp		: /(.+?)\/thumb\/(.+?)\.(jpe?g|gif|png).*$/i,
+		replaceString		: '$1/$2.$3',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'wikipedia'); return false; }
+	}, // wikipedia
+
+	// imagesocket (needs to come before 'show')
+	{
+		name				: 'imagesocket',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^(https?:\/\/)(.*?\.)?imagesocket\.com\/(view|thumbs)\/(.*?\.(jpe?g|gif|png))$/i,
+		replaceString		: '$1content.imagesocket.com/images/$4',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'imagesocket'); return false; }
+	}, // imagesocket
+
+	// imagesocket site (needs to come before 'show')
+	{
+		name				: 'imagesocketSite',
+		includeRegExp		: /^https?:\/\/(.*?\.)?imagesocket\.com/i,
+		linkRegExp			: /^\/view\/(.*?\.(jpe?g|gif|png))$/i,
+		replaceString		: 'http://content.imagesocket.com/images/$1',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'imagesocketSite'); return false; }
+	}, // imagesocket site
+
+	// blogger/blogspot (needs to come before 'show')
+	{
+		name				: 'blogger',
+		includeRegExp		: /^https?:\/\/(.*?\.)?blog(ger|spot)\.com/i,
+		linkRegExp			: /^(https?:\/\/.*?\.blogger\.com\/.*?\/.*?\/.*?\/.*?)\/.*?-h(\/.*?\.(jpe?g|gif|png))$/i,
+		replaceString		: '$1$2',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'blogger'); return false; }
+	}, // blogger/blogspot
+
+	// regular links to images
+	{
+		name				: 'show',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /.*?\.(jpe?g|gif|png)$/i,
+		excludeLinkRegExp	: /\?/i,
+		showFunction		: function(event) { ngLightbox.show(event); return false; }
+	}, // regular links to images
+
+	// javascript link
+	{
+		name				: 'javascript',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^javascript:.*'([^']*?\.(?:jpe?g|gif|png))'.*$/i,
+		replaceString		: '$1',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'javascript'); return false; }
+	}, // javascript link
+
+	// search engine images (google, yahoo, ask jeeves, blingo)
+	{
+		name				: 'search',
+		includeRegExp		: /^https?:\/\/(.*?\.)?(google\..*|search\.yahoo\.com|blingo\.com\/images)/i,
+		linkRegExp			: /.*?(image|img)(ur[il]|src)=(http(s?):\/\/)?(.*?)&.*/i,
+		replaceString		: 'http$4://$5',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'search'); return false; }
+	}, // search engine images
+
+	// flickr
+	{
+		name				: 'flickr',
+		includeRegExp		: /^https?:\/\/(.*?\.)?flickr\.com/i,
+		linkRegExp			: /\/photos\/[^\/]+\/[0-9]+/i,
+		findImageRegExp		: /_[tsm]\.jpg/i,
+		replaceString		: '.jpg',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'flickr'); return false; }
+	}, // flickr
+
+	// myspace1
+	{
+		name				: 'myspace1',
+		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
+		linkRegExp			: /imageID=[0-9]+/i,
+		findImageRegExp		: /m_(.+)\.jpg/i,
+		replaceString		: 'l_$1.jpg',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'myspace1'); return false; }
+	},  // myspace1
+
+	// myspace2
+	{
+		name				: 'myspace2',
+		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
+		linkRegExp			: /imageID/i,
+		findImageRegExp		: /_m/i,
+		replaceString		: '_l',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'myspace2'); return false; }
+	},  // myspace2
+
+	// deviantart
+	{
+		name				: 'deviantart',
+		includeRegExp		: /^https?:\/\/(.*?\.)?deviantart\.com/i,
+		linkRegExp			: /deviantart\.com\/(deviation|print|art)\/.+/i,
+		findImageRegExp		: /^http(s)?:\/\/.*?\.deviantart\.com\/([^\/]*)\/[^\/]*\/(.*?)\.(jpe?g|gif|png)$/i,
+		replaceString		: 'http$1://fc01.deviantart.com/$2/$3.$4',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'deviantart'); return false; }
+	}, // deviantart
+
+	// subvariance
+	{
+		name				: 'subvariance',
+		includeRegExp		: /^https?:\/\/(.*?\.)?subvariance\.com/i,
+		linkRegExp			: /\/view\/[0-9]+/i,
+		findImageRegExp		: /\/items\/thumbs\/(.*?)\.jpg/i,
+		replaceString		: '/items/$1.jpg',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'subvariance'); return false; }
+	}, // subvariance
+
+	// gmail
+	{
+		name				: 'gmail',
+		includeRegExp		: /^https?:\/\/mail\.google\./i,
+		linkRegExp			: /^(\/mail\/\?view=att&(amp;)?disp=)inline/i,
+		replaceString		: 'http://' + window.location.host + '$1emb',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'gmail'); return false; }
+	}, // gmail
+
+	// imagefap
+	{
+		name				: 'imagefap',
+		includeRegExp		: /^https?:\/\/(.*?\.)?imagefap\.com/i,
+		linkRegExp			: /(image.php\?id=|gallery\/)[0-9]+/i,
+		findImageRegExp		: /\/images\/(thumb|mini)\/([0-9]+)\/([0-9]+)\/([0-9]+)\.jpg/i,
+		replaceString		: '/full/$2/$3/$4.jpg',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'imagefap'); return false; }
+	},
+
+	// ffffound!
+	{
+		name				: 'ffffound',
+		includeRegExp		: /^https?:\/\/(.*?\.)?ffffound\.com/i,
+		linkRegExp			: /\/image\/[\w]+$/i,
+		findImageRegExp		: /img(-thumb)?\.ffffound\.com\/static-data\/assets\/([\w\/]+?)_[\w]+\.(jpe?g|gif|png)$/i,
+		replaceString		: 'img.ffffound.com/static-data/assets/$2.$3',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'ffffound'); return false; }
+	},
+
+	// Yahoo! Auction Japan
+	{
+		name				: 'yauctionjp',
+		includeRegExp		: /^http:\/\/(?:[^\/]*?\.)?auctions\.yahoo\.co\.jp\/(?:jp\/)?(?:user|(?:str)?search|.*-category\.html)/i,
+		linkRegExp			: /^http:\/\/(?:.*?\.)?auctions\.yahoo\.co\.jp\/jp\//,
+		findImageRegExp		: /\.yimg\.(?:jp|com)\/.+\.auctions\.yahoo\.co\.jp\/.+\.jpg$/,
+		captionXPath		: '../../td[2]/a/text()',
+		imageInPageRegExp	: /<img(?= )(?=[^>]* id="imgsrc\d")(?=[^>]* src="([^"]+)").*?>/gm,
+		replaceString		: '$1',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'yauctionjp'); return false; }
+	},
+
+	// Yahoo! Photos Japan
+	{
+		name				: 'yphotojp',
+		includeRegExp		: /^http:\/\/photos\.yahoo\.co\.jp\/ph\//i,
+		linkRegExp		    : /^http:\/\/photos\.yahoo\.co\.jp\/ph\/[^\/]*\/vwp\?.*/i,
+		findImageRegExp		: /(?:)/,
+		getImageFunction	: function(linkData, listener) {
+			var url = linkData['link'].href + '&.hires=t';
+			var def = {
+				imageInPageRegExp : /<img(?= )(?=[^>]* src="(http:\/\/proxy\.[\w.]*\.yahoofs\.jp\/users\/[^"]+)").*?>/,
+				replaceString     : '$1'
+			};
+			ngLightbox.loadPageAndFindImage(url, def, listener);
+		},
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'yphotojp'); return false; }
+	},
+
+	// Yahoo! Blog Japan
+	{
+		name				: 'yblogjp',
+		includeRegExp		: /^http:\/\/blogs\.yahoo\.co\.jp\//i,
+		linkRegExp		    : /^javascript:popup(?:ImgGal|_img_view)/i,
+		findImageRegExp		: /^(?:(.*)_thumb)?(.*)$/,
+		replaceString		: '$1$2',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'yblogjp'); return false; }
+	},
+
+	// danbooru
+	{
+		name				: 'danbooru',
+		includeRegExp		: /^http:\/\/danbooru\.donmai\.us(\/|$)/i,
+		linkRegExp			: /^\/post\/show\/\d+/i,
+		imageInPageRegExp	: /href="(http:\/\/danbooru\.donmai\.us\/data\/(?!preview)[^"]+)"/,
+		replaceString		: '$1',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'danbooru'); return false; }
+	},
+
+	// Pixiv
+	{
+		name				: 'pixiv',
+		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
+		linkRegExp			: /^member_illust\.php/i,
+		findImageRegExp		: /_[sm](?=\.\w+$)/i,
+		replaceString		: '',
+		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()',
+		getExLinksFunction  : function(linkData) {
+			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
+			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
+		},
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'pixiv'); return false; }
+	},
+
+	// Impress
+	{
+		name				: 'impress',
+		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
+		linkRegExp			: /^\/cda\/parts\/image_for_link\/|^image\/|^\/img\/|^[^\/]*_\d+r\.html$|^http:.*\/tmp\/blog\//,
+		findImageRegExp		: /^(?:(\/cda\/static\/image\/.*?)([-_]?s)?\.(jpg|gif)|(image\/.*?|\/img\/.*?|^http:.*\/tmp\/blog\/.*?|[^\/]*_\d+)(_?s)?\.(gif|jpg))(?:\?.*)?$/i,
+		replaceString		: function(s, a1, a2, a3, b1, b2, b3) {
+			if (a1) return a1 + ((a2 || a3 == 'gif') ? '' : 'l') + '.' + a3.replace('gif', 'jpg');
+			if (b1) return b1 + ((0 <= b1.indexOf('/')) ? '' : 'r') + '.' + b3.replace('gif', 'jpg');
+		},
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'impress'); return false; }
+	},
+
+	// NikkeiBP
+	{
+		name				: 'nikkeibp',
+		includeRegExp		: /^http:\/\/(?:.*\.)?nikkeibp\.co\.jp\//,
+		linkRegExp			: /\?SS=/,
+		findImageRegExp		: /^thumb_\d+_(.*)\.(jpg)$/i,
+		replaceString		: '$1.$2',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'nikkeibp'); return false; }
+	}
+
+]; // ngLightbox.searchDefs
 
 ngLightbox.data = {
 
