@@ -1696,6 +1696,17 @@ ngLightbox.searchDefs = [
 		showFunction		: function(event) { ngLightbox.showFrom(event, 'javascript'); return false; }
 	}, // javascript link
 
+	// twitpic
+	{
+		name				: 'twitpic',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/twitpic.com\/\w+/i,
+		linkReplaceString   : '$&/full',
+		imageInPageRegExp   : /<img(?= )(?=[^>]* class="photo-large")(?=[^>]* src="([^"]+)").*?>/,
+		replaceString       : '$1',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'twitpic'); return false; }
+	}, // regular links to images
+
 	// search engine images (google)
 	{
 		name				: 'google',
