@@ -525,15 +525,31 @@ var ngLightbox = {
 		}
 	}, // windowScrollTo()
 
+	// evaluate XPath
+	evaluateXPath : function(xpath, contextNode, resultType) {
+		var regCurrent = /\bcurrent\(\)(?:[^\[\]\(\),=]|\[(?:[^\]]|".*?"|'.*?')*\]|\(.*?\))*/.source;
+		var reg = new RegExp('\\b(?:count|local-name|name|namespace-uri)\\((?:' + regCurrent + ')\\)|(?:' + regCurrent + ')', 'g');
+		xpath = xpath.replace(reg, function(match) {
+			match = match.replace(/\bcurrent\(\)/g, '.');
+			var res = document.evaluate(match, contextNode, null, XPathResult.STRING_TYPE, null).stringValue;
+			if (0 <= res.indexOf('"'))
+				return 'concat("' + res.replace('"', '",\'"\',"') + '")';
+			return '"' + res + '"';
+		});
+		return document.evaluate(xpath, contextNode, null, resultType || XPathResult.ANY_TYPE, null);
+	}, // evaluateXPath()
+
 	// make caption text
 	makeCaption : function(link, xpaths /* string or array */) {
 		var xpaths = ('string' == typeof xpaths) ? [xpaths] : (xpaths || []);
 		xpaths = xpaths.concat(['.//@title', './/img/@alt']);
 		for (var i = 0; i < xpaths.length; ++i) {
-			var res = document.evaluate(xpaths[i], link, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
-			if (res.singleNodeValue) {
-				var caption = res.singleNodeValue.nodeValue;
-				return caption.toString().replace(/^\s+|\s+$/gm, '');
+			var res = ngLightbox.evaluateXPath(xpaths[i], link, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
+			if (0 < res.snapshotLength) {
+				var caption = [];
+				for (var j = 0; j < res.snapshotLength; ++j)
+					caption.push(res.snapshotItem(j).nodeValue);
+				return caption.join('').replace(/^\s+|\s+$/gm, '');
 			}
 		}
 		return '';
@@ -1828,6 +1844,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
 		linkRegExp			: /^\/cda\/parts\/image_for_link\/|^image\/|^\/img\/|^[^\/]*_\d+r\.html$|^http:.*\/tmp\/blog\//,
 		findImageRegExp		: /^(?:(\/cda\/static\/image\/.*?)([-_]?s)?\.(jpg|gif)|(image\/.*?|\/img\/.*?|^http:.*\/tmp\/blog\/.*?|[^\/]*_\d+)(_?s)?\.(gif|jpg))(?:\?.*)?$/i,
+		captionXPath		: 'ancestor::tr/following-sibling::tr[1]/td[count(current()/parent::td/preceding-sibling::td)+1]//text()|ancestor::tr/following-sibling::tr[1]/td[1][@colspan]//text()',
 		replaceString		: function(s, a1, a2, a3, b1, b2, b3) {
 			if (a1) return a1 + ((a2 || a3 == 'gif') ? '' : 'l') + '.' + a3.replace('gif', 'jpg');
 			if (b1) return b1 + ((0 <= b1.indexOf('/')) ? '' : 'r') + '.' + b3.replace('gif', 'jpg');
