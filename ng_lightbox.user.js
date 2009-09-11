@@ -170,9 +170,13 @@ var ngLightbox = {
 			if (searchDef['getImageFunction']) {
 				searchDef['getImageFunction'](linkData, hookListener);
 			} else if (searchDef['imageInPageRegExp']) {
+				if (searchDef.hasOwnProperty('linkReplaceString'))
+					address = address.replace(searchDef['linkRegExp'], searchDef['linkReplaceString']);
 				ngLightbox.loadPageAndFindImage(link.href, searchDef, hookListener);
 			} else if (searchDef['findImageRegExp']) {
 				hookListener(ngLightbox.containsThumb(link, searchDef, true));
+			} else if (searchDef.hasOwnProperty('linkReplaceString')) {
+				hookListener(address.replace(searchDef['linkRegExp'], searchDef['linkReplaceString']));
 			} else if (searchDef.hasOwnProperty('replaceString')) {
 				hookListener(address.replace(searchDef['linkRegExp'], searchDef['replaceString']));
 			} else {
@@ -1621,6 +1625,7 @@ var ngLightbox = {
 //                              });
 //                            }
 //  replaceString      : replace string used by imageInPageRegExp, findImageRegExp or linkRegExp
+//  linkReplaceString  : replace string used by linkRegExp
 //  captionXPath       : XPath that caption-text match
 //                       ex.) '../div[@class="caption"]/text()'
 //  getExLinksFunction : function that create additional link buttons data
@@ -1628,7 +1633,12 @@ var ngLightbox = {
 //                              return [ {href:linkData.href+'?q=new', text:'New', title:'Open New'} ];
 //                            }
 //
-// (high priority) getImageFunction > imageInPageRegExp > findImageRegExp (low priority)
+// **field priorities
+//  (high) getImageFunction
+//         imageInPageRegExp
+//         findImageRegExp
+//         linkReplaceString
+//  (low)  replaceString
 ngLightbox.searchDefs = [
 
 	// wikipedia (needs to come before 'show')
@@ -1801,15 +1811,10 @@ ngLightbox.searchDefs = [
 		name				: 'yphotojp',
 		includeRegExp		: /^http:\/\/photos\.yahoo\.co\.jp\/ph\//i,
 		linkRegExp		    : /^http:\/\/photos\.yahoo\.co\.jp\/ph\/[^\/]*\/vwp\?.*/i,
+		linkReplaceString   : '$&&.hires=t',
 		findImageRegExp		: /(?:)/,
-		getImageFunction	: function(linkData, listener) {
-			var url = linkData['link'].href + '&.hires=t';
-			var def = {
-				imageInPageRegExp : /<img(?= )(?=[^>]* src="(http:\/\/proxy\.[\w.]*\.yahoofs\.jp\/users\/[^"]+)").*?>/,
-				replaceString     : '$1'
-			};
-			ngLightbox.loadPageAndFindImage(url, def, listener);
-		},
+		imageInPageRegExp   : /<img(?= )(?=[^>]* src="(http:\/\/proxy\.[\w.]*\.yahoofs\.jp\/users\/[^"]+)").*?>/,
+		replaceString       : '$1',
 		showFunction		: function(event) { ngLightbox.showFrom(event, 'yphotojp'); return false; }
 	},
 
