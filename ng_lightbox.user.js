@@ -551,12 +551,11 @@ var ngLightbox = {
 	}, // setOverlaysVisibility()
 
 	findImageLinkPosition : function(link) {
-		var allImageLinks = ngLightbox.allImageLinks;
 		var pos = ngLightbox.currentImagePosition;
-		if (allImageLinks[pos]['link'] == link) return pos;
+		if (ngLightbox.allImageLinks[pos]['link'] == link) return pos;
 
-		for (var i = 0; i < allImageLinks.length; i++) {
-			if (allImageLinks[i]['link'] == link) {
+		for (var i = 0; i < ngLightbox.allImageLinks.length; i++) {
+			if (ngLightbox.allImageLinks[i]['link'] == link) {
 				return i;
 			}
 		}
@@ -564,15 +563,15 @@ var ngLightbox = {
 	}, // findImageLinkPosition()
 
 	getNextPosition : function() {
-		var allImageLinks = ngLightbox.allImageLinks;
 		var firstPos = ngLightbox.currentImagePosition;
-		var href = allImageLinks[firstPos]['link'].href;
+		var firstData = ngLightbox.allImageLinks[firstPos];
 		var pos = firstPos;
 		do {
 			pos += ngLightbox.lastMove;
 			if (pos < 0) pos = ngLightbox.allImageLinks.length - 1;
 			if (ngLightbox.allImageLinks.length <= pos) pos = 0;
-		} while (allImageLinks[pos]['link'].href == href && pos != firstPos);
+			if (pos == firstPos || ngLightbox.allImageLinks[pos]['image'] != firstData['image']) break;
+		} while (ngLightbox.allImageLinks[pos]['link'].href == firstData['link'].href);
 		return pos;
 	}, // getNextPosition()
 
@@ -847,15 +846,15 @@ var ngLightbox = {
 			var rel = link.getAttribute('rel') || '';
 			var searchDef = ngLightbox.findSearchDefForLink(link);
 			if (searchDef) {
-				// prevents doubling lightboxes
-				if (!ngLightbox.timerEnabled || !rel.match(/lightbox/i)) {
-					ngLightbox.addEvent(link, 'click', searchDef['showFunction'], true);
-					link.setAttribute('rel', (rel + ' ngLightbox').replace(/^\s+/, ''));
-				}
 				ngLightbox.allImageLinks.push({
 					searchDef : searchDef,
 					link      : link
 				});
+				// prevents doubling lightboxes
+				if (!ngLightbox.timerEnabled || !rel.match(/lightbox/i)) {
+					link.setAttribute('rel', (rel + ' ngLightbox').replace(/^\s+/, ''));
+					ngLightbox.addEvent(link, 'click', searchDef['showFunction'], true);
+				}
 			} else {
 				link.setAttribute('rel', (rel + ' notLightbox').replace(/^\s+/, ''));
 			}
