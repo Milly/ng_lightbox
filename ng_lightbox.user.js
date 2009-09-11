@@ -1858,15 +1858,36 @@ ngLightbox.searchDefs = [
 
 	// Impress
 	{
-		name				: 'impress',
+		name				: 'impress1',
 		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
-		linkRegExp			: /^\/cda\/parts\/image_for_link\/|^image\/|^\/img\/|^[^\/]*_\d+r\.html$|^http:.*\/tmp\/blog\//,
-		findImageRegExp		: /^(?:(\/cda\/static\/image\/.*?)([-_]?s)?\.(jpg|gif)|(image\/.*?|\/img\/.*?|^http:.*\/tmp\/blog\/.*?|[^\/]*_\d+)(_?s)?\.(gif|jpg))(?:\?.*)?$/i,
+		linkRegExp			: /^\/cda\/parts\/image_for_link\//,
+		findImageRegExp		: /^(\/cda\/static\/image\/.*?)(?:[-_]?s\.jpg|\.gif)(?:\?.*)?$/i,
 		captionXPath		: 'ancestor::tr/following-sibling::tr[1]/td[count(current()/parent::td/preceding-sibling::td)+1]//text()|ancestor::tr/following-sibling::tr[1]/td[1][@colspan]//text()',
-		replaceString		: function(s, a1, a2, a3, b1, b2, b3) {
-			if (a1) return a1 + ((a2 || a3 == 'gif') ? '' : 'l') + '.' + a3.replace('gif', 'jpg');
-			if (b1) return b1 + ((0 <= b1.indexOf('/')) ? '' : 'r') + '.' + b3.replace('gif', 'jpg');
-		}
+		replaceString		: '$1.jpg'
+	},
+	{
+		name				: 'impress2',
+		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
+		linkRegExp			: /^\/cda\/parts\/image_for_link\//,
+		findImageRegExp		: /^(\/cda\/static\/image\/.*?[^s])\.jpg(?:\?.*)?$/i,
+		captionXPath		: 'ancestor::tr/following-sibling::tr[1]/td[count(current()/parent::td/preceding-sibling::td)+1]//text()|ancestor::tr/following-sibling::tr[1]/td[1][@colspan]//text()',
+		replaceString		: '$1l.jpg'
+	},
+	{
+		name				: 'impress3',
+		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
+		linkRegExp			: /^image\d*\/|^\/img\/|^[^\/]*_\d+r\.html$|^http:.*\/tmp\/blog\//,
+		findImageRegExp		: /^(image\d*\/.*?|\/img\/.*?|http:.*\/tmp\/blog\/.*?)_?s?\.(?:jpg|gif)(?:\?.*)?$/i,
+		captionXPath		: 'ancestor::tr/following-sibling::tr[1]/td[count(current()/parent::td/preceding-sibling::td)+1]//text()|ancestor::tr/following-sibling::tr[1]/td[1][@colspan]//text()',
+		replaceString		: '$1.jpg'
+	},
+	{
+		name				: 'impress4',
+		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
+		linkRegExp			: /^image\d*\/|^\/img\/|^[^\/]*_\d+r\.html$|^http:.*\/tmp\/blog\//,
+		findImageRegExp		: /^([^\/]*_\d+)_?s?\.(?:jpg|gif)(?:\?.*)?$/i,
+		captionXPath		: 'ancestor::tr/following-sibling::tr[1]/td[count(current()/parent::td/preceding-sibling::td)+1]//text()|ancestor::tr/following-sibling::tr[1]/td[1][@colspan]//text()',
+		replaceString		: '$1r.jpg'
 	},
 
 	// NikkeiBP
