@@ -1847,9 +1847,9 @@ ngLightbox.searchDefs = [
 		name				: 'pixiv',
 		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
 		linkRegExp			: /^member_illust\.php/i,
-		findImageRegExp		: /_[sm](?=\.\w+$)/i,
+		findImageRegExp		: /_(?:s|m|100)(?=\.\w+$)/i,
 		replaceString		: '',
-		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()',
+		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()|ancestor::div[@id="right_ranking"]/div/a/text()|../../preceding-sibling::tr[1]//span[@class="f14b"]//text()',
 		getExLinksFunction  : function(linkData) {
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
