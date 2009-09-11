@@ -109,6 +109,9 @@ var ngLightbox = {
 	// initialized by init().
 	searchDefsToUse : [],
 
+	// show functions
+	showFunctions : {},
+
 	getSearchDef : function(name) {
 		var searchDefs = ngLightbox.searchDefs;
 		for (var i = 0; i < searchDefs.length; i++) {
@@ -117,6 +120,16 @@ var ngLightbox = {
 				return searchDef;
 		}
 	}, // getSearchDef()
+
+	getShowFunction : function(name) {
+		if (!ngLightbox.showFunctions[name]) {
+			ngLightbox.showFunctions[name] = function(event) {
+				ngLightbox.showFrom(event, name);
+				return false;
+			};
+		}
+		return ngLightbox.showFunctions[name];
+	}, // getShowFunction()
 
 	// Generic helper function that calls show() with the correct parameters
 	showFrom : function(event) {
@@ -423,7 +436,8 @@ var ngLightbox = {
 			objError.style.display = 'none';
 			ngLightbox.currentImagePosition = ngLightbox.getNextPosition();
 			var linkData = ngLightbox.allImageLinks[ngLightbox.currentImagePosition];
-			linkData['searchDef']['showFunction'](linkData['link']);
+			var func = ngLightbox.getShowFunction(linkData['searchDef']['name']);
+			func(linkData['link']);
 		}
 	}, // showNext()
 
@@ -873,7 +887,8 @@ var ngLightbox = {
 				// prevents doubling lightboxes
 				if (!ngLightbox.timerEnabled || !rel.match(/lightbox/i)) {
 					link.setAttribute('rel', (rel + ' ngLightbox').replace(/^\s+/, ''));
-					ngLightbox.addEvent(link, 'click', searchDef['showFunction'], true);
+					var listener = ngLightbox.getShowFunction(searchDef['name']);
+					ngLightbox.addEvent(link, 'click', listener, true);
 				}
 			} else {
 				link.setAttribute('rel', (rel + ' notLightbox').replace(/^\s+/, ''));
@@ -1609,7 +1624,6 @@ var ngLightbox = {
 //  name               : self-explanitory, must be unique (used for internal references)
 //  includeRegExp      : regular expression that window.location.href needs to match
 //  linkRegExp         : regular expression that link must match
-//  showFunction       : function that is called when link is clicked
 //
 // **optional fields
 //  excludeLinkRegExp  : regular expression that link must not match
@@ -1647,8 +1661,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?wikipedia\.org/i,
 		linkRegExp			: /.*?\/(Fi(le?|xter|txategi|gura|n?ch(ier|eiro))|Fa(il|sciculus)|Dat(oteka|ei)|Delwedd|Dosiero|Be(stand|rkas)|Billede|Skeudenn|Soubor|Slika|Pilt|Archivo|Mynd|Vaizdas|Tiedosto|Larawan|Resim|%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB|%ED%8C%8C%EC%9D%BC|%D7%A7%D7%95%D7%91%D7%A5):.*\.(jpe?g|gif|png)$/i,
 		findImageRegExp		: /(.+?)\/thumb\/(.+?)\.(jpe?g|gif|png).*$/i,
-		replaceString		: '$1/$2.$3',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'wikipedia'); return false; }
+		replaceString		: '$1/$2.$3'
 	}, // wikipedia
 
 	// imagesocket (needs to come before 'show')
@@ -1656,8 +1669,7 @@ ngLightbox.searchDefs = [
 		name				: 'imagesocket',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^(https?:\/\/)(.*?\.)?imagesocket\.com\/(view|thumbs)\/(.*?\.(jpe?g|gif|png))$/i,
-		replaceString		: '$1content.imagesocket.com/images/$4',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'imagesocket'); return false; }
+		replaceString		: '$1content.imagesocket.com/images/$4'
 	}, // imagesocket
 
 	// imagesocket site (needs to come before 'show')
@@ -1665,8 +1677,7 @@ ngLightbox.searchDefs = [
 		name				: 'imagesocketSite',
 		includeRegExp		: /^https?:\/\/(.*?\.)?imagesocket\.com/i,
 		linkRegExp			: /^\/view\/(.*?\.(jpe?g|gif|png))$/i,
-		replaceString		: 'http://content.imagesocket.com/images/$1',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'imagesocketSite'); return false; }
+		replaceString		: 'http://content.imagesocket.com/images/$1'
 	}, // imagesocket site
 
 	// blogger/blogspot (needs to come before 'show')
@@ -1674,8 +1685,7 @@ ngLightbox.searchDefs = [
 		name				: 'blogger',
 		includeRegExp		: /^https?:\/\/(.*?\.)?blog(ger|spot)\.com/i,
 		linkRegExp			: /^(https?:\/\/.*?\.blogger\.com\/.*?\/.*?\/.*?\/.*?)\/.*?-h(\/.*?\.(jpe?g|gif|png))$/i,
-		replaceString		: '$1$2',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'blogger'); return false; }
+		replaceString		: '$1$2'
 	}, // blogger/blogspot
 
 	// regular links to images
@@ -1683,8 +1693,7 @@ ngLightbox.searchDefs = [
 		name				: 'show',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /.*?\.(jpe?g|gif|png)$/i,
-		excludeLinkRegExp	: /\?/i,
-		showFunction		: function(event) { ngLightbox.show(event); return false; }
+		excludeLinkRegExp	: /\?/i
 	}, // regular links to images
 
 	// javascript link
@@ -1692,8 +1701,7 @@ ngLightbox.searchDefs = [
 		name				: 'javascript',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^javascript:.*'([^']*?\.(?:jpe?g|gif|png))'.*$/i,
-		replaceString		: '$1',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'javascript'); return false; }
+		replaceString		: '$1'
 	}, // javascript link
 
 	// twitpic
@@ -1703,8 +1711,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /^http:\/\/twitpic.com\/\w+/i,
 		linkReplaceString   : '$&/full',
 		imageInPageRegExp   : /<img(?= )(?=[^>]* class="photo-large")(?=[^>]* src="([^"]+)").*?>/,
-		replaceString       : '$1',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'twitpic'); return false; }
+		replaceString       : '$1'
 	}, // regular links to images
 
 	// search engine images (google)
@@ -1713,8 +1720,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?google\./i,
 		linkRegExp			: /.*?imgurl=(http(s?):\/\/)?(.*?)&.*/i,
 		replaceString		: 'http$2://$3',
-		captionXPath		: 'ancestor::table//td[@id=concat("tDataText",substring-after(current()/parent::td/@id,"tDataImage"))]//text()',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'google'); return false; }
+		captionXPath		: 'ancestor::table//td[@id=concat("tDataText",substring-after(current()/parent::td/@id,"tDataImage"))]//text()'
 	}, // search engine images
 
 	// search engine images (yahoo, ask jeeves, blingo)
@@ -1722,8 +1728,7 @@ ngLightbox.searchDefs = [
 		name				: 'search',
 		includeRegExp		: /^https?:\/\/(.*?\.)?(search\.yahoo\.com|blingo\.com\/images)/i,
 		linkRegExp			: /.*?(image|img)(ur[il]|src)=(http(s?):\/\/)?(.*?)&.*/i,
-		replaceString		: 'http$4://$5',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'search'); return false; }
+		replaceString		: 'http$4://$5'
 	}, // search engine images
 
 	// flickr
@@ -1732,8 +1737,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?flickr\.com/i,
 		linkRegExp			: /\/photos\/[^\/]+\/[0-9]+/i,
 		findImageRegExp		: /_[tsm]\.jpg/i,
-		replaceString		: '.jpg',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'flickr'); return false; }
+		replaceString		: '.jpg'
 	}, // flickr
 
 	// myspace1
@@ -1742,8 +1746,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
 		linkRegExp			: /imageID=[0-9]+/i,
 		findImageRegExp		: /m_(.+)\.jpg/i,
-		replaceString		: 'l_$1.jpg',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'myspace1'); return false; }
+		replaceString		: 'l_$1.jpg'
 	},  // myspace1
 
 	// myspace2
@@ -1752,8 +1755,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
 		linkRegExp			: /imageID/i,
 		findImageRegExp		: /_m/i,
-		replaceString		: '_l',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'myspace2'); return false; }
+		replaceString		: '_l'
 	},  // myspace2
 
 	// deviantart
@@ -1762,8 +1764,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?deviantart\.com/i,
 		linkRegExp			: /deviantart\.com\/(deviation|print|art)\/.+/i,
 		findImageRegExp		: /^http(s)?:\/\/.*?\.deviantart\.com\/([^\/]*)\/[^\/]*\/(.*?)\.(jpe?g|gif|png)$/i,
-		replaceString		: 'http$1://fc01.deviantart.com/$2/$3.$4',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'deviantart'); return false; }
+		replaceString		: 'http$1://fc01.deviantart.com/$2/$3.$4'
 	}, // deviantart
 
 	// subvariance
@@ -1772,8 +1773,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?subvariance\.com/i,
 		linkRegExp			: /\/view\/[0-9]+/i,
 		findImageRegExp		: /\/items\/thumbs\/(.*?)\.jpg/i,
-		replaceString		: '/items/$1.jpg',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'subvariance'); return false; }
+		replaceString		: '/items/$1.jpg'
 	}, // subvariance
 
 	// gmail
@@ -1781,8 +1781,7 @@ ngLightbox.searchDefs = [
 		name				: 'gmail',
 		includeRegExp		: /^https?:\/\/mail\.google\./i,
 		linkRegExp			: /^(\/mail\/\?view=att&(amp;)?disp=)inline/i,
-		replaceString		: 'http://' + window.location.host + '$1emb',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'gmail'); return false; }
+		replaceString		: 'http://' + window.location.host + '$1emb'
 	}, // gmail
 
 	// imagefap
@@ -1791,8 +1790,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?imagefap\.com/i,
 		linkRegExp			: /(image.php\?id=|gallery\/)[0-9]+/i,
 		findImageRegExp		: /\/images\/(thumb|mini)\/([0-9]+)\/([0-9]+)\/([0-9]+)\.jpg/i,
-		replaceString		: '/full/$2/$3/$4.jpg',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'imagefap'); return false; }
+		replaceString		: '/full/$2/$3/$4.jpg'
 	},
 
 	// ffffound!
@@ -1801,8 +1799,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?ffffound\.com/i,
 		linkRegExp			: /\/image\/[\w]+$/i,
 		findImageRegExp		: /img(-thumb)?\.ffffound\.com\/static-data\/assets\/([\w\/]+?)_[\w]+\.(jpe?g|gif|png)$/i,
-		replaceString		: 'img.ffffound.com/static-data/assets/$2.$3',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'ffffound'); return false; }
+		replaceString		: 'img.ffffound.com/static-data/assets/$2.$3'
 	},
 
 	// Yahoo! Auction Japan
@@ -1813,8 +1810,7 @@ ngLightbox.searchDefs = [
 		findImageRegExp		: /\.yimg\.(?:jp|com)\/.+\.auctions\.yahoo\.co\.jp\/.+\.jpg$/,
 		captionXPath		: '../../td[2]/a/text()',
 		imageInPageRegExp	: /<img(?= )(?=[^>]* id="imgsrc\d")(?=[^>]* src="([^"]+)").*?>/gm,
-		replaceString		: '$1',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'yauctionjp'); return false; }
+		replaceString		: '$1'
 	},
 
 	// Yahoo! Photos Japan
@@ -1825,8 +1821,7 @@ ngLightbox.searchDefs = [
 		linkReplaceString   : '$&&.hires=t',
 		findImageRegExp		: /(?:)/,
 		imageInPageRegExp   : /<img(?= )(?=[^>]* src="(http:\/\/proxy\.[\w.]*\.yahoofs\.jp\/users\/[^"]+)").*?>/,
-		replaceString       : '$1',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'yphotojp'); return false; }
+		replaceString       : '$1'
 	},
 
 	// Yahoo! Blog Japan
@@ -1835,8 +1830,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^http:\/\/blogs\.yahoo\.co\.jp\//i,
 		linkRegExp		    : /^javascript:popup(?:ImgGal|_img_view)/i,
 		findImageRegExp		: /^(?:(.*)_thumb)?(.*)$/,
-		replaceString		: '$1$2',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'yblogjp'); return false; }
+		replaceString		: '$1$2'
 	},
 
 	// danbooru
@@ -1845,8 +1839,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^http:\/\/danbooru\.donmai\.us(\/|$)/i,
 		linkRegExp			: /^\/post\/show\/\d+/i,
 		imageInPageRegExp	: /href="(http:\/\/danbooru\.donmai\.us\/data\/(?!preview)[^"]+)"/,
-		replaceString		: '$1',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'danbooru'); return false; }
+		replaceString		: '$1'
 	},
 
 	// Pixiv
@@ -1860,8 +1853,7 @@ ngLightbox.searchDefs = [
 		getExLinksFunction  : function(linkData) {
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
-		},
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'pixiv'); return false; }
+		}
 	},
 
 	// Impress
@@ -1874,8 +1866,7 @@ ngLightbox.searchDefs = [
 		replaceString		: function(s, a1, a2, a3, b1, b2, b3) {
 			if (a1) return a1 + ((a2 || a3 == 'gif') ? '' : 'l') + '.' + a3.replace('gif', 'jpg');
 			if (b1) return b1 + ((0 <= b1.indexOf('/')) ? '' : 'r') + '.' + b3.replace('gif', 'jpg');
-		},
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'impress'); return false; }
+		}
 	},
 
 	// NikkeiBP
@@ -1884,8 +1875,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^http:\/\/(?:.*\.)?nikkeibp\.co\.jp\//,
 		linkRegExp			: /\?SS=/,
 		findImageRegExp		: /^thumb_\d+_(.*)\.(jpg)$/i,
-		replaceString		: '$1.$2',
-		showFunction		: function(event) { ngLightbox.showFrom(event, 'nikkeibp'); return false; }
+		replaceString		: '$1.$2'
 	}
 
 ]; // ngLightbox.searchDefs
