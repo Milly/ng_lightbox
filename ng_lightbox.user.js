@@ -1686,10 +1686,20 @@ ngLightbox.searchDefs = [
 		showFunction		: function(event) { ngLightbox.showFrom(event, 'javascript'); return false; }
 	}, // javascript link
 
-	// search engine images (google, yahoo, ask jeeves, blingo)
+	// search engine images (google)
+	{
+		name				: 'google',
+		includeRegExp		: /^https?:\/\/(.*?\.)?google\./i,
+		linkRegExp			: /.*?imgurl=(http(s?):\/\/)?(.*?)&.*/i,
+		replaceString		: 'http$2://$3',
+		captionXPath		: 'ancestor::table//td[@id=concat("tDataText",substring-after(current()/parent::td/@id,"tDataImage"))]//text()',
+		showFunction		: function(event) { ngLightbox.showFrom(event, 'google'); return false; }
+	}, // search engine images
+
+	// search engine images (yahoo, ask jeeves, blingo)
 	{
 		name				: 'search',
-		includeRegExp		: /^https?:\/\/(.*?\.)?(google\..*|search\.yahoo\.com|blingo\.com\/images)/i,
+		includeRegExp		: /^https?:\/\/(.*?\.)?(search\.yahoo\.com|blingo\.com\/images)/i,
 		linkRegExp			: /.*?(image|img)(ur[il]|src)=(http(s?):\/\/)?(.*?)&.*/i,
 		replaceString		: 'http$4://$5',
 		showFunction		: function(event) { ngLightbox.showFrom(event, 'search'); return false; }
