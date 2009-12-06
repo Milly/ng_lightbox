@@ -1712,7 +1712,15 @@ ngLightbox.searchDefs = [
 		linkReplaceString   : '$&/full',
 		imageInPageRegExp   : /<img(?= )(?=[^>]* class="photo-large")(?=[^>]* src="([^"]+)").*?>/,
 		replaceString       : '$1'
-	}, // regular links to images
+	}, // twitpic link
+
+	// movapic
+	{
+		name				: 'movapic',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/movapic.com\/pic\/([^\/]+)$/i,
+		replaceString       : 'http://image.movapic.com/pic/m_$1.jpeg'
+	}, // movapic link
 
 	// search engine images (google)
 	{
