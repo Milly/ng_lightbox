@@ -1688,6 +1688,14 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1$2'
 	}, // blogger/blogspot
 
+	// Mycom journal (needs to come before 'show')
+	{
+		name				: 'mycom',
+		includeRegExp		: /^http:\/\/journal\.mycom\.co\.jp\//,
+		linkRegExp			: /\/photo\//,
+		replaceString		: '/'
+	},
+
 	// regular links to images
 	{
 		name				: 'show',
