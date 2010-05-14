@@ -1884,13 +1884,20 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'impress3',
 		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
+		linkRegExp			: /^(\/img\/.*\/)html\/([^\/]*\.(?:jpg|gif))\.html$/,
+		captionXPath		: 'ancestor::tr/following-sibling::tr[1]/td[count(current()/parent::td/preceding-sibling::td)+1]//text()|ancestor::tr/following-sibling::tr[1]/td[1][@colspan]//text()',
+		replaceString		: '$1$2'
+	},
+	{
+		name				: 'impress4',
+		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
 		linkRegExp			: /^image\d*\/|^\/img\/|^[^\/]*_\d+r\.html$|^http:.*\/tmp\/blog\//,
 		findImageRegExp		: /^(image\d*\/.*?|\/img\/.*?|http:.*\/tmp\/blog\/.*?)_?s?\.(?:jpg|gif)(?:\?.*)?$/i,
 		captionXPath		: 'ancestor::tr/following-sibling::tr[1]/td[count(current()/parent::td/preceding-sibling::td)+1]//text()|ancestor::tr/following-sibling::tr[1]/td[1][@colspan]//text()',
 		replaceString		: '$1.jpg'
 	},
 	{
-		name				: 'impress4',
+		name				: 'impress5',
 		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
 		linkRegExp			: /^image\d*\/|^\/img\/|^[^\/]*_\d+r\.html$|^http:.*\/tmp\/blog\//,
 		findImageRegExp		: /^([^\/]*_\d+)_?s?\.(?:jpg|gif)(?:\?.*)?$/i,
