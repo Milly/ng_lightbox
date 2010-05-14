@@ -874,13 +874,18 @@ var ngLightbox = {
 	// Update all image links event.
 	updateAllImageLinks : function() {
 		ngLightbox.requireUpdate = false;
+		var allImageLinks = [];
+		for (var i = 0; i < ngLightbox.allImageLinks.length; ++i) {
+			if (!ngLightbox.allImageLinks[i]['searchDef']['resetEverytime'])
+				allImageLinks.push(ngLightbox.allImageLinks[i]);
+		}
 		var links = document.evaluate('//a[@href and not(@rel="ngLightbox")]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		for (var i = 0; i < links.snapshotLength; ++i) {
 			var link = links.snapshotItem(i);
 			var rel = link.getAttribute('rel') || '';
 			var searchDef = ngLightbox.findSearchDefForLink(link);
 			if (searchDef) {
-				ngLightbox.allImageLinks.push({
+				allImageLinks.push({
 					searchDef : searchDef,
 					link      : link
 				});
@@ -894,6 +899,7 @@ var ngLightbox = {
 				link.setAttribute('rel', (rel + ' notLightbox').replace(/^\s+/, ''));
 			}
 		}
+		ngLightbox.allImageLinks = allImageLinks;
 	}, // updateAllImageLinks()
 
 	// Find link element from ancestor or self.
@@ -923,6 +929,19 @@ var ngLightbox = {
 		element.addEventListener(type, listener, capture);
 		ngLightbox.events.push([element, type, listener, capture]);
 	}, // addEvent()
+
+	// Remove event listener.
+	removeEvent : function(element, type, listener, capture) {
+		var events = ngLightbox.events;
+		for (var i = 0, l = events.length; i < l; ++i) {
+			var e = events[i];
+			if (e && element === e[0] && type === e[1] && listener === e[2] && capture === e[3]) {
+				element.removeEventListener(type, listener, capture);
+				events[i] = null;
+				break;
+			}
+		}
+	}, // removeEvent()
 
 	stopEvents : function(event) {
 		if (event && event.currentTarget) {
@@ -1688,6 +1707,27 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1$2'
 	}, // blogger/blogspot
 
+	// ITmedia (needs to come before 'show')
+	{
+		name				: 'itmedia',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/image\.itmedia\.co\.jp\/.*\.jpg$/,
+		getImageFunction	: function(linkData, listener) {
+				var m = linkData.link.href.match(/^(http:\/\/image\.itmedia\.co\.jp\/)(?:l\/im\/)?(.*)$/);
+				if (m) {
+					var iframe = document.createElement('iframe');
+					iframe.style.display = 'none';
+					ngLightbox.addEvent(iframe, 'load', function() {
+							ngLightbox.removeEvent(iframe, 'load', arguments.callee, true);
+							document.body.removeChild(iframe);
+							listener(m[1] + m[2]);
+						}, true);
+					iframe.src = m[1] + 'l/im/' + m[2];
+					document.body.appendChild(iframe);
+				}
+			}
+	},
+
 	// Mycom journal (needs to come before 'show')
 	{
 		name				: 'mycom',
@@ -1795,9 +1835,10 @@ ngLightbox.searchDefs = [
 	// gmail
 	{
 		name				: 'gmail',
-		includeRegExp		: /^https?:\/\/mail\.google\./i,
-		linkRegExp			: /^(\/mail\/\?view=att&(amp;)?disp=)inline/i,
-		replaceString		: 'http://' + window.location.host + '$1emb'
+		resetEverytime		: true,
+		includeRegExp		: /^https?:\/\/mail\.google\.\w+\//i,
+		linkRegExp			: /^(\?.*?\bview=att\b.*?\bdisp=)inline\b(.*)$/i,
+		replaceString		: '$1emb$2'
 	}, // gmail
 
 	// imagefap
