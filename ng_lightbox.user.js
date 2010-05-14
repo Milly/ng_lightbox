@@ -1133,9 +1133,9 @@ var ngLightbox = {
 		windowUnload : function() {
 			var events = ngLightbox.events;
 			ngLightbox.events = [];
-			while (events.length) {
-				var e = events.pop();
-				e[0].removeEventListener(e[1], e[2], e[3]);
+			for (var i = events.length; 0 <= --i;) {
+				var e = events[i];
+				if (e) e[0].removeEventListener(e[1], e[2], e[3]);
 			}
 		}, // windowUnload()
 
@@ -1634,7 +1634,7 @@ var ngLightbox = {
 //                       ex.) function(linkData, listener) {
 //                              GM_xmlhttpRequest({
 //                                method : 'GET',
-//                                url    : linkData.href + '?mode=ajax',
+//                                url    : linkData.link.href + '?mode=ajax',
 //                                onload : function(r) { listener(r.responseText); }
 //                              });
 //                            }
@@ -1644,7 +1644,7 @@ var ngLightbox = {
 //                       ex.) '../div[@class="caption"]/text()'
 //  getExLinksFunction : function that create additional link buttons data
 //                       ex.) function(linkData) {
-//                              return [ {href:linkData.href+'?q=new', text:'New', title:'Open New'} ];
+//                              return [ {href:linkData.link.href+'?q=new', text:'New', title:'Open New'} ];
 //                            }
 //
 // **field priorities
