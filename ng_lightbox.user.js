@@ -1961,6 +1961,15 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /\?SS=/,
 		findImageRegExp		: /^thumb_\d+_(.*)\.(jpg)$/i,
 		replaceString		: '$1.$2'
+	},
+
+	// Ascii
+	{
+		name				: 'ascii',
+		includeRegExp		: /^http:\/\/(?:.*\.)?ascii\.jp\//,
+		linkRegExp			: /^\/elem\/.*\/img\.html$/,
+		imageInPageRegExp   : /<img(?= )(?=[^>]*\bRefBack\b)(?=[^>]* src="(\/elem\/[^"]+)").*?>/,
+		replaceString		: '$1'
 	}
 
 ]; // ngLightbox.searchDefs
