@@ -183,9 +183,10 @@ var ngLightbox = {
 			if (searchDef['getImageFunction']) {
 				searchDef['getImageFunction'](linkData, hookListener);
 			} else if (searchDef['imageInPageRegExp']) {
+				address = link.href;
 				if (searchDef.hasOwnProperty('linkReplaceString'))
 					address = address.replace(searchDef['linkRegExp'], searchDef['linkReplaceString']);
-				ngLightbox.loadPageAndFindImage(link.href, searchDef, hookListener);
+				ngLightbox.loadPageAndFindImage(address, searchDef, hookListener);
 			} else if (searchDef['findImageRegExp']) {
 				hookListener(ngLightbox.containsThumb(link, searchDef, true));
 			} else if (searchDef.hasOwnProperty('linkReplaceString')) {
