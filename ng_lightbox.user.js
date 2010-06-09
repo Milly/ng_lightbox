@@ -914,6 +914,8 @@ var ngLightbox = {
 	findSearchDefForLink : function(link) {
 		var searchDefsToUse = ngLightbox.searchDefsToUse;
 		var href = link.getAttribute('href');
+		if (location.href.match(/^http:\/\/(?:[^\/]+\.)google\.(?:com|co\.[a-z]{2})\//))
+			href = href.replace(/^\/url\?(?=\bq=([^&]+)).*$/, '$1');
 		for (var i = 0; i < searchDefsToUse.length; ++i) {
 			var searchDef = searchDefsToUse[i];
 			if (searchDef['linkRegExp'].test(href)
