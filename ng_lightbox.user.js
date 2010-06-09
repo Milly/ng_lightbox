@@ -1797,6 +1797,15 @@ ngLightbox.searchDefs = [
 		replaceString		: '.jpg'
 	}, // flickr
 
+	// flic.kr
+	{
+		name				: 'flic.kr',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/flic\.kr\/p\/[a-z1-9]+$/i,
+		imageInPageRegExp	: /<img(?= )(?=[^>]* class="reflect")(?=[^>]* src="([^"]+?)(?:_[tsm]|)\.jpg").*?>/m,
+		replaceString		: '$1_b.jpg'
+	}, // flic.kr
+
 	// myspace1
 	{
 		name				: 'myspace1',
