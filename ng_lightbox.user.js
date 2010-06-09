@@ -1763,6 +1763,15 @@ ngLightbox.searchDefs = [
 		replaceString       : '$1'
 	}, // twitpic link
 
+	// tweetphoto
+	{
+		name				: 'tweetphoto',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/(?:www\.)?tweetphoto\.com\/\d+/i,
+		imageInPageRegExp	: /<a\b(?=[^>]*\btitle='Enlarge Photo')(?=[^>]*\bhref='([^']+?)').*?>/m,
+		replaceString       : '$1'
+	}, // tweetphoto
+
 	// movapic
 	{
 		name				: 'movapic',
