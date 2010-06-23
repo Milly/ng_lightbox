@@ -1,3 +1,4 @@
+// header {{{1
 /****************************
 
 Next-generation Greased Lightbox v1.0
@@ -47,7 +48,11 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 // @include			*
 // ==/UserScript==
 
+// ngLightbox {{{1
 var ngLightbox = {
+
+// properties {{{2
+
 	version : '1.0',
 
 	// slide show interval time (user setting)
@@ -111,6 +116,8 @@ var ngLightbox = {
 
 	// show functions
 	showFunctions : {},
+
+// methods {{{2
 
 	getSearchDef : function(name) {
 		var searchDefs = ngLightbox.searchDefs;
@@ -238,14 +245,14 @@ var ngLightbox = {
 
 	// Extracts an address out of a linkObj
 	getAddress : function(linkObj) {
-        var address = linkObj.getAttribute('href');
+		var address = linkObj.getAttribute('href');
 
-        // for GreaseKit users because Safari doesn't like stopping events even though it says it does...
-        if (/Safari/.test(navigator.userAgent)) {
-            linkObj.onclick = function() { return false; };
-        }
-        return address;
-    }, // getAddress()
+		// for GreaseKit users because Safari doesn't like stopping events even though it says it does...
+		if (/Safari/.test(navigator.userAgent)) {
+			linkObj.onclick = function() { return false; };
+		}
+		return address;
+	}, // getAddress()
 
 	// Returns page scroll, page size and window size
 	getView : function() {
@@ -978,6 +985,8 @@ var ngLightbox = {
 		return link;
 	}, // checkEvent()
 
+// initialize methods {{{2
+
 	// Initialize NG Lightbox.
 	init : function() {
 		// check setTimeout useable
@@ -1148,6 +1157,8 @@ var ngLightbox = {
 			objMenuButtonSlide.style.display = 'inline-block';
 		}
 	}, // initControls()
+
+// event listeners {{{2
 
 	eventListeners : {
 
@@ -1637,8 +1648,11 @@ var ngLightbox = {
 
 	}
 
+// }}}2
+
 } // ngLightbox
 
+// ngLightbox.searchDefs {{{1
 // searchDefs stores regular expressions used to find and execute functions for image links within the page.
 // these are executed in the order that they appear.
 //
@@ -1677,7 +1691,7 @@ var ngLightbox = {
 //  (low)  replaceString
 ngLightbox.searchDefs = [
 
-	// wikipedia (needs to come before 'show')
+	// wikipedia (needs to come before 'show') {{{2
 	{
 		name				: 'wikipedia',
 		includeRegExp		: /^https?:\/\/(.*?\.)?wikipedia\.org/i,
@@ -1686,7 +1700,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1/$2.$3'
 	}, // wikipedia
 
-	// imagesocket (needs to come before 'show')
+	// imagesocket (needs to come before 'show') {{{2
 	{
 		name				: 'imagesocket',
 		includeRegExp		: /./, // used on every page
@@ -1694,7 +1708,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1content.imagesocket.com/images/$4'
 	}, // imagesocket
 
-	// imagesocket site (needs to come before 'show')
+	// imagesocket site (needs to come before 'show') {{{2
 	{
 		name				: 'imagesocketSite',
 		includeRegExp		: /^https?:\/\/(.*?\.)?imagesocket\.com/i,
@@ -1702,7 +1716,7 @@ ngLightbox.searchDefs = [
 		replaceString		: 'http://content.imagesocket.com/images/$1'
 	}, // imagesocket site
 
-	// blogger/blogspot (needs to come before 'show')
+	// blogger/blogspot (needs to come before 'show') {{{2
 	{
 		name				: 'blogger',
 		includeRegExp		: /^https?:\/\/(.*?\.)?blog(ger|spot)\.com/i,
@@ -1710,7 +1724,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1$2'
 	}, // blogger/blogspot
 
-	// ITmedia (needs to come before 'show')
+	// ITmedia (needs to come before 'show') {{{2
 	{
 		name				: 'itmedia',
 		includeRegExp		: /./, // used on every page
@@ -1731,7 +1745,7 @@ ngLightbox.searchDefs = [
 			}
 	},
 
-	// Mycom journal (needs to come before 'show')
+	// Mycom journal (needs to come before 'show') {{{2
 	{
 		name				: 'mycom',
 		includeRegExp		: /^http:\/\/journal\.mycom\.co\.jp\//,
@@ -1739,7 +1753,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '/'
 	},
 
-	// regular links to images
+	// regular links to images {{{2
 	{
 		name				: 'show',
 		includeRegExp		: /./, // used on every page
@@ -1747,7 +1761,7 @@ ngLightbox.searchDefs = [
 		excludeLinkRegExp	: /\?/i
 	}, // regular links to images
 
-	// javascript link
+	// javascript link {{{2
 	{
 		name				: 'javascript',
 		includeRegExp		: /./, // used on every page
@@ -1755,7 +1769,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1'
 	}, // javascript link
 
-	// twitpic
+	// twitpic {{{2
 	{
 		name				: 'twitpic',
 		includeRegExp		: /./, // used on every page
@@ -1765,7 +1779,7 @@ ngLightbox.searchDefs = [
 		replaceString       : '$1'
 	}, // twitpic link
 
-	// tweetphoto
+	// tweetphoto {{{2
 	{
 		name				: 'tweetphoto',
 		includeRegExp		: /./, // used on every page
@@ -1774,7 +1788,7 @@ ngLightbox.searchDefs = [
 		replaceString       : '$1'
 	}, // tweetphoto
 
-	// movapic
+	// movapic {{{2
 	{
 		name				: 'movapic',
 		includeRegExp		: /./, // used on every page
@@ -1782,7 +1796,7 @@ ngLightbox.searchDefs = [
 		replaceString       : 'http://image.movapic.com/pic/m_$1.jpeg'
 	}, // movapic link
 
-	// search engine images (google)
+	// search engine images (google) {{{2
 	{
 		name				: 'google',
 		includeRegExp		: /^https?:\/\/(.*?\.)?google\./i,
@@ -1791,7 +1805,7 @@ ngLightbox.searchDefs = [
 		captionXPath		: 'ancestor::table//td[@id=concat("tDataText",substring-after(current()/parent::td/@id,"tDataImage"))]//text()'
 	}, // search engine images
 
-	// search engine images (yahoo, ask jeeves, blingo)
+	// search engine images (yahoo, ask jeeves, blingo) {{{2
 	{
 		name				: 'search',
 		includeRegExp		: /^https?:\/\/(.*?\.)?(search\.yahoo\.com|blingo\.com\/images)/i,
@@ -1799,7 +1813,7 @@ ngLightbox.searchDefs = [
 		replaceString		: 'http$4://$5'
 	}, // search engine images
 
-	// flickr
+	// flickr {{{2
 	{
 		name				: 'flickr',
 		includeRegExp		: /^https?:\/\/(.*?\.)?flickr\.com/i,
@@ -1808,7 +1822,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '.jpg'
 	}, // flickr
 
-	// flic.kr
+	// flic.kr {{{2
 	{
 		name				: 'flic.kr',
 		includeRegExp		: /./, // used on every page
@@ -1817,7 +1831,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1_b.jpg'
 	}, // flic.kr
 
-	// myspace1
+	// myspace1 {{{2
 	{
 		name				: 'myspace1',
 		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
@@ -1826,7 +1840,7 @@ ngLightbox.searchDefs = [
 		replaceString		: 'l_$1.jpg'
 	},  // myspace1
 
-	// myspace2
+	// myspace2 {{{2
 	{
 		name				: 'myspace2',
 		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
@@ -1835,7 +1849,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '_l'
 	},  // myspace2
 
-	// deviantart
+	// deviantart {{{2
 	{
 		name				: 'deviantart',
 		includeRegExp		: /^https?:\/\/(.*?\.)?deviantart\.com/i,
@@ -1844,7 +1858,7 @@ ngLightbox.searchDefs = [
 		replaceString		: 'http$1://fc01.deviantart.com/$2/$3.$4'
 	}, // deviantart
 
-	// subvariance
+	// subvariance {{{2
 	{
 		name				: 'subvariance',
 		includeRegExp		: /^https?:\/\/(.*?\.)?subvariance\.com/i,
@@ -1853,7 +1867,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '/items/$1.jpg'
 	}, // subvariance
 
-	// gmail
+	// gmail {{{2
 	{
 		name				: 'gmail',
 		resetEverytime		: true,
@@ -1862,7 +1876,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1emb$2'
 	}, // gmail
 
-	// imagefap
+	// imagefap {{{2
 	{
 		name				: 'imagefap',
 		includeRegExp		: /^https?:\/\/(.*?\.)?imagefap\.com/i,
@@ -1871,7 +1885,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '/full/$2/$3/$4.jpg'
 	},
 
-	// ffffound!
+	// ffffound! {{{2
 	{
 		name				: 'ffffound',
 		includeRegExp		: /^https?:\/\/(.*?\.)?ffffound\.com/i,
@@ -1880,7 +1894,7 @@ ngLightbox.searchDefs = [
 		replaceString		: 'img.ffffound.com/static-data/assets/$2.$3'
 	},
 
-	// Yahoo! Auction Japan
+	// Yahoo! Auction Japan {{{2
 	{
 		name				: 'yauctionjp',
 		includeRegExp		: /^http:\/\/(?:[^\/]*?\.)?auctions\.yahoo\.co\.jp\/(?:jp\/)?(?:user|(?:str)?search|.*-category\.html)/i,
@@ -1891,7 +1905,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1'
 	},
 
-	// Yahoo! Photos Japan
+	// Yahoo! Photos Japan {{{2
 	{
 		name				: 'yphotojp',
 		includeRegExp		: /^http:\/\/photos\.yahoo\.co\.jp\/ph\//i,
@@ -1902,7 +1916,7 @@ ngLightbox.searchDefs = [
 		replaceString       : '$1'
 	},
 
-	// Yahoo! Blog Japan
+	// Yahoo! Blog Japan {{{2
 	{
 		name				: 'yblogjp',
 		includeRegExp		: /^http:\/\/blogs\.yahoo\.co\.jp\//i,
@@ -1911,7 +1925,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1$2'
 	},
 
-	// danbooru
+	// danbooru {{{2
 	{
 		name				: 'danbooru',
 		includeRegExp		: /^http:\/\/danbooru\.donmai\.us(\/|$)/i,
@@ -1920,7 +1934,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1'
 	},
 
-	// Pixiv
+	// Pixiv {{{2
 	{
 		name				: 'pixiv',
 		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
@@ -1934,7 +1948,7 @@ ngLightbox.searchDefs = [
 		}
 	},
 
-	// Impress
+	// Impress {{{2
 	{
 		name				: 'impress1',
 		includeRegExp		: /^http:\/\/(?:.*\.)?impress\.co\.jp\//,
@@ -1975,7 +1989,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1r.jpg'
 	},
 
-	// NikkeiBP
+	// NikkeiBP {{{2
 	{
 		name				: 'nikkeibp',
 		includeRegExp		: /^http:\/\/(?:.*\.)?nikkeibp\.co\.jp\//,
@@ -1984,7 +1998,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1.$2'
 	},
 
-	// Ascii
+	// Ascii {{{2
 	{
 		name				: 'ascii',
 		includeRegExp		: /^http:\/\/(?:.*\.)?ascii\.jp\//,
@@ -1993,12 +2007,15 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1'
 	}
 
+	// }}}2
+
 ]; // ngLightbox.searchDefs
 
+// ngLightbox.data {{{1
 ngLightbox.data = {
 
-	// Global css.
-	styleSheet :[
+	// Global css. {{{2
+	styleSheet : [
 		'#ngLightboxOverlay, #ngLightboxOverlay * { margin:0 !important; padding:0 !important; border:0 none !important; }',
 		'#ngLightboxBackground, #ngLightboxOverlay { position:fixed !important; top:0; left:0; z-index:10000000 !important; width:100%; height:100%; overflow:hidden !important; }',
 		'#ngLightboxBackground { background-color:#000 !important; opacity:0.8 !important; }',
@@ -2036,7 +2053,7 @@ ngLightbox.data = {
 		'a[rel$="ngLightbox"] { cursor:url("$lightboxCursor$") 5 0, auto; }'
 	].join(''),
 
-	// Loading animation icon.
+	// Loading animation icon. {{{2
 	loadingIcon : [
 		'data:image/gif;base64,',
 		'R0lGODlhIAAgAPYAAAAAAP///wQEBBwcHCwsLCoqKhAQEAICAggICEZGRpKSkrq6urCwsHZ2digo',
@@ -2115,7 +2132,7 @@ ngLightbox.data = {
 		'ToQEAgA7AAAAAAAAAAAA'
 	].join(''),
 
-	// Lightbox target link's hover cursor.
+	// Lightbox target link's hover cursor. {{{2
 	lightboxCursor : [
 		'data:image/png;base64,',
 		'iVBORw0KGgoAAAANSUhEUgAAACQAAAAmCAYAAACsyDmTAAAB9ElEQVRYw+WWS04CQRCGayRiIBkT',
@@ -2130,6 +2147,7 @@ ngLightbox.data = {
 		'QfyfQkvROnyngkkENVef5TMVTOLP+PELLJ+AmbEcGlQAAAAASUVORK5CYII='
 	].join(''),
 
+	// SVG container XML. {{{2
 	svgImageContainer : [
 		'data:image/svg+xml,',
 		'<?xml version="1.0" standalone="no"?>',
@@ -2141,11 +2159,16 @@ ngLightbox.data = {
 		'</svg>'
 	].join('')
 
+	// }}}2
+
 } // ngLightbox.data
 
+// ngLightbox.text {{{1
 ngLightbox.text = {
 
-	// english
+// languages {{{2
+
+	// english {{{3
 	en : [
 		{
 			loading			: "Loading image",
@@ -2164,7 +2187,7 @@ ngLightbox.text = {
 		}
 	], // english
 
-	// spanish
+	// spanish {{{3
 	es : [
 		{
 			loading			: "Cargando imagen",
@@ -2183,7 +2206,7 @@ ngLightbox.text = {
 		}
 	], // spanish
 
-	// portuguese
+	// portuguese {{{3
 	pt : [
 		{
 			loading			: "Carregando imagem",
@@ -2202,7 +2225,7 @@ ngLightbox.text = {
 		}
 	], // portuguese
 
-	// german
+	// german {{{3
 	de : [
 		{
 		  	loading			: "Bild wird geladen",
@@ -2221,7 +2244,7 @@ ngLightbox.text = {
 		}
 	], // german
 
-	// french
+	// french {{{3
 	fr : [
 		{
 			loading			: "Chargement de l'image",
@@ -2240,7 +2263,7 @@ ngLightbox.text = {
 		}
 	], // french
 
-	// dutch
+	// dutch {{{3
 	nl : [
 		{
 			loading			: "Laden",
@@ -2259,7 +2282,7 @@ ngLightbox.text = {
 		}
 	], // dutch
 
-	// italian
+	// italian {{{3
 	it : [
 		{
 		  	loading			: "Scarico immagine",
@@ -2278,7 +2301,7 @@ ngLightbox.text = {
 		}
 	], // italian
 
-	// hungarian
+	// hungarian {{{3
 	hu : [
 		{
 			loading			: "K\u00E9p bet\u00F6lt\u00E9se",
@@ -2297,7 +2320,7 @@ ngLightbox.text = {
 		}
 	], // hungarian
 
-	// finnish
+	// finnish {{{3
 	fi : [
 	  {
 			loading			: "Ladataan kuvaa",
@@ -2316,7 +2339,7 @@ ngLightbox.text = {
 	  }
 	], // finnish
 
-	// japanese
+	// japanese {{{3
 	ja : [
 		{
 		  	loading			: "\u8AAD\u307F\u8FBC\u307F\u4E2D",
@@ -2335,7 +2358,7 @@ ngLightbox.text = {
 		}
 	], // japanese
 
-	// chinese (simplified)
+	// chinese (simplified) {{{3
 	zh : [
 		{
 		  	loading			: "\u8BFB\u53D6\u56FE\u7247",
@@ -2354,7 +2377,7 @@ ngLightbox.text = {
 		}
 	], // chinese (simplified)
 
-    // chinese (traditional)
+	// chinese (traditional) {{{3
 	tw : [
 		{
 			loading			: "\u8F09\u5165\u5716\u7247\u4E2D",
@@ -2373,7 +2396,7 @@ ngLightbox.text = {
 		}
 	], // chinese (traditional)
 
-    // polish
+	// polish {{{3
 	pl : [
 		{
 			loading			: "\u0141aduj\u0119 obraz",
@@ -2392,7 +2415,7 @@ ngLightbox.text = {
 		}
 	], // polish
 
-	// czech
+	// czech {{{3
 	cs : [
 		{
 			loading			: "Nahr\u00E1v\u00E1m obr\u00E1zek",
@@ -2411,7 +2434,7 @@ ngLightbox.text = {
 		}
 	], // czech
 
-	// slovak
+	// slovak {{{3
 	sk : [
 		{
 			loading			: "Nahr\u00E1vam obr\u00E1zok",
@@ -2430,7 +2453,7 @@ ngLightbox.text = {
 		}
 	], // slovak
 
-	// swedish
+	// swedish {{{3
 	sv : [
 		{
 			loading			: "Laddar bild",
@@ -2449,9 +2472,8 @@ ngLightbox.text = {
 		}
 	], // swedish
 
-	/* language template
-	// lang
-	 : [
+	// template {{{3
+	langcode : [
 		{
 		  	loading			: "",
 			loadingSub		: "",
@@ -2467,8 +2489,9 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: ""
 		}
-	], // lang
-	*/
+	], // template
+
+// methods {{{2
 
 	// The correct language for localization is set in init()
 	language : null,
@@ -2484,6 +2507,9 @@ ngLightbox.text = {
 		ngLightbox.text.language = ngLightbox.text[lang] ? lang : 'en';
 	} // init()
 
+// }}}2
+
 } // ngLightbox.text
 
+// initialize {{{1
 if (document.body) ngLightbox.init();
