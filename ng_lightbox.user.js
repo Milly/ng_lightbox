@@ -1831,7 +1831,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1_b.jpg'
 	},
 
-	// myspace1 {{{2
+	// myspace {{{2
 	{
 		name				: 'myspace1',
 		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
@@ -1839,8 +1839,6 @@ ngLightbox.searchDefs = [
 		findImageRegExp		: /m_(.+)\.jpg/i,
 		replaceString		: 'l_$1.jpg'
 	},
-
-	// myspace2 {{{2
 	{
 		name				: 'myspace2',
 		includeRegExp		: /^https?:\/\/(.*?\.)?myspace\.com/i,
