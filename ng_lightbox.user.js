@@ -126,7 +126,7 @@ var ngLightbox = {
 			if (searchDef['name'] == name)
 				return searchDef;
 		}
-	}, // getSearchDef()
+	},
 
 	getShowFunction : function(name) {
 		if (!ngLightbox.showFunctions[name]) {
@@ -136,7 +136,7 @@ var ngLightbox = {
 			};
 		}
 		return ngLightbox.showFunctions[name];
-	}, // getShowFunction()
+	},
 
 	// Generic helper function that calls show() with the correct parameters
 	showFrom : function(event) {
@@ -159,7 +159,7 @@ var ngLightbox = {
 				ngLightbox.showLoadingMessage();
 			}
 		}
-	}, // showFrom()
+	},
 
 	// get image url and call listener.
 	getImageByListener : function(linkData, listener) {
@@ -204,7 +204,7 @@ var ngLightbox = {
 				hookListener(address);
 			}
 		}
-	}, // getImageByListener()
+	},
 
 	loadPageAndFindImage : function(url, searchDef, listener) {
 		GM_xmlhttpRequest({
@@ -225,7 +225,7 @@ var ngLightbox = {
 				listener.apply(ngLightbox, matches);
 			}
 		});
-	}, // loadPageAndFindImage()
+	},
 
 	containsThumb : function(elem, searchDef, verbose) {
 		var srcs = document.evaluate('.//img/@src', elem, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
@@ -241,7 +241,7 @@ var ngLightbox = {
 			}
 		}
 		return false;
-	}, // containsThumb()
+	},
 
 	// Extracts an address out of a linkObj
 	getAddress : function(linkObj) {
@@ -252,7 +252,7 @@ var ngLightbox = {
 			linkObj.onclick = function() { return false; };
 		}
 		return address;
-	}, // getAddress()
+	},
 
 	// Returns page scroll, page size and window size
 	getView : function() {
@@ -272,7 +272,7 @@ var ngLightbox = {
 			pageWidth  : Math.max(pageWidth,  windowWidth),
 			pageHeight : Math.max(pageHeight, windowHeight)
 		};
-	}, // getView()
+	},
 
 	getElementOffset : function(element, base) {
 		var left = 0, top = 0;
@@ -302,7 +302,7 @@ var ngLightbox = {
 			height : height,
 			ancestor : parent
 		};
-	}, // getElementOffset()
+	},
 
 	// Centers the object in the page
 	center : function(objToCenter, options) {
@@ -325,7 +325,7 @@ var ngLightbox = {
 			container.style.top  = Math.max(minTop,  newTop ) + 'px';
 			container.style.left = Math.max(minLeft, newLeft) + 'px';
 		}
-	}, // center()
+	},
 
 	// Preloads images. Pleaces new image in lightbox then centers and displays.
 	show : function(event /* or link */, link, img, context, caption, exLinks) {
@@ -362,7 +362,7 @@ var ngLightbox = {
 		if (ngLightbox.allImageLinks.length > 1) {
 			ngLightbox.prefetchNextImage();
 		}
-	}, // show()
+	},
 
 	showLightboxOverlay : function() {
 		var objOverlay = document.getElementById('ngLightboxOverlay');
@@ -371,7 +371,7 @@ var ngLightbox = {
 			objOverlay.style.display = 'block';
 			ngLightbox.setOverlaysVisibility(false);
 		}
-	}, // showLightboxOverlay()
+	},
 
 	showLoadingMessage : function() {
 		if (!ngLightbox.isSlideShow) {
@@ -382,7 +382,7 @@ var ngLightbox = {
 			ngLightbox.center(objLoading);
 			objMenu.style.bottom = 0;
 		}
-	}, // showLoadingMessage()
+	},
 
 	hideLoadingMessage : function() {
 		var objLoading = document.getElementById('ngLightboxLoading');
@@ -409,7 +409,7 @@ var ngLightbox = {
 				objMenu.style.bottom = '';
 			}
 		}
-	}, // hideLoadingMessage()
+	},
 
 	showMessage : function(message, context) {
 		var objLightbox     = document.getElementById('ngLightboxBox');
@@ -432,7 +432,7 @@ var ngLightbox = {
 
 		ngLightbox.hideLoadingMessage();
 		objLightbox.style.display = 'none';
-	}, // showMessage()
+	},
 
 	// Loads another image from allImageLinks[]
 	showNext : function(moveByAmount) {
@@ -447,7 +447,7 @@ var ngLightbox = {
 			var func = ngLightbox.getShowFunction(linkData['searchDef']['name']);
 			func(linkData['link']);
 		}
-	}, // showNext()
+	},
 
 	// Cycles through all of the lightboxable images.
 	startSlideShow : function() {
@@ -463,7 +463,7 @@ var ngLightbox = {
 				ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext() }, interval);
 			} });
 		}
-	}, // startSlideShow()
+	},
 
 	// stop slide show.
 	stopSlideShow : function() {
@@ -477,7 +477,7 @@ var ngLightbox = {
 			objOverlay.removeAttribute('class');
 			ngLightbox.fadeElement(objBackground, { from:1, to:0.8 });
 		}
-	}, // stopSlideShow()
+	},
 
 	// Start or stop slide show
 	toggleSlideShow : function() {
@@ -486,7 +486,7 @@ var ngLightbox = {
 		} else {
 			ngLightbox.startSlideShow();
 		}
-	}, // toggleSlideShow()
+	},
 
 	// Stops the preloader in case it hasn't finished and then hides all of the lightbox components
 	hide : function() {
@@ -506,7 +506,7 @@ var ngLightbox = {
 
 		var link = ngLightbox.allImageLinks[ngLightbox.currentImagePosition]['link'];
 		ngLightbox.windowScrollTo(link, { center:true, smooth:true, focus:true });
-	}, // hide()
+	},
 
 	// Window scrool to element
 	windowScrollTo : function(element, opt) {
@@ -549,7 +549,7 @@ var ngLightbox = {
 		} else {
 			if (opt.focus) element.focus();
 		}
-	}, // windowScrollTo()
+	},
 
 	// evaluate XPath
 	evaluateXPath : function(xpath, contextNode, resultType) {
@@ -563,7 +563,7 @@ var ngLightbox = {
 			return '"' + res + '"';
 		});
 		return document.evaluate(xpath, contextNode, null, resultType || XPathResult.ANY_TYPE, null);
-	}, // evaluateXPath()
+	},
 
 	// make caption text
 	makeCaption : function(link, xpaths /* string or array */) {
@@ -579,7 +579,7 @@ var ngLightbox = {
 			}
 		}
 		return '';
-	}, // makeCaption()
+	},
 
 	// Show Hide flash movies that peek through the overlay
 	setOverlaysVisibility : function(visible) {
@@ -590,7 +590,7 @@ var ngLightbox = {
 			var thisObtrusive = obtrusives.snapshotItem(i);
 			thisObtrusive.style.visibility = visibility;
 		}
-	}, // setOverlaysVisibility()
+	},
 
 	findImageLinkPosition : function(link) {
 		var pos = ngLightbox.currentImagePosition;
@@ -602,7 +602,7 @@ var ngLightbox = {
 			}
 		}
 		return null;
-	}, // findImageLinkPosition()
+	},
 
 	getNextPosition : function() {
 		var firstPos = ngLightbox.currentImagePosition;
@@ -615,7 +615,7 @@ var ngLightbox = {
 			if (pos == firstPos || ngLightbox.allImageLinks[pos]['image'] != firstData['image']) break;
 		} while (ngLightbox.allImageLinks[pos]['link'].href == firstData['link'].href);
 		return pos;
-	}, // getNextPosition()
+	},
 
 	// for some reason this pre-fetching breaks lightbox in opera
 	prefetchNextImage : function() {
@@ -628,7 +628,7 @@ var ngLightbox = {
 			var objPrefetch = document.getElementById('ngLightboxPrefetch');
 			objPrefetch.src = img;
 		});
-	}, // prefetchNextImage()
+	},
 
 	// Resize the image.
 	// resizeByAmount = 0   : set to default size
@@ -695,7 +695,7 @@ var ngLightbox = {
 		if (!notShowImageAmount) {
 			ngLightbox.showImageAmount();
 		}
-	}, // resize()
+	},
 
 	rotate : function(angle) {
 		var objImageSvg  = document.getElementById('ngLightboxImageSvg');
@@ -736,12 +736,12 @@ var ngLightbox = {
 
 		objImage.style.display    = 'none';
 		objImageSvg.style.display = 'block';
-	}, // rotate()
+	},
 
 	rotateAndResize : function(angle, resizeByAmount, notShowImageAmount) {
 		ngLightbox.currentRotate += angle;
 		ngLightbox.resize(resizeByAmount, notShowImageAmount);
-	}, // rotateAndResize()
+	},
 
 	showImageAmount : function() {
 		if (ngLightbox.animationEnabled && ngLightbox.timerEnabled) {
@@ -754,7 +754,7 @@ var ngLightbox = {
 
 			ngLightbox.fadeElement(objSize, { from:2, steps:10, interval:50 });
 		}
-	}, // showImageAmount()
+	},
 
 	fadeElement : function(element, opt) {
 		if (ngLightbox.fadeTimerCloser) ngLightbox.fadeTimerCloser();
@@ -795,7 +795,7 @@ var ngLightbox = {
 		} else {
 			ngLightbox.fadeTimerCloser();
 		}
-	}, // fadeElement()
+	},
 
 	scrollElement : function(element, opt) {
 		if (ngLightbox.imageScrollTimerCloser) ngLightbox.imageScrollTimerCloser();
@@ -847,7 +847,7 @@ var ngLightbox = {
 		} else {
 			ngLightbox.imageScrollTimerCloser();
 		}
-	}, // scrollElement ()
+	},
 
 	imageScrollTo: function(pos_or_opt) {
 		var objLightbox = document.getElementById('ngLightboxBox');
@@ -877,7 +877,7 @@ var ngLightbox = {
 				left : parsePos(pos_or_opt, objLightbox.offsetLeft, view.width, objLightbox.offsetWidth)
 			});
 		}
-	}, // imageScrollToHead ()
+	},
 
 	// Update all image links event.
 	updateAllImageLinks : function() {
@@ -908,14 +908,14 @@ var ngLightbox = {
 			}
 		}
 		ngLightbox.allImageLinks = allImageLinks;
-	}, // updateAllImageLinks()
+	},
 
 	// Find link element from ancestor or self.
 	findLink : function(element /* or event */) {
 		if (element.currentTarget) element = element.target;
 		var res = document.evaluate('ancestor-or-self::a', element, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
 		return res.singleNodeValue;
-	}, // findLink()
+	},
 
 	// Find SearchDef for link.
 	findSearchDefForLink : function(link) {
@@ -932,13 +932,13 @@ var ngLightbox = {
 			}
 		}
 		return false;
-	}, // findSearchDefForLink()
+	},
 
 	// Add event listener.
 	addEvent : function(element, type, listener, capture) {
 		element.addEventListener(type, listener, capture);
 		ngLightbox.events.push([element, type, listener, capture]);
-	}, // addEvent()
+	},
 
 	// Remove event listener.
 	removeEvent : function(element, type, listener, capture) {
@@ -951,7 +951,7 @@ var ngLightbox = {
 				break;
 			}
 		}
-	}, // removeEvent()
+	},
 
 	stopEvents : function(event) {
 		if (event && event.currentTarget) {
@@ -966,7 +966,7 @@ var ngLightbox = {
 				}
 			}
 		}
-	}, // stopEvents()
+	},
 
 	checkEventAndLink : function(event /* or link */, link) {
 		// let shift+click and ctrl+click (but not ctrl+shift+click) through without lightbox
@@ -983,7 +983,7 @@ var ngLightbox = {
 		}
 
 		return link;
-	}, // checkEvent()
+	},
 
 // initialize methods {{{2
 
@@ -1059,7 +1059,7 @@ var ngLightbox = {
 				}
 			}
 			return element;
-		} // build()
+		}
 
 		var listeners = ngLightbox.eventListeners;
 
@@ -1070,7 +1070,7 @@ var ngLightbox = {
 							  onmouseup:listeners.imageDragEnd,
 							  onmousemove:listeners.imageDragMove,
 							  onDOMMouseScroll:listeners.imageMouseScroll } ]);
-		} // svgContainerLoaded()
+		}
 
 		build([ document.body, {},
 			[ 'div', { id:'ngLightboxOverlay',
@@ -1156,7 +1156,7 @@ var ngLightbox = {
 			var objMenuButtonSlide = document.getElementById('ngLightboxButtonSlide');
 			objMenuButtonSlide.style.display = 'inline-block';
 		}
-	}, // initControls()
+	},
 
 // event listeners {{{2
 
@@ -1170,7 +1170,7 @@ var ngLightbox = {
 				var e = events[i];
 				if (e) e[0].removeEventListener(e[1], e[2], e[3]);
 			}
-		}, // windowUnload()
+		},
 
 		windowResize : function() {
 			if (ngLightbox.isSlideShow) {
@@ -1182,7 +1182,7 @@ var ngLightbox = {
 				ngLightbox.center(objLoading,  { view:view });
 				ngLightbox.center(objError,    { view:view });
 			}
-		}, // windowResize()
+		},
 
 		// Handles keypress.
 		captureKeypress : function(event) {
@@ -1232,7 +1232,7 @@ var ngLightbox = {
 						ngLightbox.rotateAndResize(90, '=', true);
 						handled = STOP_SLIDESHOW;
 						break;
-				} // end switch
+				}
 			}
 
 			// with <CTRL> + <SHIFT>
@@ -1267,7 +1267,7 @@ var ngLightbox = {
 						ngLightbox.rotateAndResize(-90, '=', true);
 						handled = STOP_SLIDESHOW;
 						break;
-				} // end switch
+				}
 			}
 
 			// without modifier keys
@@ -1366,7 +1366,7 @@ var ngLightbox = {
 				return true;
 			}
 			return false;
-		}, // captureKeypress()
+		},
 
 		// Handle global mouse click.
 		captureClick : function(event) {
@@ -1379,7 +1379,7 @@ var ngLightbox = {
 				}
 			}
 			return true;
-		}, // captureClick()
+		},
 
 		// Handle global load event.
 		// checking Auto Pager, AutoPagerize or other dynamic loading page
@@ -1389,60 +1389,60 @@ var ngLightbox = {
 				ngLightbox.requireUpdate = true;
 			}
 			return true;
-		}, // captureLoad()
+		},
 
 		magnifyButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.resize(15);
-		}, // magnifyButtonClick()
+		},
 
 		shrinkButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.resize(-15);
-		}, // shrinkButtonClick()
+		},
 
 		defaultSizeButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.resize(0);
-		}, // defaultSizeButtonClick()
+		},
 
 		fitToScreenButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.resize('=');
-		}, // fitToScreenButtonClick()
+		},
 
 		rotateLeftButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.rotateAndResize(-90, '=', true);
-		}, // rotateLeftButtonClick()
+		},
 
 		rotateRightButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.rotateAndResize(90, '=', true);
-		}, // rotateRightButtonClick()
+		},
 
 		nextButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.showNext(-1);
-		}, // nextButtonClick()
+		},
 
 		previousButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.stopSlideShow();
 			ngLightbox.showNext(1);
-		}, // previousButtonClick()
+		},
 
 		slideShowButtonClick : function(event) {
 			ngLightbox.stopEvents(event);
 			ngLightbox.toggleSlideShow();
-		}, // slideShowButtonClick()
+		},
 
 		menuBarClick : function(event) {
 			ngLightbox.stopEvents(event);
@@ -1458,7 +1458,7 @@ var ngLightbox = {
 					window.location.href = event.target.href;
 				}
 			}
-		}, // menuBarClick()
+		},
 
 		// Start image dragging.
 		imageDragStart : function(event) {
@@ -1488,7 +1488,7 @@ var ngLightbox = {
 
 			ngLightbox.stopEvents(event);
 			return false;
-		}, // imageDragStart()
+		},
 
 		// End image dragging.
 		imageDragEnd : function(event) {
@@ -1504,7 +1504,7 @@ var ngLightbox = {
 
 			ngLightbox.stopEvents(event);
 			return false;
-		}, // imageDragEnd()
+		},
 
 		// Tracking image dragging.
 		imageDragMove : function(event) {
@@ -1523,7 +1523,7 @@ var ngLightbox = {
 
 			ngLightbox.stopEvents(event);
 			return false;
-		}, // imageDragMove()
+		},
 
 		// Resize by mouse wheel scroll.
 		imageMouseScroll : function(event) {
@@ -1534,17 +1534,17 @@ var ngLightbox = {
 				return false;
 			}
 			return true;
-		}, // imageMouseScroll()
+		},
 
 		prefetchDone : function() {
 			var objPrefetch = document.getElementById('ngLightboxPrefetch');
 			ngLightbox.prefetchedImage = objPrefetch.src;
 			return false;
-		}, // prefetchDone()
+		},
 
 		prefetchError : function() {
 			return false;
-		}, // prefetchError()
+		},
 
 		preloaderDone : function() {
 			if (ngLightbox.isShowing) {
@@ -1570,7 +1570,7 @@ var ngLightbox = {
 				}
 			}
 			return false;
-		}, // preloaderDone()
+		},
 
 		preloaderError : function() {
 			if (ngLightbox.isShowing) {
@@ -1588,7 +1588,7 @@ var ngLightbox = {
 				}
 			}
 			return false;
-		}, // preloaderError()
+		},
 
 		loaderDone : function() {
 			if (ngLightbox.isShowing) {
@@ -1644,13 +1644,13 @@ var ngLightbox = {
 				}
 			}
 			return false;
-		} // loaderDone()
+		}
 
 	}
 
 // }}}2
 
-} // ngLightbox
+}
 
 // ngLightbox.searchDefs {{{1
 // searchDefs stores regular expressions used to find and execute functions for image links within the page.
@@ -1698,7 +1698,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /.*?\/(Fi(le?|xter|txategi|gura|n?ch(ier|eiro))|Fa(il|sciculus)|Dat(oteka|ei)|Delwedd|Dosiero|Be(stand|rkas)|Billede|Skeudenn|Soubor|Slika|Pilt|Archivo|Mynd|Vaizdas|Tiedosto|Larawan|Resim|%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB|%ED%8C%8C%EC%9D%BC|%D7%A7%D7%95%D7%91%D7%A5):.*\.(jpe?g|gif|png)$/i,
 		findImageRegExp		: /(.+?)\/thumb\/(.+?)\.(jpe?g|gif|png).*$/i,
 		replaceString		: '$1/$2.$3'
-	}, // wikipedia
+	},
 
 	// imagesocket (needs to come before 'show') {{{2
 	{
@@ -1706,7 +1706,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^(https?:\/\/)(.*?\.)?imagesocket\.com\/(view|thumbs)\/(.*?\.(jpe?g|gif|png))$/i,
 		replaceString		: '$1content.imagesocket.com/images/$4'
-	}, // imagesocket
+	},
 
 	// imagesocket site (needs to come before 'show') {{{2
 	{
@@ -1714,7 +1714,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?imagesocket\.com/i,
 		linkRegExp			: /^\/view\/(.*?\.(jpe?g|gif|png))$/i,
 		replaceString		: 'http://content.imagesocket.com/images/$1'
-	}, // imagesocket site
+	},
 
 	// blogger/blogspot (needs to come before 'show') {{{2
 	{
@@ -1722,7 +1722,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?blog(ger|spot)\.com/i,
 		linkRegExp			: /^(https?:\/\/.*?\.blogger\.com\/.*?\/.*?\/.*?\/.*?)\/.*?-h(\/.*?\.(jpe?g|gif|png))$/i,
 		replaceString		: '$1$2'
-	}, // blogger/blogspot
+	},
 
 	// ITmedia (needs to come before 'show') {{{2
 	{
@@ -1759,7 +1759,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /.*?\.(jpe?g|gif|png)$/i,
 		excludeLinkRegExp	: /\?/i
-	}, // regular links to images
+	},
 
 	// javascript link {{{2
 	{
@@ -1767,7 +1767,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^javascript:.*'([^']*?\.(?:jpe?g|gif|png))'.*$/i,
 		replaceString		: '$1'
-	}, // javascript link
+	},
 
 	// twitpic {{{2
 	{
@@ -1777,7 +1777,7 @@ ngLightbox.searchDefs = [
 		linkReplaceString   : '$&/full',
 		imageInPageRegExp   : /<img\b(?=[^>]*\bsrc="(http:[^"]+)")(?:[^>"]|"[^"]*")*>/,
 		replaceString       : '$1'
-	}, // twitpic link
+	},
 
 	// tweetphoto {{{2
 	{
@@ -1786,7 +1786,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /^http:\/\/(?:www\.)?tweetphoto\.com\/\d+/i,
 		imageInPageRegExp	: /<a\b(?=[^>]*\btitle='Enlarge Photo')(?=[^>]*\bhref='([^']+?)').*?>/m,
 		replaceString       : '$1'
-	}, // tweetphoto
+	},
 
 	// movapic {{{2
 	{
@@ -1794,7 +1794,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^http:\/\/movapic.com\/pic\/([^\/]+)$/i,
 		replaceString       : 'http://image.movapic.com/pic/m_$1.jpeg'
-	}, // movapic link
+	},
 
 	// search engine images (google) {{{2
 	{
@@ -1803,7 +1803,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /.*?imgurl=(http(s?):\/\/)?(.*?)&.*/i,
 		replaceString		: 'http$2://$3',
 		captionXPath		: 'ancestor::table//td[@id=concat("tDataText",substring-after(current()/parent::td/@id,"tDataImage"))]//text()'
-	}, // search engine images
+	},
 
 	// search engine images (yahoo, ask jeeves, blingo) {{{2
 	{
@@ -1811,7 +1811,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?(search\.yahoo\.com|blingo\.com\/images)/i,
 		linkRegExp			: /.*?(image|img)(ur[il]|src)=(http(s?):\/\/)?(.*?)&.*/i,
 		replaceString		: 'http$4://$5'
-	}, // search engine images
+	},
 
 	// flickr {{{2
 	{
@@ -1820,7 +1820,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /\/photos\/[^\/]+\/[0-9]+/i,
 		findImageRegExp		: /_[tsm]\.jpg/i,
 		replaceString		: '.jpg'
-	}, // flickr
+	},
 
 	// flic.kr {{{2
 	{
@@ -1829,7 +1829,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /^http:\/\/flic\.kr\/p\/[a-z1-9]+$/i,
 		imageInPageRegExp	: /<img(?= )(?=[^>]* class="reflect")(?=[^>]* src="([^"]+?)(?:_[tsm]|)\.jpg").*?>/m,
 		replaceString		: '$1_b.jpg'
-	}, // flic.kr
+	},
 
 	// myspace1 {{{2
 	{
@@ -1838,7 +1838,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /imageID=[0-9]+/i,
 		findImageRegExp		: /m_(.+)\.jpg/i,
 		replaceString		: 'l_$1.jpg'
-	},  // myspace1
+	},
 
 	// myspace2 {{{2
 	{
@@ -1847,7 +1847,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /imageID/i,
 		findImageRegExp		: /_m/i,
 		replaceString		: '_l'
-	},  // myspace2
+	},
 
 	// deviantart {{{2
 	{
@@ -1856,7 +1856,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /deviantart\.com\/(deviation|print|art)\/.+/i,
 		findImageRegExp		: /^http(s)?:\/\/.*?\.deviantart\.com\/([^\/]*)\/[^\/]*\/(.*?)\.(jpe?g|gif|png)$/i,
 		replaceString		: 'http$1://fc01.deviantart.com/$2/$3.$4'
-	}, // deviantart
+	},
 
 	// subvariance {{{2
 	{
@@ -1865,7 +1865,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /\/view\/[0-9]+/i,
 		findImageRegExp		: /\/items\/thumbs\/(.*?)\.jpg/i,
 		replaceString		: '/items/$1.jpg'
-	}, // subvariance
+	},
 
 	// gmail {{{2
 	{
@@ -1874,7 +1874,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/mail\.google\.\w+\//i,
 		linkRegExp			: /^(\?.*?\bview=att\b.*?\bdisp=)inline\b(.*)$/i,
 		replaceString		: '$1emb$2'
-	}, // gmail
+	},
 
 	// imagefap {{{2
 	{
@@ -2161,7 +2161,7 @@ ngLightbox.data = {
 
 	// }}}2
 
-} // ngLightbox.data
+}
 
 // ngLightbox.text {{{1
 ngLightbox.text = {
@@ -2185,7 +2185,7 @@ ngLightbox.text = {
 			rotateRight		: "Rotate right (<CTRL>+R)",
 			slideshow		: "Start/stop slideshow"
 		}
-	], // english
+	],
 
 	// spanish {{{3
 	es : [
@@ -2204,7 +2204,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: ""
 		}
-	], // spanish
+	],
 
 	// portuguese {{{3
 	pt : [
@@ -2223,7 +2223,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "Iniciar/cancelar apresenta\u00e7\u00e3o"
 		}
-	], // portuguese
+	],
 
 	// german {{{3
 	de : [
@@ -2242,7 +2242,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "Diashow starten/beenden"
 		}
-	], // german
+	],
 
 	// french {{{3
 	fr : [
@@ -2261,7 +2261,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: ""
 		}
-	], // french
+	],
 
 	// dutch {{{3
 	nl : [
@@ -2280,7 +2280,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "Start/stop diavoorstelling"
 		}
-	], // dutch
+	],
 
 	// italian {{{3
 	it : [
@@ -2299,7 +2299,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "Avvia/ferma presentazione"
 		}
-	], // italian
+	],
 
 	// hungarian {{{3
 	hu : [
@@ -2318,7 +2318,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: ""
 		}
-	], // hungarian
+	],
 
 	// finnish {{{3
 	fi : [
@@ -2337,7 +2337,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "K\u00e4ynnist\u00e4/Pys\u00e4yt\u00e4 dia esitys"
 	  }
-	], // finnish
+	],
 
 	// japanese {{{3
 	ja : [
@@ -2356,7 +2356,7 @@ ngLightbox.text = {
 			rotateRight		: "\u53f3\u56de\u8ee2 (<CTRL>+R)",
 			slideshow		: "\u30B9\u30E9\u30A4\u30C9\u30B7\u30E7\u30FC\u3092\u958B\u59CB\u002F\u505C\u6B62"
 		}
-	], // japanese
+	],
 
 	// chinese (simplified) {{{3
 	zh : [
@@ -2375,7 +2375,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: ""
 		}
-	], // chinese (simplified)
+	],
 
 	// chinese (traditional) {{{3
 	tw : [
@@ -2394,7 +2394,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "\u958B\u59CB/\u505C\u6B62\u5FAA\u5E8F\u64AD\u653E"
 		}
-	], // chinese (traditional)
+	],
 
 	// polish {{{3
 	pl : [
@@ -2413,7 +2413,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "Uruchom/zatrzymaj pokaz slajd\u00F3w"
 		}
-	], // polish
+	],
 
 	// czech {{{3
 	cs : [
@@ -2432,7 +2432,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "Spustit/zastavit slideshow"
 		}
-	], // czech
+	],
 
 	// slovak {{{3
 	sk : [
@@ -2451,7 +2451,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: ""
 		}
-	], // slovak
+	],
 
 	// swedish {{{3
 	sv : [
@@ -2470,7 +2470,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: "Starta/stoppa bildspel"
 		}
-	], // swedish
+	],
 
 	// template {{{3
 	langcode : [
@@ -2489,7 +2489,7 @@ ngLightbox.text = {
 			rotateRight		: "",
 			slideshow		: ""
 		}
-	], // template
+	],
 
 // methods {{{2
 
@@ -2499,17 +2499,17 @@ ngLightbox.text = {
 	// Get named text for current language.
 	get : function(name) {
 		return ngLightbox.text[ngLightbox.text.language][0][name] || ngLightbox.text['en'][0][name];
-	}, // get()
+	},
 
 	// Sets ngLightbox.text.language to the correct value based on navigator.language
 	init : function() {
 		var lang = navigator.language.substring(0,2);
 		ngLightbox.text.language = ngLightbox.text[lang] ? lang : 'en';
-	} // init()
+	}
 
 // }}}2
 
-} // ngLightbox.text
+}
 
 // initialize {{{1
 if (document.body) ngLightbox.init();
