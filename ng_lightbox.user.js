@@ -187,9 +187,7 @@ var ngLightbox = {
 				listener(img);
 			};
 
-			if (searchDef['getImageFunction']) {
-				searchDef['getImageFunction'](linkData, hookListener);
-			} else if (searchDef['imageInPageRegExp']) {
+			if (searchDef['imageInPageRegExp']) {
 				address = link.href;
 				if (searchDef.hasOwnProperty('linkReplaceString'))
 					address = address.replace(searchDef['linkRegExp'], searchDef['linkReplaceString']);
@@ -1666,14 +1664,6 @@ var ngLightbox = {
 //  findImageRegExp    : regular expression that image must match for replaceString
 //  imageInPageRegExp  : regular expression that image-url must sub-match in html
 //                       ex.) /<img src="(image/.*?\.jpg)"/
-//  getImageFunction   : function that called when find image
-//                       ex.) function(linkData, listener) {
-//                              GM_xmlhttpRequest({
-//                                method : 'GET',
-//                                url    : linkData.link.href + '?mode=ajax',
-//                                onload : function(r) { listener(r.responseText); }
-//                              });
-//                            }
 //  replaceString      : replace string used by imageInPageRegExp, findImageRegExp or linkRegExp
 //  linkReplaceString  : replace string used by linkRegExp
 //  captionXPath       : XPath that caption-text match
@@ -1684,8 +1674,7 @@ var ngLightbox = {
 //                            }
 //
 // **field priorities
-//  (high) getImageFunction
-//         imageInPageRegExp
+//  (high) imageInPageRegExp
 //         findImageRegExp
 //         linkReplaceString
 //  (low)  replaceString
@@ -1728,21 +1717,8 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'itmedia',
 		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^http:\/\/image\.itmedia\.co\.jp\/.*\.jpg$/,
-		getImageFunction	: function(linkData, listener) {
-				var m = linkData.link.href.match(/^(http:\/\/image\.itmedia\.co\.jp\/)(?:l\/im\/)?(.*)$/);
-				if (m) {
-					var iframe = document.createElement('iframe');
-					iframe.style.display = 'none';
-					ngLightbox.addEvent(iframe, 'load', function() {
-							ngLightbox.removeEvent(iframe, 'load', arguments.callee, true);
-							document.body.removeChild(iframe);
-							listener(m[1] + m[2]);
-						}, true);
-					iframe.src = m[1] + 'l/im/' + m[2];
-					document.body.appendChild(iframe);
-				}
-			}
+		linkRegExp			: /^(http:\/\/image\.itmedia\.co\.jp\/)(?:l\/im\/)?(.*\.jpg)$/,
+		replaceString		: '$1$2'
 	},
 
 	// Mycom journal (needs to come before 'show') {{{2
