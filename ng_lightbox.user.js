@@ -1885,6 +1885,15 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1/1280/$2'
 	},
 
+	// Amazon {{{2
+	{
+		name				: 'amazon',
+		includeRegExp		: /^http:\/\/(?:[^.\/]+\.)?amazon\.(?:at|ca|cn|co\.jp|co\.uk|com|de|fr)\//i,
+		linkRegExp			: /\/(?:images|customer-media)\//,
+		findImageRegExp		: /^http:\/\/ec.\.images-amazon\.com\/images\/I\/([\w-]+?)\._\w+_\.jpg$/i,
+		replaceString		: 'http://ec2.images-amazon.com/images/I/$1.jpg'
+	},
+
 	// Yahoo! Auction Japan {{{2
 	{
 		name				: 'yauctionjp',
