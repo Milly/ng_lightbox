@@ -1868,6 +1868,23 @@ ngLightbox.searchDefs = [
 		replaceString		: 'img.ffffound.com/static-data/assets/$2.$3'
 	},
 
+	// ImageShack! {{{2
+	{
+		name				: 'imageshack',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/img\d+.imageshack\.us\/[if]\/(\w+)\.(?:jpg|gif|png)\/$/i,
+		imageInPageRegExp   : /<img\b(?=[^>]*\bid="(?:main_image|fullimg)")(?=[^>]*\bsrc="(?:http:\/\/[^\/]+)?\/((img\d+)\/[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		replaceString		: 'http://$2.imageshack.us/$1'
+	},
+
+	// Tumblr {{{2
+	{
+		name				: 'tumblr',
+		includeRegExp		: /^http:\/\/(?:[^.\/]+\.)?tumblr\.com\//, // used on every page
+		linkRegExp			: /^(http:\/\/(?:[^.\/]+\.)?tumblr\.com\/photo)\/\d+\/(.*)$/i,
+		replaceString		: '$1/1280/$2'
+	},
+
 	// Yahoo! Auction Japan {{{2
 	{
 		name				: 'yauctionjp',
