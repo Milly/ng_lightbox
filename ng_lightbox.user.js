@@ -1990,7 +1990,7 @@ ngLightbox.data = {
 
 	// Global css. {{{2
 	styleSheet : [
-		'#ngLightboxOverlay, #ngLightboxOverlay * { margin:0 !important; padding:0 !important; border:0 none !important; }',
+		'#ngLightboxOverlay, #ngLightboxOverlay * { margin:0 !important; padding:0 !important; border:0 none !important; background-color:transparent !important; color:inherit !important; }',
 		'#ngLightboxBackground, #ngLightboxOverlay { position:fixed !important; top:0; left:0; z-index:10000000 !important; width:100%; height:100%; overflow:hidden !important; }',
 		'#ngLightboxBackground { background-color:#000 !important; opacity:0.8 !important; }',
 		'#ngLightboxMenu { position:fixed !important; bottom:-35px; left:0; width:100%; height:53px; z-index:10000100 !important; background-color:#000 !important; text-align:center !important; font-family:"Terbuchet MS", Tahoma, Arial, Verdana, sans-serif !important; overflow:hidden !important; white-space:nowrap !important; opacity:0.2 !important; }',
