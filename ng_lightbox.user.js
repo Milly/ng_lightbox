@@ -1880,7 +1880,7 @@ ngLightbox.searchDefs = [
 	// Tumblr {{{2
 	{
 		name				: 'tumblr',
-		includeRegExp		: /^http:\/\/(?:[^.\/]+\.)?tumblr\.com\//, // used on every page
+		includeRegExp		: /^http:\/\/(?:[^.\/]+\.)?tumblr\.com\//,
 		linkRegExp			: /^(http:\/\/(?:[^.\/]+\.)?tumblr\.com\/photo)\/\d+\/(.*)$/i,
 		replaceString		: '$1/1280/$2'
 	},
