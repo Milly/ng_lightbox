@@ -76,6 +76,8 @@ var ngLightbox = {
 	currentExLinks : null,
 	prefetchedImage : null,
 	currentRotate : 0,
+	preloadFallbackFunction : null,
+	prefetchFallbackFunction : null,
 
 	// initialized flags
 	controlsInitialized : false,
@@ -148,10 +150,18 @@ var ngLightbox = {
 			var address = link.getAttribute('href');
 			var caption = ngLightbox.makeCaption(link, searchDef['captionXPath']);
 			var exLinks = searchDef['getExLinksFunction'] && searchDef['getExLinksFunction'](linkData) || [];
+			var fallbackFunction = null;
+			if (searchDef.hasOwnProperty('fallbackDefName')) {
+				fallbackFunction = function() {
+					linkData['searchDef'] = ngLightbox.getSearchDef(searchDef['fallbackDefName']);
+					delete linkData['image'];
+					ngLightbox.showFrom(link);
+				}
+			}
 			var loaded = false;
 			ngLightbox.getImageByListener(linkData, function(img) {
 				loaded = true;
-				ngLightbox.show(event, link, img, address, caption, exLinks);
+				ngLightbox.show(event, link, img, address, caption, exLinks, fallbackFunction);
 			});
 			if (!loaded) {
 				ngLightbox.initControls();
@@ -326,10 +336,11 @@ var ngLightbox = {
 	},
 
 	// Preloads images. Pleaces new image in lightbox then centers and displays.
-	show : function(event /* or link */, link, img, context, caption, exLinks) {
+	show : function(event /* or link */, link, img, context, caption, exLinks, fallbackFunction) {
 		var link = ngLightbox.checkEventAndLink(event, link);
 		if (!link) return;
 
+		ngLightbox.preloadFallbackFunction = fallbackFunction;
 		ngLightbox.currentImagePosition = ngLightbox.findImageLinkPosition(link);
 		ngLightbox.isShowing      = true;
 		ngLightbox.currentAddress = link.href;
@@ -621,6 +632,15 @@ var ngLightbox = {
 
 		var pos = ngLightbox.getNextPosition();
 		var nextImage = ngLightbox.allImageLinks[pos];
+		var searchDef = nextImage['searchDef'];
+		ngLightbox.prefetchFallbackFunction = null;
+		if (searchDef.hasOwnProperty('fallbackDefName')) {
+			ngLightbox.prefetchFallbackFunction = function() {
+				nextImage['searchDef'] = ngLightbox.getSearchDef(searchDef['fallbackDefName']);
+				delete nextImage['image'];
+				ngLightbox.prefetchNextImage();
+			}
+		}
 		ngLightbox.getImageByListener(nextImage, function(img) {
 			ngLightbox.prefetchedImage = null;
 			var objPrefetch = document.getElementById('ngLightboxPrefetch');
@@ -1535,16 +1555,21 @@ var ngLightbox = {
 		},
 
 		prefetchDone : function() {
+			ngLightbox.prefetchFallbackFunction = null;
 			var objPrefetch = document.getElementById('ngLightboxPrefetch');
 			ngLightbox.prefetchedImage = objPrefetch.src;
 			return false;
 		},
 
 		prefetchError : function() {
+			var fallbackFunction = ngLightbox.prefetchFallbackFunction;
+			ngLightbox.prefetchFallbackFunction = null;
+			if (fallbackFunction) fallbackFunction();
 			return false;
 		},
 
 		preloaderDone : function() {
+			ngLightbox.preloadFallbackFunction = null;
 			if (ngLightbox.isShowing) {
 				var objLightbox = document.getElementById('ngLightboxBox');
 				var objImage    = document.getElementById('ngLightboxImage');
@@ -1571,17 +1596,24 @@ var ngLightbox = {
 		},
 
 		preloaderError : function() {
+			var fallbackFunction = ngLightbox.preloadFallbackFunction;
+			ngLightbox.preloadFallbackFunction = null;
 			if (ngLightbox.isShowing) {
 				var objPreload = document.getElementById('ngLightboxPreload');
 
 				if (objPreload.getAttribute('src')) {
 					objPreload.removeAttribute('src');
-					// Displays error message when no image can be found.
-					ngLightbox.showMessage(ngLightbox.text.get('error'), ngLightbox.currentAddress);
 
-					if (ngLightbox.isSlideShow) {
-						var interval = ngLightbox.slideShowErrorSkipTime * 1000; // msec
-						ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext() }, interval);
+					if (fallbackFunction) {
+						fallbackFunction();
+					} else {
+						// Displays error message when no image can be found.
+						ngLightbox.showMessage(ngLightbox.text.get('error'), ngLightbox.currentAddress);
+
+						if (ngLightbox.isSlideShow) {
+							var interval = ngLightbox.slideShowErrorSkipTime * 1000; // msec
+							ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext() }, interval);
+						}
 					}
 				}
 			}
@@ -1672,6 +1704,7 @@ var ngLightbox = {
 //                       ex.) function(linkData) {
 //                              return [ {href:linkData.link.href+'?q=new', text:'New', title:'Open New'} ];
 //                            }
+//  fallbackDefName    : other searchDef name that called when image loading errored
 //
 // **field priorities
 //  (high) imageInPageRegExp
