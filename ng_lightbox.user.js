@@ -1747,6 +1747,7 @@ ngLightbox.searchDefs = [
 	},
 
 	// ITmedia (needs to come before 'show') {{{2
+	// *** send fake referrer
 	{
 		name				: 'itmedia',
 		includeRegExp		: /./, // used on every page
@@ -1910,7 +1911,18 @@ ngLightbox.searchDefs = [
 		replaceString		: 'http://$2.imageshack.us/$1'
 	},
 
+	// IMAGEBAM {{{2
+	// *** remove referrer
+	{
+		name				: 'imagebam',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/www\.imagebam\.com\/image\/\w+$/i,
+		imageInPageRegExp   : /<img\b(?=[^>]*\bsrc="(http:\/\/\d+\.imagebam.com\/dl\.php\?[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		replaceString		: '$1'
+	},
+
 	// Tumblr {{{2
+	// *** send fake referrer
 	{
 		name				: 'tumblr',
 		includeRegExp		: /^http:\/\/(?:[^.\/]+\.)?tumblr\.com\//,
