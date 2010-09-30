@@ -1,0 +1,18 @@
++-----------------------------------------------------+
+|  'Next-generation Greased Lightbox' project README  |
++-----------------------------------------------------+
+
+== Summary
+
+This project provides web image viewer for greasemonkey.
+
+== Description
+
+Enhances browsing on websites that link to images such as Google Image Search,
+Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs.
+Use left and right arrow keys to cycle through images on page.
+
+== License
+
+Released under a Creative Commons License
+http://creativecommons.org/licenses/by-nc-sa/2.5/
