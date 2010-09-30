@@ -1789,12 +1789,21 @@ ngLightbox.searchDefs = [
 		replaceString       : '$1'
 	},
 
-	// tweetphoto {{{2
+	// tweetphoto(plixi) {{{2
 	{
 		name				: 'tweetphoto',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^http:\/\/(?:www\.)?tweetphoto\.com\/\d+/i,
-		imageInPageRegExp	: /<a\b(?=[^>]*\btitle='Enlarge Photo')(?=[^>]*\bhref='([^']+?)').*?>/m,
+		imageInPageRegExp	: /<input\b(?=[^>]*\bname="url")(?=[^>]*\bvalue="(http:\/\/[^"]+?)").*?>/m,
+		replaceString       : '$1'
+	},
+
+	// plixi {{{2
+	{
+		name				: 'plixi',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/plixi\.com\/p\/\d+/i,
+		imageInPageRegExp	: /<input\b(?=[^>]*\bname="url")(?=[^>]*\bvalue="(http:\/\/[^"]+?)").*?>/m,
 		replaceString       : '$1'
 	},
 
