@@ -741,7 +741,7 @@ var ngLightbox = {
 		var rotateData = ({
 			90  : [90, height / 2, height / 2],
 			180 : [180, width / 2, height / 2],
-			270 : [270, width / 2, width / 2],
+			270 : [270, width / 2, width / 2]
 		})[angle];
 
 		objImageSvg.style.width  = sides[0] + 'px';
@@ -1789,22 +1789,12 @@ ngLightbox.searchDefs = [
 		replaceString       : '$1'
 	},
 
-	// tweetphoto(plixi) {{{2
+	// lockerz(plixi,tweetphoto) {{{2
 	{
-		name				: 'tweetphoto',
+		name				: 'lockerz',
 		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^http:\/\/(?:www\.)?tweetphoto\.com\/\d+/i,
-		imageInPageRegExp	: /<input\b(?=[^>]*\bname="url")(?=[^>]*\bvalue="(http:\/\/[^"]+?)").*?>/m,
-		replaceString       : '$1'
-	},
-
-	// plixi {{{2
-	{
-		name				: 'plixi',
-		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^http:\/\/plixi\.com\/p\/\d+/i,
-		imageInPageRegExp	: /<input\b(?=[^>]*\bname="url")(?=[^>]*\bvalue="(http:\/\/[^"]+?)").*?>/m,
-		replaceString       : '$1'
+		linkRegExp			: /^http:\/\/(?:www\.)?(?:lockerz|plixi|tweetphoto)\.com\/(?:[sp]\/)?(\d+)/i,
+		replaceString		: 'http://api.plixi.com/api/tpapi.svc/imagefromurl?size=big&url=$&'
 	},
 
 	// movapic {{{2
@@ -1840,8 +1830,6 @@ ngLightbox.searchDefs = [
 		findImageRegExp		: /_[tsm]\.jpg/i,
 		replaceString		: '.jpg'
 	},
-
-	// flic.kr {{{2
 	{
 		name				: 'flic.kr',
 		includeRegExp		: /./, // used on every page
