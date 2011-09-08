@@ -1805,6 +1805,103 @@ ngLightbox.searchDefs = [
 		replaceString		: 'http://image.movapic.com/pic/m_$1.jpeg'
 	},
 
+	// mobypicture {{{2
+	{
+		name				: 'mobypicture',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/(?:(?:www\.)?mobypicture\.com|moby\.to)\/(?!user|home|groups|mobileapps|login|logout|signup)\w+$/i,
+		replaceString		: '$&:full'
+	},
+	{
+		name				: 'mobypicture2',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^(http:\/\/(?:(?:www\.)?mobypicture\.com|moby\.to)\/user\/[^\/]+\/view\/\d+).*$/i,
+		linkReplaceString	: '$1/sizes/full',
+		imageInPageRegExp	: /<a\b(?=[^>]*\bclass="original")(?=[^>]*\bhref="(http:[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		replaceString		: '$1'
+	},
+
+	// Hatena Fotolife {{{2
+	{
+		name				: 'f.hatena',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/f\.hatena\.ne\.jp\/[^\/]*\/\d+/i,
+		imageInPageRegExp	: /<img\b(?=[^>]*\bclass="foto")(?=[^>]*\bsrc="(http:[^"]+)\.jpg").*?>(?:[\s\S]*<a\b(?=[^>]*\bhref="http:[^"]*(_original)\.jpg").*?>)?/,
+		replaceString		: '$1$2.jpg'
+	},
+
+	// yfrog {{{2
+	{
+		name				: 'yfrog',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/yfrog\.com\/(?:z\/)?(\w+)/i,
+		linkReplaceString	: 'http://yfrog.com/z/$1',
+		imageInPageRegExp	: /<div\b(?=[^>]*\bid="the-image")[\s\S]*?<img(?=[^>]*\bsrc="(http:[^"]+)").*?>/,
+		replaceString		: '$1'
+	},
+
+	// BIG CANVAS PhotoShare {{{2
+	{
+		name				: 'bcphotoshare',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/(?:www\.)?bcphotoshare\.com\/photos\/\d+\/(\d+)/i,
+		replaceString		: 'http://images.bcphotoshare.com/storages/$1/large.jpg'
+	},
+	{
+		name				: 'bcphotoshare2',
+		includeRegExp		: /^http:\/\/(?:www\.)?bcphotoshare\.com\//i,
+		linkRegExp			: /^\/photos\/\d+\/(\d+)/i,
+		replaceString		: 'http://images.bcphotoshare.com/storages/$1/large.jpg'
+	},
+	{
+		name				: 'bcphotoshare3',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/bctiny\.com\/\w+/i,
+		imageInPageRegExp	: /<img(?=[^>]*\bsrc="(http:[^"]+\/large.jpg)").*?>/,
+		replaceString		: '$1'
+	},
+
+	// twitgoo {{{2
+	{
+		name				: 'twitgoo',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/twitgoo\.com\/\d\w+$/i,
+		imageInPageRegExp	: /<img\b(?=[^>]*\bid="fullsize")(?=[^>]*\bsrc="([^"]+?)").*?>/,
+		replaceString		: '$1'
+	},
+
+	// img.ly {{{2
+	{
+		name				: 'img.ly',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/img\.ly\/\d\w+$/i,
+		imageInPageRegExp	: /<img\b(?=[^>]*\bid="the-image")(?=[^>]*\bsrc="([^"]+?)\/\w+\.(jpg|png|gif)").*?>/,
+		replaceString		: '$1/original.$2'
+	},
+	{
+		name				: 'img.ly2',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/img\.ly\/images\/\d+\/full$/i,
+		imageInPageRegExp	: /<div\b(?=[^>]*\bid="image-full")[\s\S]*?<img\b(?=[^>]*\bsrc="([^"]+?)").*?>/,
+		replaceString		: '$1'
+	},
+
+	// ow.ly {{{2
+	{
+		name				: 'ow.ly',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/ow\.ly\/i\/(\w+)/i,
+		replaceString		: 'http://static.ow.ly/photos/original/$1.jpg'
+	},
+
+	// Instagram {{{2
+	{
+		name				: 'instagram',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^(http:\/\/instagr\.am\/p\/\w+).*/i,
+		replaceString		: '$1/media/?size=l'
+	},
+
 	// search engine images (google) {{{2
 	{
 		name				: 'google',
