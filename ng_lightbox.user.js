@@ -1818,7 +1818,7 @@ ngLightbox.searchDefs = [
 	// search engine images (google) {{{2
 	{
 		name				: 'google',
-		includeRegExp		: /^https?:\/\/(.*?\.)?google\./i,
+		includeRegExp		: /^https?:\/\/(.*?\.)?google\.(?:com|co\.\w+)\//i,
 		linkRegExp			: /.*?imgurl=(http(s?):\/\/)?(.*?)&.*/i,
 		replaceString		: 'http$2://$3',
 		captionXPath		: 'ancestor::table//td[@id=concat("tDataText",substring-after(current()/parent::td/@id,"tDataImage"))]//text()'
