@@ -1783,10 +1783,10 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'twitpic',
 		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^http:\/\/(?:www\.)?twitpic\.com\/\w+/i,
-		linkReplaceString   : '$&/full',
-		imageInPageRegExp   : /<img\b(?=[^>]*\bsrc="(http:[^"]+)")(?:[^>"]|"[^"]*")*>/,
-		replaceString       : '$1'
+		linkRegExp			: /^(http:\/\/(?:www\.)?twitpic\.com\/\w+).*$/i,
+		linkReplaceString	: '$1/full',
+		imageInPageRegExp	: /<img\b(?=[^>]*\bsrc="(http:[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		replaceString		: '$1'
 	},
 
 	// lockerz(plixi,tweetphoto) {{{2
@@ -1802,7 +1802,7 @@ ngLightbox.searchDefs = [
 		name				: 'movapic',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^http:\/\/movapic.com\/pic\/([^\/]+)$/i,
-		replaceString       : 'http://image.movapic.com/pic/m_$1.jpeg'
+		replaceString		: 'http://image.movapic.com/pic/m_$1.jpeg'
 	},
 
 	// search engine images (google) {{{2
@@ -1904,7 +1904,7 @@ ngLightbox.searchDefs = [
 		name				: 'imageshack',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^http:\/\/img\d+.imageshack\.us\/[if]\/(\w+)\.(?:jpg|gif|png)\/$/i,
-		imageInPageRegExp   : /<img\b(?=[^>]*\bid="(?:main_image|fullimg)")(?=[^>]*\bsrc="(?:http:\/\/[^\/]+)?\/((img\d+)\/[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		imageInPageRegExp	: /<img\b(?=[^>]*\bid="(?:main_image|fullimg)")(?=[^>]*\bsrc="(?:http:\/\/[^\/]+)?\/((img\d+)\/[^"]+)")(?:[^>"]|"[^"]*")*>/,
 		replaceString		: 'http://$2.imageshack.us/$1'
 	},
 
@@ -1914,7 +1914,7 @@ ngLightbox.searchDefs = [
 		name				: 'imagebam',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^http:\/\/www\.imagebam\.com\/image\/\w+$/i,
-		imageInPageRegExp   : /<img\b(?=[^>]*\bsrc="(http:\/\/\d+\.imagebam.com\/dl\.php\?[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		imageInPageRegExp	: /<img\b(?=[^>]*\bsrc="(http:\/\/\d+\.imagebam.com\/dl\.php\?[^"]+)")(?:[^>"]|"[^"]*")*>/,
 		replaceString		: '$1'
 	},
 
@@ -1951,18 +1951,18 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'yphotojp',
 		includeRegExp		: /^http:\/\/photos\.yahoo\.co\.jp\/ph\//i,
-		linkRegExp		    : /^http:\/\/photos\.yahoo\.co\.jp\/ph\/[^\/]*\/vwp\?.*/i,
-		linkReplaceString   : '$&&.hires=t',
+		linkRegExp			: /^http:\/\/photos\.yahoo\.co\.jp\/ph\/[^\/]*\/vwp\?.*/i,
+		linkReplaceString	: '$&&.hires=t',
 		findImageRegExp		: /(?:)/,
-		imageInPageRegExp   : /<img(?= )(?=[^>]* src="(http:\/\/proxy\.[\w.]*\.yahoofs\.jp\/users\/[^"]+)").*?>/,
-		replaceString       : '$1'
+		imageInPageRegExp	: /<img(?= )(?=[^>]* src="(http:\/\/proxy\.[\w.]*\.yahoofs\.jp\/users\/[^"]+)").*?>/,
+		replaceString		: '$1'
 	},
 
 	// Yahoo! Blog Japan {{{2
 	{
 		name				: 'yblogjp',
 		includeRegExp		: /^http:\/\/blogs\.yahoo\.co\.jp\//i,
-		linkRegExp		    : /^javascript:popup(?:ImgGal|_img_view)/i,
+		linkRegExp			: /^javascript:popup(?:ImgGal|_img_view)/i,
 		findImageRegExp		: /^(?:(.*)_thumb)?(.*)$/,
 		replaceString		: '$1$2'
 	},
@@ -1985,7 +1985,7 @@ ngLightbox.searchDefs = [
 		imageInPageRegExp	: /<img\b(?=[^>]*\bsrc="(http:\/\/img[^"]*\.pixiv\.net\/img\/[^"]*)")[^>]*>/ig,
 		replaceString		: '$1',
 		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()|ancestor::div[@id="right_ranking"]/div/a/text()|../../preceding-sibling::tr[1]//span[@class="f14b"]//text()',
-		getExLinksFunction  : function(linkData) {
+		getExLinksFunction	: function(linkData) {
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
 		}
@@ -1998,7 +1998,7 @@ ngLightbox.searchDefs = [
 		replaceString		: '',
 		fallbackDefName		: 'pixiv-p0',
 		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()|ancestor::div[@id="right_ranking"]/div/a/text()|../../preceding-sibling::tr[1]//span[@class="f14b"]//text()',
-		getExLinksFunction  : function(linkData) {
+		getExLinksFunction	: function(linkData) {
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
 		}
@@ -2010,7 +2010,7 @@ ngLightbox.searchDefs = [
 		findImageRegExp		: /_(?:s|m|100)(?=\.\w+$)/i,
 		replaceString		: '_p0',
 		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()|ancestor::div[@id="right_ranking"]/div/a/text()|../../preceding-sibling::tr[1]//span[@class="f14b"]//text()',
-		getExLinksFunction  : function(linkData) {
+		getExLinksFunction	: function(linkData) {
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
 		}
@@ -2071,7 +2071,7 @@ ngLightbox.searchDefs = [
 		name				: 'ascii',
 		includeRegExp		: /^http:\/\/(?:.*\.)?ascii\.jp\//,
 		linkRegExp			: /^\/elem\/.*\/img\.html$/,
-		imageInPageRegExp   : /<img(?= )(?=[^>]*\bRefBack\b)(?=[^>]* src="(\/elem\/[^"]+)").*?>/,
+		imageInPageRegExp	: /<img(?= )(?=[^>]*\bRefBack\b)(?=[^>]* src="(\/elem\/[^"]+)").*?>/,
 		replaceString		: '$1'
 	}
 
