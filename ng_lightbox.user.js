@@ -1925,14 +1925,15 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?flickr\.com/i,
 		linkRegExp			: /\/photos\/[^\/]+\/[0-9]+/i,
 		findImageRegExp		: /_[tsm]\.jpg/i,
-		replaceString		: '.jpg'
+		replaceString		: '_z.jpg'
 	},
 	{
-		name				: 'flic.kr',
+		name				: 'flickr2',
 		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^http:\/\/flic\.kr\/p\/[a-z1-9]+$/i,
-		imageInPageRegExp	: /<img(?= )(?=[^>]* class="reflect")(?=[^>]* src="([^"]+?)(?:_[tsm]|)\.jpg").*?>/m,
-		replaceString		: '$1_b.jpg'
+		linkRegExp			: /^(https?:\/\/(?:(?:.*?\.)?flickr\.com\/photos\/[^\/]+\/[0-9]+|flic\.kr\/p\/[a-z1-9]+$)).*$/i,
+		linkReplaceString	: '$1',
+		imageInPageRegExp	: /<div\b(?=[^>]*\b(?:class="photo-div"|id="allsizes-photo"))[\s\S]*?<img\b(?=[^>]*\bsrc="([^"]+?)(?:_[tsmbz]|)\.(jpg|png|gif)").*?>/,
+		replaceString		: '$1_z.$2'
 	},
 
 	// myspace {{{2
