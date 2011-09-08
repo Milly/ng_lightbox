@@ -1902,6 +1902,15 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1/media/?size=l'
 	},
 
+	// PHOTOZOU {{{2
+	{
+		name				: 'photozou',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^http:\/\/photozou\.jp\/photo\//i,
+		imageInPageRegExp	: /<div\b(?=[^>]*\b(?:id="indivi_media"|class="align_center"))[\s\S]*?<img\b(?=[^>]*\bsrc="([^"]+?\d+)(?:_org)?(\.v\d+\.\w+)").*?>/,
+		replaceString		: '$1_org$2'
+	},
+
 	// search engine images (google) {{{2
 	{
 		name				: 'google',
