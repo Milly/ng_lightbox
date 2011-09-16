@@ -1969,7 +1969,7 @@ ngLightbox.searchDefs = [
 		name				: 'deviantart',
 		includeRegExp		: /^https?:\/\/(.*?\.)?deviantart\.com/i,
 		linkRegExp			: /deviantart\.com\/(deviation|print|art)\/.+/i,
-		findImageRegExp		: /^http(s)?:\/\/.*?\.deviantart\.(com|net)\/([^\/]*)\/[^\/]*\/(.*?\.(?:jpe?g|gif|png))$/i,
+		findImageRegExp		: /^http(s)?:\/\/(?![a-z]+\.).*?\.deviantart\.(com|net)\/([^\/]*)\/[^\/]*\/(.*?\.(?:jpe?g|gif|png))$/i,
 		replaceString		: 'http$1://fc01.deviantart.$2/$3/$4'
 	},
 
