@@ -1152,11 +1152,13 @@ var ngLightbox = {
 					[ 'div', { id:'ngLightboxLeftArrow',
 							   title:_('next'),
 							   onclick:listeners.nextButtonClick },
+						[ 'img', { class:'ngLightboxArrowTransImage' } ],
 						[ 'div', { class:'ngLightboxArrowBox' },
 							[ 'div', { class:'ngLightboxArrowTip' } ] ] ],
 					[ 'div', { id:'ngLightboxRightArrow',
 							   title:_('previous'),
 							   onclick:listeners.previousButtonClick },
+						[ 'img', { class:'ngLightboxArrowTransImage' } ],
 						[ 'div', { class:'ngLightboxArrowBox' },
 							[ 'div', { class:'ngLightboxArrowTip' } ] ] ] ],
 				[ 'div', { id:'ngLightboxSize' } ],
@@ -1571,6 +1573,7 @@ var ngLightbox = {
 			if (ngLightbox.isShowing) {
 				var objLightbox = document.getElementById('ngLightboxBox');
 				var objImage    = document.getElementById('ngLightboxImage');
+				var objImages   = objLightbox.getElementsByClassName('ngLightboxArrowTransImage');
 				var objPreload  = document.getElementById('ngLightboxPreload');
 				var objImageSvg = document.getElementById('ngLightboxImageSvg');
 				if (objImageSvg.contentDocument)
@@ -1579,6 +1582,8 @@ var ngLightbox = {
 				function done() {
 					objLightbox.style.display = 'none';
 					objImage.src = ngLightbox.currentImage;
+					for (var i = 0; i < objImages.length; ++i)
+					  objImages[i].src = ngLightbox.currentImage;
 					if (svgImage)
 						svgImage.setAttributeNS('http://www.w3.org/1999/xlink', 'href', ngLightbox.currentImage);
 					objPreload.removeAttribute('src');
@@ -2214,8 +2219,9 @@ ngLightbox.data = {
 		'#ngLightboxBox { position:fixed !important; z-index:10000050 !important; background:#fff !important; }',
 		'img#ngLightboxImage, img#ngLightboxPreload, img#ngLightboxPrefetch { max-height:none; max-width:none; }',
 		'#ngLightboxSize { position:fixed !important; z-index:10000060 !important; padding:0.2em 1em !important; -moz-border-radius:8px !important; background-color:#444 !important; color:#fff !important; font-weight:bold !important; }',
+		'#ngLightboxBox .ngLightboxArrowTransImage { display:block; opacity:0 !important; width:100% !important; height:100% !important; }',
 		'#ngLightboxBox .ngLightboxArrowBox { display:none; position:fixed !important; left:0; top:45%; z-index:10000060 !important; padding:5px !important; -moz-border-radius:5px !important; background-color:#888 !important; box-shadow: 4px 4px 8px 0 #000 !important; }',
-		'#ngLightboxLeftArrow, #ngLightboxRightArrow { position:absolute !important; left:0; top:0; max-width:100px; width:20%; height:100%; }',
+		'#ngLightboxLeftArrow, #ngLightboxRightArrow { position:absolute !important; left:0; top:0; width:33%; height:100%; }',
 		'#ngLightboxRightArrow, #ngLightboxRightArrow .ngLightboxArrowBox { left:auto; right:0; }',
 		'#ngLightboxLeftArrow:hover .ngLightboxArrowBox, #ngLightboxRightArrow:hover .ngLightboxArrowBox { display:block; }',
 		'#ngLightboxBox .ngLightboxArrowTip { display:inline-block; width:0; height:0; border:40px solid transparent !important; background-color:transparent !important; }',
