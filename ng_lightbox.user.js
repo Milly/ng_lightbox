@@ -236,7 +236,7 @@ var ngLightbox = {
 	},
 
 	containsThumb : function(elem, searchDef, verbose) {
-		var srcs = document.evaluate('.//img/@src', elem, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+		var srcs = document.evaluate('.//img/@src|.//img/@data-src', elem, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		for (var i = 0; i < srcs.snapshotLength; i++) {
 			var src = srcs.snapshotItem(i).nodeValue;
 			if (searchDef['findImageRegExp'].test(src)) {
@@ -2066,38 +2066,27 @@ ngLightbox.searchDefs = [
 
 	// Pixiv {{{2
 	{
-		name				: 'pixiv-manga',
-		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
-		linkRegExp			: /^member_illust\.php\?(?=.*\bmode=manga\b)(?=.*\billust_id=([^&]*))/i,
-		findImageRegExp		: /^http:\/\/img[^.]*\.pixiv.net\//,
-		imageInPageRegExp	: /<img\b(?=[^>]*\bsrc="(http:\/\/img[^"]*\.pixiv\.net\/img\/[^"]*)")[^>]*>/ig,
-		replaceString		: '$1',
-		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()|ancestor::div[@id="right_ranking"]/div/a/text()|../../preceding-sibling::tr[1]//span[@class="f14b"]//text()',
-		getExLinksFunction	: function(linkData) {
-			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
-			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
-		}
-	},
-	{
 		name				: 'pixiv',
 		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
-		linkRegExp			: /^member_illust\.php/i,
-		findImageRegExp		: /_(?:s|m|100)(?=\.\w+$)/i,
+		linkRegExp			: /\bmember_illust\.php\?(?=.*\billust_id=)/i,
+		findImageRegExp		: /_(?:s|m|100)(?=\.\w+(?:\?.*)?$)/i,
 		replaceString		: '',
-		fallbackDefName		: 'pixiv-p0',
-		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()|ancestor::div[@id="right_ranking"]/div/a/text()|../../preceding-sibling::tr[1]//span[@class="f14b"]//text()',
+		fallbackDefName		: 'pixiv-manga',
+		captionXPath		: './h1/text()|..//h2//text()',
 		getExLinksFunction	: function(linkData) {
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
 		}
 	},
 	{
-		name				: 'pixiv-p0',
+		name				: 'pixiv-manga',
 		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
-		linkRegExp			: /^member_illust\.php/i,
-		findImageRegExp		: /_(?:s|m|100)(?=\.\w+$)/i,
-		replaceString		: '_p0',
-		captionXPath		: '../div[@class="pdgTop5"]/text()|../../div[1]//div[@class="f18b"]/text()|ancestor::div[@id="right_ranking"]/div/a/text()|../../preceding-sibling::tr[1]//span[@class="f14b"]//text()',
+		linkRegExp			: /\bmember_illust\.php\?(?=.*\b(illust_id=[^&]*))/i,
+		findImageRegExp		: /_(?:s|m|100)(?=\.\w+(?:\?.*)?$)/i,
+		linkReplaceString	: '/member_illust.php?mode=manga&$1',
+		imageInPageRegExp	: /\.unshift\('(http:\/\/img[^']*\.pixiv\.net\/img\/[^']*)'\)/ig,
+		replaceString		: '$1',
+		captionXPath		: './h1/text()|..//h2//text()',
 		getExLinksFunction	: function(linkData) {
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
