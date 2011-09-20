@@ -1960,15 +1960,6 @@ ngLightbox.searchDefs = [
 		replaceString		: 'http$1://fc01.deviantart.$2/$3/$4'
 	},
 
-	// subvariance {{{2
-	{
-		name				: 'subvariance',
-		includeRegExp		: /^https?:\/\/(.*?\.)?subvariance\.com/i,
-		linkRegExp			: /\/view\/[0-9]+/i,
-		findImageRegExp		: /\/items\/thumbs\/(.*?)\.jpg/i,
-		replaceString		: '/items/$1.jpg'
-	},
-
 	// gmail {{{2
 	{
 		name				: 'gmail',
