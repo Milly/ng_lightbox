@@ -1795,6 +1795,14 @@ ngLightbox.searchDefs = [
 		replaceString		: 'http://image.movapic.com/pic/m_$1.jpeg'
 	},
 
+	// twipple {{{2
+	{
+		name				: 'twipple',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^(http:\/\/p\.twipple.jp)\/(\w)(\w)(\w)(\w)(\w)$/i,
+		replaceString		: '$1/data/$2/$3/$4/$5/$6.jpg'
+	},
+
 	// mobypicture {{{2
 	{
 		name				: 'mobypicture',
