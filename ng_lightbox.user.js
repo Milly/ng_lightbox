@@ -1769,6 +1769,15 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1'
 	},
 
+	// twimg {{{2
+	{
+		name				: 'twimg',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^https?:\/\/(?:t\.co\/\w+|twitter.com\/.*\/photo\/[0-9]+)/i,
+		findImageRegExp		: /^https?:\/\/p\.twimg\.com\/[^:]+/i,
+		replaceString		: '$&:large'
+	},
+
 	// twitpic {{{2
 	{
 		name				: 'twitpic',
