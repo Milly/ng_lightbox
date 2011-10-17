@@ -197,11 +197,15 @@ var ngLightbox = {
 				listener(img);
 			};
 
-			if (searchDef['imageInPageRegExp']) {
+			if (searchDef['findImageFunction'] || searchDef['imageInPageRegExp']) {
 				address = link.href;
 				if (searchDef.hasOwnProperty('linkReplaceString'))
 					address = address.replace(searchDef['linkRegExp'], searchDef['linkReplaceString']);
-				ngLightbox.loadPageAndFindImage(address, searchDef, hookListener);
+				if (searchDef['findImageFunction']) {
+					searchDef['findImageFunction'].call(ngLightbox, address, searchDef, hookListener);
+				} else {
+					ngLightbox.loadPageAndFindImage(address, searchDef, hookListener);
+				}
 			} else if (searchDef['findImageRegExp']) {
 				hookListener(ngLightbox.containsThumb(link, searchDef, true));
 			} else if (searchDef.hasOwnProperty('linkReplaceString')) {
@@ -2108,6 +2112,45 @@ ngLightbox.searchDefs = [
 			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
 			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
 		}
+	},
+
+	// TINAMI {{{2
+	{
+		name				: 'tinami',
+		includeRegExp		: /^http:\/\/www\.tinami\.com\//i,
+		linkRegExp			: /\/view\/(\d+)$/i,
+		_imageInPageRegExp	: /<img(?=[^>]*\bsrc="(http:\/\/img\.tinami\.com\/[^"]*)")(?=[^>]*\bclass="captify")[^>]*>/,
+		_replaceString		: '$1',
+		findImageFunction	: function(url, searchDef, listener) {
+			var m, matches = [];
+			function send(method, data, onload) {
+				GM_xmlhttpRequest({
+					method: method,
+					url: url,
+					data: data,
+					onload: onload
+				});
+			}
+			send('GET', '', function(r) {
+				var html = r.responseText;
+				var form = (html.match(/<form(?=[^>]*\bid="open_original_content")[^>]*>([\s\S]*?)<\/form>/) || [])[1];
+				if (form) {
+					var data = [];
+					var reg = /<input(?=[^>]*\bname="([^"]*)")(?=[^>]*\bvalue="([^"]*)")[^>]*>/g;
+					while (m = reg.exec(form))
+						data.push(encodeURIComponent(m[1]) + '=' + encodeURIComponent(m[2]));
+					send('POST', data.join('&'), function(r) {
+						var html = r.responseText;
+						var reg = /<img(?=[^>]*\bsrc="(http:\/\/img\.tinami\.com\/[^"]*)")(?=[^>]*\bclass="captify")[^>]*>/;
+						if (m = reg.exec(html)) matches.push(m[1]);
+						listener.apply(ngLightbox, matches);
+					});
+				} else {
+					listener.apply(ngLightbox, matches);
+				}
+			});
+		},
+		captionXPath		: 'ancestor::li/@original-title'
 	},
 
 	// Impress {{{2
