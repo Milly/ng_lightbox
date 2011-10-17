@@ -2012,9 +2012,9 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'imageshack',
 		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^http:\/\/img\d+.imageshack\.us\/[if]\/(\w+)\.(?:jpg|gif|png)\/$/i,
-		imageInPageRegExp	: /<img\b(?=[^>]*\bid="(?:main_image|fullimg)")(?=[^>]*\bsrc="(?:http:\/\/[^\/]+)?\/((img\d+)\/[^"]+)")(?:[^>"]|"[^"]*")*>/,
-		replaceString		: 'http://$2.imageshack.us/$1'
+		linkRegExp			: /^http:\/\/(?:img\d+.imageshack\.us\/[if]|imageshack\.us\/photo\/my-images\/\d+)\/\w+\.(?:jpg|gif|png)\/$/i,
+		imageInPageRegExp	: /<img\b(?=[^>]*\bid="(?:main_image|fullimg)")(?=[^>]*\bsrc="(http:\/\/[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		replaceString		: '$1'
 	},
 
 	// IMAGEBAM {{{2
