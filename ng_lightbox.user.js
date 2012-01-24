@@ -2055,7 +2055,7 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'yauctionjp',
 		includeRegExp		: /^http:\/\/[^\/]*?auction[^\/]*\.yahoo\.co\.jp\/(?:jp\/)?(?:user|(?:str)?search|.*-category\.html|list|show\/mystatus)/i,
-		linkRegExp			: /^http:\/\/(?:.*?\.)?auctions\.yahoo\.co\.jp\/jp\//,
+		linkRegExp			: /^(?:http:\/\/ord\.yahoo\.co\.jp\/.*\*-)?http(?::|%3A)\/\/(?:.*?\.)?auctions\.yahoo\.co\.jp\/jp\//,
 		findImageRegExp		: /\.yimg\.(?:jp|com)\/.+\.auctions\.yahoo\.co\.jp\/.+\.jpg$/,
 		captionXPath		: '../../td[2]/a/text()',
 		imageInPageRegExp	: /<img(?= )(?=[^>]* id="imgsrc\d")(?=[^>]* src="([^"]+)").*?>/gm,
