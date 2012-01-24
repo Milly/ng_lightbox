@@ -2159,6 +2159,15 @@ ngLightbox.searchDefs = [
 		captionXPath		: 'ancestor::li/@original-title'
 	},
 
+	// Niconico seiga {{{2
+	{
+		name				: 'nicoseiga',
+		includeRegExp		: /^http:\/\/seiga\.nicovideo\.jp\//i,
+		linkRegExp			: /^(?:\/image\/source\?.*\bid=(\d+)\b|^\/seiga\/im(\d+)\b).*$/i,
+		replaceString		: '/image/source?id=$1$2',
+		captionXPath		: 'id("main")//div[@class="title_text"]/text()'
+	},
+
 	// Impress {{{2
 	{
 		name				: 'impress1',
