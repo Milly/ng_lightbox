@@ -911,7 +911,7 @@ var ngLightbox = {
 			if (!ngLightbox.allImageLinks[i]['searchDef']['resetEverytime'])
 				allImageLinks.push(ngLightbox.allImageLinks[i]);
 		}
-		var links = document.evaluate('//a[@href and not(@rel="ngLightbox")]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+		var links = document.evaluate('//a[@href]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		for (var i = 0; i < links.snapshotLength; ++i) {
 			var link = links.snapshotItem(i);
 			var rel = link.getAttribute('rel') || '';
@@ -927,7 +927,7 @@ var ngLightbox = {
 					var listener = ngLightbox.getShowFunction(searchDef['name']);
 					ngLightbox.addEvent(link, 'click', listener, true);
 				}
-			} else {
+			} else if (!rel.match(/lightbox/i)) {
 				link.setAttribute('rel', (rel + ' notLightbox').replace(/^\s+/, ''));
 			}
 		}
