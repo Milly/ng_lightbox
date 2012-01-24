@@ -196,11 +196,16 @@ var ngLightbox = {
 				}
 				listener(img);
 			};
+			function replace(str, searchName, replaceName) {
+				str = str.replace(searchDef[searchName], searchDef[replaceName]);
+				if (searchDef['decodeURI']) str = decodeURIComponent(str);
+				return str;
+			};
 
 			if (searchDef['findImageFunction'] || searchDef['imageInPageRegExp']) {
 				address = link.href;
 				if (searchDef.hasOwnProperty('linkReplaceString'))
-					address = address.replace(searchDef['linkRegExp'], searchDef['linkReplaceString']);
+					address = replace(address, 'linkRegExp', 'linkReplaceString');
 				if (searchDef['findImageFunction']) {
 					searchDef['findImageFunction'].call(ngLightbox, address, searchDef, hookListener);
 				} else {
@@ -209,9 +214,9 @@ var ngLightbox = {
 			} else if (searchDef['findImageRegExp']) {
 				hookListener(ngLightbox.containsThumb(link, searchDef, true));
 			} else if (searchDef.hasOwnProperty('linkReplaceString')) {
-				hookListener(address.replace(searchDef['linkRegExp'], searchDef['linkReplaceString']));
+				hookListener(replace(address, 'linkRegExp', 'linkReplaceString'));
 			} else if (searchDef.hasOwnProperty('replaceString')) {
-				hookListener(address.replace(searchDef['linkRegExp'], searchDef['replaceString']));
+				hookListener(replace(address, 'linkRegExp', 'replaceString'));
 			} else {
 				hookListener(address);
 			}
@@ -1692,6 +1697,7 @@ var ngLightbox = {
 //                       ex.) /<img src="(image/.*?\.jpg)"/
 //  replaceString      : replace string used by imageInPageRegExp, findImageRegExp or linkRegExp
 //  linkReplaceString  : replace string used by linkRegExp
+//  decodeURI          : decode string, after replacing
 //  captionXPath       : XPath that caption-text match
 //                       ex.) '../div[@class="caption"]/text()'
 //  getExLinksFunction : function that create additional link buttons data
@@ -2210,6 +2216,16 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /^\/elem\/.*\/img\.html$/,
 		imageInPageRegExp	: /<img(?= )(?=[^>]*\bRefBack\b)(?=[^>]* src="(\/elem\/[^"]+)").*?>/,
 		replaceString		: '$1'
+	},
+
+	// }}}2
+	// Minkara {{{2
+	{
+		name				: 'minkara',
+		includeRegExp		: /^http:\/\/minkara\.carview\.co\.jp\//,
+		linkRegExp			: /^\/image\.aspx\?src=/,
+		replaceString		: '',
+		decodeURI   		: true
 	}
 
 	// }}}2
