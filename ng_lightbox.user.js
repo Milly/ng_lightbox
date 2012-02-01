@@ -1576,7 +1576,7 @@ var ngLightbox = {
 					objLightbox.style.display = 'none';
 					objImage.src = ngLightbox.currentImage;
 					for (var i = 0; i < objImages.length; ++i)
-					  objImages[i].src = ngLightbox.currentImage;
+						objImages[i].src = ngLightbox.currentImage;
 					objPreload.removeAttribute('src');
 				}
 
@@ -2442,7 +2442,7 @@ ngLightbox.text = {
 	// german {{{3
 	de : [
 		{
-		  	loading			: "Bild wird geladen",
+			loading			: "Bild wird geladen",
 			loadingSub		: "Zum Abbrechen irgendwo klicken",
 			context			: "Bild im urspr\u00fcnglichen Kontext anzeigen",
 			error			: "Bild nicht verf\u00fcgbar",
@@ -2499,7 +2499,7 @@ ngLightbox.text = {
 	// italian {{{3
 	it : [
 		{
-		  	loading			: "Scarico immagine",
+			loading			: "Scarico immagine",
 			loadingSub		: "Fai clic sullo sfondo per annullare",
 			context			: "Mostra nel suo contesto originale",
 			error			: "Immagine non disponibile",
@@ -2536,7 +2536,7 @@ ngLightbox.text = {
 
 	// finnish {{{3
 	fi : [
-	  {
+		{
 			loading			: "Ladataan kuvaa",
 			loadingSub		: "Napsauta kerran keskeytt\u00e4\u00e4ksesi",
 			context			: "N\u00e4yt\u00e4 kuva alkuper\u00e4isess\u00e4 kontekstissa",
@@ -2550,13 +2550,13 @@ ngLightbox.text = {
 			rotateLeft		: "",
 			rotateRight		: "",
 			slideshow		: "K\u00e4ynnist\u00e4/Pys\u00e4yt\u00e4 dia esitys"
-	  }
+		}
 	],
 
 	// japanese {{{3
 	ja : [
 		{
-		  	loading			: "\u8AAD\u307F\u8FBC\u307F\u4E2D",
+			loading			: "\u8AAD\u307F\u8FBC\u307F\u4E2D",
 			loadingSub		: "\u30AF\u30EA\u30C3\u30AF\u3067\u30AD\u30E3\u30F3\u30BB\u30EB\u3057\u307E\u3059",
 			context			: "\u5143\u306E\u753B\u50CF\u3092\u8868\u793A",
 			error			: "\u753B\u50CF\u304C\u5B58\u5728\u3057\u307E\u305B\u3093",
@@ -2575,7 +2575,7 @@ ngLightbox.text = {
 	// chinese (simplified) {{{3
 	zh : [
 		{
-		  	loading			: "\u8BFB\u53D6\u56FE\u7247",
+			loading			: "\u8BFB\u53D6\u56FE\u7247",
 			loadingSub		: "\u6309\u4EFB\u610F\u952E\u6765\u53D6\u6D88",
 			context			: "\u4EE5\u539F\u6587\u672C\u67E5\u770B\u56FE\u7247",
 			error			: "\u56FE\u7247\u4E0D\u53EF\u8BFB",
@@ -2689,7 +2689,7 @@ ngLightbox.text = {
 	// template {{{3
 	langcode : [
 		{
-		  	loading			: "",
+			loading			: "",
 			loadingSub		: "",
 			context			: "",
 			error			: "",
