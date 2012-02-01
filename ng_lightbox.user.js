@@ -116,9 +116,6 @@ var ngLightbox = {
 	// initialized by init().
 	searchDefsToUse : [],
 
-	// show functions
-	showFunctions : {},
-
 // methods {{{2
 
 	getSearchDef : function(name) {
@@ -130,44 +127,31 @@ var ngLightbox = {
 		}
 	},
 
-	getShowFunction : function(name) {
-		if (!ngLightbox.showFunctions[name]) {
-			ngLightbox.showFunctions[name] = function(event) {
-				ngLightbox.showFrom(event, name);
-				return false;
-			};
-		}
-		return ngLightbox.showFunctions[name];
-	},
-
 	// Generic helper function that calls show() with the correct parameters
-	showFrom : function(event) {
-		var link = ngLightbox.checkEventAndLink(event);
-		if (link) {
-			var pos = ngLightbox.findImageLinkPosition(link);
-			var linkData = ngLightbox.allImageLinks[pos];
-			var searchDef = linkData['searchDef'];
-			var address = link.getAttribute('href');
-			var caption = ngLightbox.makeCaption(link, searchDef['captionXPath']);
-			var exLinks = searchDef['getExLinksFunction'] && searchDef['getExLinksFunction'](linkData) || [];
-			var fallbackFunction = null;
-			if (searchDef.hasOwnProperty('fallbackDefName')) {
-				fallbackFunction = function() {
-					linkData['searchDef'] = ngLightbox.getSearchDef(searchDef['fallbackDefName']);
-					delete linkData['image'];
-					ngLightbox.showFrom(link);
-				}
+	showFrom : function(link) {
+		var pos = ngLightbox.findImageLinkPosition(link);
+		var linkData = ngLightbox.allImageLinks[pos];
+		var searchDef = linkData['searchDef'];
+		var address = link.getAttribute('href');
+		var caption = ngLightbox.makeCaption(link, searchDef['captionXPath']);
+		var exLinks = searchDef['getExLinksFunction'] && searchDef['getExLinksFunction'](linkData) || [];
+		var fallbackFunction = null;
+		if (searchDef.hasOwnProperty('fallbackDefName')) {
+			fallbackFunction = function() {
+				linkData['searchDef'] = ngLightbox.getSearchDef(searchDef['fallbackDefName']);
+				delete linkData['image'];
+				ngLightbox.showFrom(link);
 			}
-			var loaded = false;
-			ngLightbox.getImageByListener(linkData, function(img) {
-				loaded = true;
-				ngLightbox.show(event, link, img, address, caption, exLinks, fallbackFunction);
-			});
-			if (!loaded) {
-				ngLightbox.initControls();
-				ngLightbox.showLightboxOverlay();
-				ngLightbox.showLoadingMessage();
-			}
+		}
+		var loaded = false;
+		ngLightbox.getImageByListener(linkData, function(img) {
+			loaded = true;
+			ngLightbox.show(link, img, address, caption, exLinks, fallbackFunction);
+		});
+		if (!loaded) {
+			ngLightbox.initControls();
+			ngLightbox.showLightboxOverlay();
+			ngLightbox.showLoadingMessage();
 		}
 	},
 
@@ -345,10 +329,7 @@ var ngLightbox = {
 	},
 
 	// Preloads images. Pleaces new image in lightbox then centers and displays.
-	show : function(event /* or link */, link, img, context, caption, exLinks, fallbackFunction) {
-		var link = ngLightbox.checkEventAndLink(event, link);
-		if (!link) return;
-
+	show : function(link, img, context, caption, exLinks, fallbackFunction) {
 		ngLightbox.preloadFallbackFunction = fallbackFunction;
 		ngLightbox.currentImagePosition = ngLightbox.findImageLinkPosition(link);
 		ngLightbox.isShowing      = true;
@@ -462,8 +443,7 @@ var ngLightbox = {
 			objError.style.display = 'none';
 			ngLightbox.currentImagePosition = ngLightbox.getNextPosition();
 			var linkData = ngLightbox.allImageLinks[ngLightbox.currentImagePosition];
-			var func = ngLightbox.getShowFunction(linkData['searchDef']['name']);
-			func(linkData['link']);
+			ngLightbox.showFrom(linkData['link']);
 		}
 	},
 
@@ -938,8 +918,7 @@ var ngLightbox = {
 				// prevents doubling lightboxes
 				if (!ngLightbox.timerEnabled || !rel.match(/lightbox/i)) {
 					link.setAttribute('rel', (rel + ' ngLightbox').replace(/^\s+/, ''));
-					var listener = ngLightbox.getShowFunction(searchDef['name']);
-					ngLightbox.addEvent(link, 'click', listener, true);
+					ngLightbox.addEvent(link, 'click', ngLightbox.eventListeners.imageLinkClick, true);
 				}
 			} else if (!rel.match(/lightbox/i)) {
 				link.setAttribute('rel', (rel + ' notLightbox').replace(/^\s+/, ''));
@@ -1004,23 +983,6 @@ var ngLightbox = {
 				}
 			}
 		}
-	},
-
-	checkEventAndLink : function(event /* or link */, link) {
-		// let shift+click and ctrl+click (but not ctrl+shift+click) through without lightbox
-		if ((event.shiftKey || event.ctrlKey) && !(event.shiftKey && event.ctrlKey)) return false;
-
-		// if this is a real event stop the click and set the link, otherwise, just set the link
-		ngLightbox.stopEvents(event);
-		var link = link || ngLightbox.findLink(event);
-
-		// make ctrl+shift+click follow link without lightbox
-		if (event.shiftKey && event.ctrlKey) {
-			window.location.href = link.href;
-			return false;
-		}
-
-		return link;
 	},
 
 // initialize methods {{{2
@@ -1401,6 +1363,26 @@ var ngLightbox = {
 			var id = event.target.id || '';
 			if (0 != id.indexOf('ngLightbox')) {
 				ngLightbox.requireUpdate = true;
+			}
+			return true;
+		},
+
+		// Handle image link clicked.
+		imageLinkClick : function(event) {
+			// let shift+click and ctrl+click (but not ctrl+shift+click) through without lightbox
+			if (!event.shiftKey && !event.ctrlKey || (event.shiftKey && event.ctrlKey)) {
+				var link = ngLightbox.findLink(event);
+				if (link) {
+					ngLightbox.stopEvents(event);
+
+					// make ctrl+shift+click follow link without lightbox
+					if (event.shiftKey && event.ctrlKey) {
+						window.location.href = link.href;
+					} else {
+						ngLightbox.showFrom(link);
+					}
+					return false;
+				}
 			}
 			return true;
 		},
