@@ -1767,8 +1767,7 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'show',
 		includeRegExp		: /./, // used on every page
-		linkRegExp			: /.*?\.(jpe?g|gif|png|bmp)(\?[a-z0-9_-]*)?$/i,
-		excludeLinkRegExp	: /\?/i
+		linkRegExp			: /[^?]*?\.(jpe?g|gif|png|bmp)(\?[a-z0-9=_-]*)?$/i
 	},
 
 	// javascript link {{{2
