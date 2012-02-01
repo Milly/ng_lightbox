@@ -1045,7 +1045,9 @@ var ngLightbox = {
 			ngLightbox.text.init();
 			ngLightbox.addEvent(window, 'unload', ngLightbox.eventListeners.windowUnload, false);
 			ngLightbox.addEvent(window, 'resize', ngLightbox.eventListeners.windowResize, true);
-			ngLightbox.addEvent(document, 'keypress', ngLightbox.eventListeners.captureKeypress, true);
+			ngLightbox.addEvent(document, 'keydown', ngLightbox.eventListeners.captureKeyDown, true);
+			ngLightbox.addEvent(document, 'keypress', ngLightbox.eventListeners.captureKeyPress, true);
+			ngLightbox.addEvent(document, 'keyup', ngLightbox.eventListeners.captureKeyUp, true);
 			ngLightbox.addEvent(document, 'click', ngLightbox.eventListeners.captureClick, true);
 			ngLightbox.addEvent(document, 'load', ngLightbox.eventListeners.captureLoad, true);
 			/*
@@ -1211,42 +1213,41 @@ var ngLightbox = {
 			}
 		},
 
-		// Handles keypress.
-		captureKeypress : function(event) {
+		// Handles key down.
+		captureKeyDown : function(event) {
 			if (!ngLightbox.isShowing || event.altKey) return true;
 
 			const HANDLED        = 1;
 			const STOP_SLIDESHOW = 2;
 			var handled = false;
-			var charcode = event.which;
-			var key = String.fromCharCode(charcode).toLowerCase();
-			var key_or_keycode = (32 <= charcode && charcode <= 126) ? key : event.keyCode;
+			var keycode = event.keyCode;
+			var key_or_keycode = (48 <= keycode && keycode <= 57 || 65 <= keycode && keycode <= 90) ? String.fromCharCode(keycode).toLowerCase() : keycode;
+			var invert = event.shiftKey ? -1 : 1;
 
-			// with <CTRL>
-			if (event.ctrlKey && !event.shiftKey) {
+			if (event.ctrlKey) { // with <CTRL>
 				switch (key_or_keycode) {
 					// move to view left
 					case 37:    // <LEFT> (firefox)
 					case 63234: // <LEFT> (safari)
-						ngLightbox.imageScrollTo({ left:100, relative:true, steps:1 });
+						ngLightbox.imageScrollTo({ left:100 * invert, relative:true, steps:1 });
 						handled = STOP_SLIDESHOW;
 						break;
 					// move to view right
 					case 39:    // <RIGHT> (firefox)
 					case 63235: // <RIGHT> (safari)
-						ngLightbox.imageScrollTo({ left:-100, relative:true, steps:1 });
+						ngLightbox.imageScrollTo({ left:-100 * invert, relative:true, steps:1 });
 						handled = STOP_SLIDESHOW;
 						break;
 					// move to view up
 					case 38:    // <UP> (firefox)
 					case 63232: // <UP> (safari)
-						ngLightbox.imageScrollTo({ top:100, relative:true, steps:1 });
+						ngLightbox.imageScrollTo({ top:100 * invert, relative:true, steps:1 });
 						handled = STOP_SLIDESHOW;
 						break;
 					// move to view down
 					case 40:    // <DOWN> (firefox)
 					case 63233: // <DOWN> (safari)
-						ngLightbox.imageScrollTo({ top:-100, relative:true, steps:1 });
+						ngLightbox.imageScrollTo({ top:-100 * invert, relative:true, steps:1 });
 						handled = STOP_SLIDESHOW;
 						break;
 					// open original page
@@ -1254,51 +1255,9 @@ var ngLightbox = {
 						GM_openInTab(ngLightbox.currentAddress);
 						handled = STOP_SLIDESHOW;
 						break;
-					// rotate right
-					case 'r':
-						ngLightbox.resize('=', true, 90);
-						handled = STOP_SLIDESHOW;
-						break;
 				}
-			}
 
-			// with <CTRL> + <SHIFT>
-			if (!handled && event.ctrlKey && event.shiftKey) {
-				switch (key_or_keycode) {
-					// move to image left
-					case 37:    // <LEFT> (firefox)
-					case 63234: // <LEFT> (safari)
-						ngLightbox.imageScrollTo({ left:-100, relative:true, steps:1 });
-						handled = STOP_SLIDESHOW;
-						break;
-					// move to image right
-					case 39:    // <RIGHT> (firefox)
-					case 63235: // <RIGHT> (safari)
-						ngLightbox.imageScrollTo({ left:100, relative:true, steps:1 });
-						handled = STOP_SLIDESHOW;
-						break;
-					// move to image up
-					case 38:    // <UP> (firefox)
-					case 63232: // <UP> (safari)
-						ngLightbox.imageScrollTo({ top:-100, relative:true, steps:1 });
-						handled = STOP_SLIDESHOW;
-						break;
-					// move to image down
-					case 40:    // <DOWN> (firefox)
-					case 63233: // <DOWN> (safari)
-						ngLightbox.imageScrollTo({ top:100, relative:true, steps:1 });
-						handled = STOP_SLIDESHOW;
-						break;
-					// rotate left
-					case 'r':
-						ngLightbox.resize('=', true, -90);
-						handled = STOP_SLIDESHOW;
-						break;
-				}
-			}
-
-			// without modifier keys
-			if (!handled && !event.ctrlKey && !event.shiftKey) {
+			} else { // without <CTRL>
 				switch (key_or_keycode) {
 					// close lightbox
 					case 'x':
@@ -1308,17 +1267,25 @@ var ngLightbox = {
 						}
 						handled = STOP_SLIDESHOW;
 						break;
+					// rotate
+					case 'r':
+						ngLightbox.resize('=', true, 90 * invert);
+						handled = STOP_SLIDESHOW;
+						break;
 					// increase size
-					case '+':
-					case '=':   // '+' key without shift
-					case ';':   // '+' key without shift at japanese K/B
+					case 43:    // '+'
+					case 107:   // '+' key (keypad)
+					case 61:    // '+' key (firefox)
+					case 187:   // '+' key (ie)
 					case 38:    // <UP> (firefox)
 					case 63232: // <UP> (safari)
 						ngLightbox.resize(15);
 						handled = STOP_SLIDESHOW;
 						break;
 					// decrease size
-					case '-':
+					case 45:    // '-'
+					case 109:   // '-' key (firefox)
+					case 189:   // '-' key (ie)
 					case 40:    // <DOWN> (firefox)
 					case 63233: // <DOWN> (safari)
 						ngLightbox.resize(-15);
@@ -1349,7 +1316,7 @@ var ngLightbox = {
 						handled = STOP_SLIDESHOW;
 						break;
 					// move to last direction
-					case ' ':   // <SPACE>
+					case 32:    // <SPACE>
 						ngLightbox.showNext();
 						handled = STOP_SLIDESHOW;
 						break;
@@ -1390,9 +1357,29 @@ var ngLightbox = {
 				if (STOP_SLIDESHOW == handled)
 					ngLightbox.stopSlideShow();
 				ngLightbox.stopEvents(event);
-				return true;
+				ngLightbox.keyHandled = true;
+				return false;
 			}
-			return false;
+			return true;
+		},
+
+		// Handles key press.
+		captureKeyPress : function(event) {
+			if (ngLightbox.isShowing && ngLightbox.keyHandled) {
+				ngLightbox.stopEvents(event);
+				return false;
+			}
+			return true;
+		},
+
+		// Handles key up.
+		captureKeyUp : function(event) {
+			if (ngLightbox.isShowing && ngLightbox.keyHandled) {
+				ngLightbox.stopEvents(event);
+				return false;
+			}
+			ngLightbox.keyHandled = false;
+			return true;
 		},
 
 		// Handle global mouse click.
