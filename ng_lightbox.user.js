@@ -723,7 +723,7 @@ var ngLightbox = {
 		}
 	},
 
-	rotate : function(angle) {
+	rotate : function(angle, noAnimate) {
 		angle = angle || 0;
 		var objLightbox       = document.getElementById('ngLightboxBox');
 		var objImage          = document.getElementById('ngLightboxImage');
@@ -749,8 +749,8 @@ var ngLightbox = {
 		objLightbox.style.height = sides[1] + 'px';
 		objImageContainer.style.left = Math.round(offsets[0]) + 'px';
 		objImageContainer.style.top  = Math.round(offsets[1]) + 'px';
-		objImageContainer.style.setProperty('-moz-transform-origin', Math.round(w2) + 'px ' + Math.round(h2) + 'px', '');
-		if (ngLightbox.timerEnabled) {
+		setStyle('transform-origin', Math.round(w2) + 'px ' + Math.round(h2) + 'px', '');
+		if (!noAnimate && ngLightbox.timerEnabled) {
 			if (fixAngle) {
 				enableTransition(false);
 				rotate(lastAngle + fixAngle);
@@ -765,10 +765,19 @@ var ngLightbox = {
 		}
 
 		function rotate(angle) {
-			objImageContainer.style.setProperty('-moz-transform', 'rotate(' + angle + 'deg)', 'important');
+			setStyle('transform', 'rotate(' + angle + 'deg)', 'important');
 		}
 		function enableTransition(enabled) {
-			objImageContainer.style.setProperty('-moz-transition', enabled ? '' : 'none', enabled ? '' : 'important');
+			if (enabled) {
+				setStyle('transition', '', '');
+			} else {
+				setStyle('transition', 'none', 'important');
+			}
+		}
+		function setStyle(property, value, important) {
+			var prefix = ['-moz-', '-webkit-', ''];
+			for (var i = 0; i < prefix.length; ++i)
+				objImageContainer.style.setProperty(prefix[i] + property, value, important);
 		}
 	},
 
@@ -1658,7 +1667,7 @@ var ngLightbox = {
 				ngLightbox.aspectRatio    = objImage.height / objImage.width;
 				ngLightbox.originalHeight = objImage.height;
 				ngLightbox.originalWidth  = objImage.width;
-				ngLightbox.rotate();
+				ngLightbox.rotate(0, true);
 				ngLightbox.resize('=', true);
 
 				ngLightbox.hideLoadingMessage();
@@ -2253,26 +2262,26 @@ ngLightbox.data = {
 		'#ngLightboxMenu:hover { bottom:0; opacity:0.9 !important; }',
 		'#ngLightboxCaption { width:100%; height:18px; line-height:18px; font-size:12px !important; z-index:10000400 !important; color:#aaa !important; }',
 		'#ngLightboxButtons { height:35px; line-height:33px; font-size:18px !important; z-index:10000400 !important; }',
-		'#ngLightboxButtons a { display:inline-block; min-width:33px; height:33px; border:1px solid #000 !important; -moz-border-radius:5px !important; cursor:pointer; text-align:center !important; color:#aaa !important; text-decoration:none !important; z-index:10000450 !important; }',
+		'#ngLightboxButtons a { display:inline-block; min-width:33px; height:33px; border:1px solid #000 !important; border-radius:5px !important; cursor:pointer; text-align:center !important; color:#aaa !important; text-decoration:none !important; z-index:10000450 !important; }',
 		'#ngLightboxButtons a:hover { border-color:orange !important; background-color:#333 !important; color:#fff !important; }',
 		'#ngLightboxSlideStop, .ngLightboxSlideShow #ngLightboxSlideStart { display: none; }',
 		'.ngLightboxSlideShow #ngLightboxSlideStop { display: inline; }',
 		'#ngLightboxExButtons { display:inline-block; }',
 		'#ngLightboxButtonContext, #ngLightboxExButtons a { padding:0 0.5em !important; font-size:14px !important; }',
-		'#ngLightboxLoading { position:fixed !important; z-index:10000070 !important; background-color:#000 !important; color:#fff !important; padding:10px !important; border:1px solid #444 !important; -moz-border-radius:10px !important; font-weight:bold !important; font-family:"Trebuchet MS", Tahoma, Arial, Verdana, sans-serif !important; text-align:center !important; line-height:2em; opacity:0.8 !important; }',
+		'#ngLightboxLoading { position:fixed !important; z-index:10000070 !important; background-color:#000 !important; color:#fff !important; padding:10px !important; border:1px solid #444 !important; border-radius:10px !important; font-weight:bold !important; font-family:"Trebuchet MS", Tahoma, Arial, Verdana, sans-serif !important; text-align:center !important; line-height:2em; opacity:0.8 !important; }',
 		'#ngLightboxLoading img { width:64px; height:64px; }',
 		'p#ngLightboxLoadingText { padding:25px 0 5px 0 !important; font-size:45px !important; color:#fff !important; font-weight:bold !important; font-family:"Trebuchet MS", Tahoma, Arial, Verdana, sans-serif !important; line-height:1em; text-align:center !important; }',
 		'p#ngLightboxLoadingHelp { padding:5px 0 !important; font-weight:normal !important; font-size:11px !important; color:#fff !important; font-family:"Trebuchet MS", Tahoma, Arial, Verdana, sans-serif !important; line-height:1em; text-align:center !important; }',
-		'#ngLightboxError { position:fixed !important; z-index:10000050 !important; text-align:center !important; background:#000 !important; color:#aaa !important; padding:10px !important; border:1px solid #444 !important; -moz-border-radius:10px !important; font-family:verdana, sans-serif !important; font-size:11px !important; }',
+		'#ngLightboxError { position:fixed !important; z-index:10000050 !important; text-align:center !important; background:#000 !important; color:#aaa !important; padding:10px !important; border:1px solid #444 !important; border-radius:10px !important; font-family:verdana, sans-serif !important; font-size:11px !important; }',
 		'p#ngLightboxErrorMessage { color:#fff !important; font-size:45px !important; font-weight:bold !important; margin:10px 20px !important; font-family:"Trebuchet MS", Tahoma, Arial, Verdana, sans-serif !important; text-decoration:none !important; text-align:center !important; }',
 		'#ngLightboxError a { color:#aaa !important; text-decoration:none !important; border-bottom:1px solid #777; }',
 		'p#ngLightboxErrorContext { display:block; padding:5px 0 !important; font-weight:normal !important; font-size:11px !important; color:#fff !important; font-family:"Trebuchet MS", Tahoma, Arial, Verdana, sans-serif !important; line-height:1em; text-align:center !important; text-decoration:none !important; }',
 		'#ngLightboxBox { position:fixed !important; z-index:10000050 !important; }',
-		'#ngLightboxImageContainer { position:relative !important; display:inline-block !important; background:#fff !important; -moz-transition:-moz-transform 300ms ease 0s !important; }',
+		'#ngLightboxImageContainer { position:relative !important; display:inline-block !important; background:#fff !important; -moz-transition:-moz-transform 300ms ease 0s !important; -webkit-transition:-webkit-transform 300ms ease 0s !important; transition:transform 300ms ease 0s !important; }',
 		'img#ngLightboxImage, img#ngLightboxPreload, img#ngLightboxPrefetch { max-height:none; max-width:none; }',
-		'#ngLightboxSize { position:fixed !important; z-index:10000060 !important; padding:0.2em 1em !important; -moz-border-radius:8px !important; background-color:#444 !important; color:#fff !important; font-weight:bold !important; }',
+		'#ngLightboxSize { position:fixed !important; z-index:10000060 !important; padding:0.2em 1em !important; border-radius:8px !important; background-color:#444 !important; color:#fff !important; font-weight:bold !important; }',
 		'#ngLightboxBox .ngLightboxArrowTransImage { display:block; opacity:0 !important; width:100% !important; height:100% !important; }',
-		'#ngLightboxBox .ngLightboxArrowBox { display:none; position:fixed !important; left:0; top:45%; z-index:10000060 !important; padding:5px !important; -moz-border-radius:5px !important; background-color:#888 !important; box-shadow: 4px 4px 8px 0 #000 !important; }',
+		'#ngLightboxBox .ngLightboxArrowBox { display:none; position:fixed !important; left:0; top:45%; z-index:10000060 !important; padding:5px !important; border-radius:5px !important; background-color:#888 !important; box-shadow: 4px 4px 8px 0 #000 !important; }',
 		'#ngLightboxLeftArrow, #ngLightboxRightArrow { position:absolute !important; left:0; top:0; width:33%; height:100%; }',
 		'#ngLightboxRightArrow, #ngLightboxRightArrow .ngLightboxArrowBox { left:auto; right:0; }',
 		'#ngLightboxLeftArrow:hover .ngLightboxArrowBox, #ngLightboxRightArrow:hover .ngLightboxArrowBox { display:block; }',
