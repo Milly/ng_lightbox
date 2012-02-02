@@ -446,6 +446,13 @@ var ngLightbox = {
 		}
 	},
 
+	showPrevious : function() {
+		var dir = ngLightbox.lastMove;
+		ngLightbox.lastMove = -dir;
+		ngLightbox.showNext();
+		ngLightbox.lastMove = dir;
+	},
+
 	// Cycles through all of the lightboxable images.
 	startSlideShow : function() {
 		if (!ngLightbox.isSlideShow && ngLightbox.timerEnabled) {
@@ -1287,6 +1294,11 @@ var ngLightbox = {
 					// move to last direction
 					case 32:    // <SPACE>
 						ngLightbox.showNext();
+						handled = STOP_SLIDESHOW;
+						break;
+					// move to backward direction
+					case 8:     // <BACKSPACE>
+						ngLightbox.showPrevious();
 						handled = STOP_SLIDESHOW;
 						break;
 					// start or stop slide show
