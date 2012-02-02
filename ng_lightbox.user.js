@@ -1,9 +1,8 @@
 // header {{{1
 /****************************
 
-Next-generation Greased Lightbox v1.0
-April 15, 2009
-Copyright (c) 2009 Milly
+Next-generation Greased Lightbox
+Copyright (c) Milly
 http://d.hatena.ne.jp/MillyC/searchdiary?word=%2a%5blightbox%5d
 
 Released under a Creative Commons License
@@ -53,7 +52,7 @@ var ngLightbox = {
 
 // properties {{{2
 
-	version : '1.0',
+	version : '1.0.20120202',
 
 	// slide show interval time (user setting)
 	slideShowIntervalTime : 4, // seconds
