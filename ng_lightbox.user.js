@@ -931,7 +931,6 @@ var ngLightbox = {
 				}
 			}
 		}
-		var lll=[];for each(var l in allImageLinks)lll.push(l.link);
 		ngLightbox.allImageLinks = allImageLinks;
 	},
 
