@@ -42,6 +42,8 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 
 // ==UserScript==
 // @name			NG Lightbox
+// @version			1.0.20120202
+// @author			Milly
 // @namespace		http://d.hatena.ne.jp/MillyC/
 // @description		Enhances browsing on websites that link to images such as Google Image Search, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page.
 // @include			*
@@ -51,8 +53,6 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 var ngLightbox = {
 
 // properties {{{2
-
-	version : '1.0.20120202',
 
 	// slide show interval time (user setting)
 	slideShowIntervalTime : 4, // seconds
