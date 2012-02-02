@@ -1235,6 +1235,10 @@ var ngLightbox = {
 
 			} else { // without <CTRL>
 				switch (key_or_keycode) {
+					// nop
+					case 9:     // <TAB>
+						handled = HANDLED;
+						break;
 					// close lightbox
 					case 'x':
 					case 27:    // <ESC>
@@ -1341,6 +1345,7 @@ var ngLightbox = {
 				ngLightbox.keyHandled = true;
 				return false;
 			}
+			ngLightbox.keyHandled = false;
 			return true;
 		},
 
