@@ -902,28 +902,37 @@ var ngLightbox = {
 		ngLightbox.requireUpdate = false;
 		var allImageLinks = [];
 		for (var i = 0; i < ngLightbox.allImageLinks.length; ++i) {
-			if (!ngLightbox.allImageLinks[i]['searchDef']['resetEverytime'])
-				allImageLinks.push(ngLightbox.allImageLinks[i]);
+			var data = ngLightbox.allImageLinks[i];
+			if (data['searchDef']['resetEverytime']) {
+				var link = data['link'];
+				ngLightbox.removeEvent(link, 'click', ngLightbox.eventListeners.imageLinkClick, true);
+				link.setAttribute('rel', (link.getAttribute('rel') || '').replace(/\s*(ng|not)Lightbox\b/, ''));
+			} else {
+				allImageLinks.push(data);
+			}
 		}
 		var links = document.evaluate('//a[@href]', document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 		for (var i = 0; i < links.snapshotLength; ++i) {
 			var link = links.snapshotItem(i);
 			var rel = link.getAttribute('rel') || '';
-			var searchDef = ngLightbox.findSearchDefForLink(link);
-			if (searchDef) {
-				allImageLinks.push({
-					searchDef : searchDef,
-					link      : link
-				});
-				// prevents doubling lightboxes
-				if (!ngLightbox.timerEnabled || !rel.match(/lightbox/i)) {
-					link.setAttribute('rel', (rel + ' ngLightbox').replace(/^\s+/, ''));
-					ngLightbox.addEvent(link, 'click', ngLightbox.eventListeners.imageLinkClick, true);
+			if (!rel.match(/\b(ng|not)Lightbox\b/)) {
+				var searchDef = ngLightbox.findSearchDefForLink(link);
+				if (searchDef) {
+					allImageLinks.push({
+						searchDef : searchDef,
+						link      : link
+					});
+					// prevents doubling lightboxes
+					if (!ngLightbox.timerEnabled || !rel.match(/lightbox/i)) {
+						link.setAttribute('rel', (rel + ' ngLightbox').replace(/^\s+/, ''));
+						ngLightbox.addEvent(link, 'click', ngLightbox.eventListeners.imageLinkClick, true);
+					}
+				} else if (!rel.match(/lightbox/i)) {
+					link.setAttribute('rel', (rel + ' notLightbox').replace(/^\s+/, ''));
 				}
-			} else if (!rel.match(/lightbox/i)) {
-				link.setAttribute('rel', (rel + ' notLightbox').replace(/^\s+/, ''));
 			}
 		}
+		var lll=[];for each(var l in allImageLinks)lll.push(l.link);
 		ngLightbox.allImageLinks = allImageLinks;
 	},
 
@@ -1908,6 +1917,7 @@ ngLightbox.searchDefs = [
 	// search engine images (google) {{{2
 	{
 		name				: 'google',
+		resetEverytime		: true,
 		includeRegExp		: /^https?:\/\/(.*?\.)?google\.(?:com|co\.\w+)\//i,
 		linkRegExp			: /.*?imgurl=(http(s?):\/\/)?(.*?)&.*/i,
 		replaceString		: 'http$2://$3',
