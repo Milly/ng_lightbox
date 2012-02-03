@@ -2237,6 +2237,15 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /^\/image\.aspx\?src=/,
 		replaceString		: '',
 		decodeURI   		: true
+	},
+
+	// }}}2
+	// 4Gamer.net {{{2
+	{
+		name				: '4gamer',
+		includeRegExp		: /^http:\/\/www\.4gamer\.net\//,
+		linkRegExp			: /\/screenshot\.html\?num=(\d+)$/,
+		replaceString		: '/SS/$1.jpg'
 	}
 
 	// }}}2
