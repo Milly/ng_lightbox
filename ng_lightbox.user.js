@@ -2410,9 +2410,9 @@ ngLightbox.text = {
 			magnify			: "Magnify image (+ key)",
 			shrink			: "Shrink image (- key)",
 			defaultSize		: "Shown at actual size (1 key)",
-			fitToScreen		: "Fit to screen (= key)",
-			rotateLeft		: "Rotate left (<CTRL>+<SHIFT>+R)",
-			rotateRight		: "Rotate right (<CTRL>+R)",
+			fitToScreen		: "Fit to screen (0 key)",
+			rotateLeft		: "Rotate left (<SHIFT>+R)",
+			rotateRight		: "Rotate right (R)",
 			slideshow		: "Start/stop slideshow"
 		}
 	],
@@ -2581,9 +2581,9 @@ ngLightbox.text = {
 			magnify			: "\u753B\u50CF\u3092\u62E1\u5927 (+)",
 			shrink			: "\u753B\u50CF\u3092\u7E2E\u5C0F (-)",
 			defaultSize		: "\u5b9f\u30b5\u30a4\u30ba\u3067\u8868\u793a (1)",
-			fitToScreen		: "\u753b\u9762\u306b\u53ce\u3081\u308b (=)",
-			rotateLeft		: "\u5de6\u56de\u8ee2 (<CTRL>+<SHIFT>+R)",
-			rotateRight		: "\u53f3\u56de\u8ee2 (<CTRL>+R)",
+			fitToScreen		: "\u753b\u9762\u306b\u53ce\u3081\u308b (0)",
+			rotateLeft		: "\u5de6\u56de\u8ee2 (<SHIFT>+R)",
+			rotateRight		: "\u53f3\u56de\u8ee2 (R)",
 			slideshow		: "\u30B9\u30E9\u30A4\u30C9\u30B7\u30E7\u30FC\u3092\u958B\u59CB\u002F\u505C\u6B62"
 		}
 	],
