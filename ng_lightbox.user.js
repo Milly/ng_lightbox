@@ -649,6 +649,7 @@ var ngLightbox = {
 	//                  0 > : increase size
 	//                  0 < : decrease size
 	resize : function(resizeByAmount, notShowImageAmount, angle) {
+		angle = angle || 0;
 		var objLightbox = document.getElementById('ngLightboxBox');
 		var objImage    = document.getElementById('ngLightboxImage');
 		var view        = ngLightbox.getView();
