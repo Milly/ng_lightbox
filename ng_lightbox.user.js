@@ -1743,6 +1743,14 @@ ngLightbox.searchDefs = [
 		replaceString		: '/'
 	},
 
+	// cocolog (needs to come before 'show') {{{2
+	{
+		name				: 'cocolog',
+		includeRegExp		: /^http:\/\/(?:[^\/]*\.)*cocolog-nifty\.com\//,
+		linkRegExp			: /\/\.shared\/image\.html\?\//,
+		replaceString		: '/'
+	},
+
 	// regular links to images {{{2
 	{
 		name				: 'show',
