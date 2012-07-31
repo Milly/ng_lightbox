@@ -1726,22 +1726,6 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1/$2.$3'
 	},
 
-	// imagesocket (needs to come before 'show') {{{2
-	{
-		name				: 'imagesocket',
-		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^(https?:\/\/)(.*?\.)?imagesocket\.com\/(view|thumbs)\/(.*?\.(jpe?g|gif|png))$/i,
-		replaceString		: '$1content.imagesocket.com/images/$4'
-	},
-
-	// imagesocket site (needs to come before 'show') {{{2
-	{
-		name				: 'imagesocketSite',
-		includeRegExp		: /^https?:\/\/(.*?\.)?imagesocket\.com/i,
-		linkRegExp			: /^\/view\/(.*?\.(jpe?g|gif|png))$/i,
-		replaceString		: 'http://content.imagesocket.com/images/$1'
-	},
-
 	// blogger/blogspot (needs to come before 'show') {{{2
 	{
 		name				: 'blogger',
@@ -1779,6 +1763,15 @@ ngLightbox.searchDefs = [
 		name				: 'javascript',
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^javascript:.*'([^']*?\.(?:jpe?g|gif|png))'.*$/i,
+		replaceString		: '$1'
+	},
+
+	// imagesocket {{{2
+	{
+		name				: 'imagesocket',
+		includeRegExp		: /./, // used on every page
+		linkRegExp			: /^https?:\/\/(?:.*?\.)?imagesocket\.com\/((?:[a-z]+\/){1,2}\d+)(?:\/|$)/i,
+		imageInPageRegExp	: /\.attr\('src',\s*'(http:[^']+)'\)\.load/,
 		replaceString		: '$1'
 	},
 
