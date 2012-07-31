@@ -1726,14 +1726,6 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1/$2.$3'
 	},
 
-	// blogger/blogspot (needs to come before 'show') {{{2
-	{
-		name				: 'blogger',
-		includeRegExp		: /^https?:\/\/(.*?\.)?blog(ger|spot)\.com/i,
-		linkRegExp			: /^(https?:\/\/.*?\.blogger\.com\/.*?\/.*?\/.*?\/.*?)\/.*?-h(\/.*?\.(jpe?g|gif|png))$/i,
-		replaceString		: '$1$2'
-	},
-
 	// ITmedia (needs to come before 'show') {{{2
 	// *** send fake referrer
 	{
