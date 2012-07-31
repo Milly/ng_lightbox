@@ -1814,7 +1814,7 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'mobypicture',
 		includeRegExp		: /./, // used on every page
-		linkRegExp			: /^http:\/\/(?:(?:www\.)?mobypicture\.com|moby\.to)\/(?!user|home|groups|mobileapps|login|logout|signup)\w+$/i,
+		linkRegExp			: /^http:\/\/(?:(?:www\.)?mobypicture\.com|moby\.to)\/(?!user|home|groups|mobileapps|login|logout|signup|iphoneapp)\w+$/i,
 		replaceString		: '$&:full'
 	},
 	{
