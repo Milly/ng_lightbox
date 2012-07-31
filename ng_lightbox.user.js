@@ -2092,7 +2092,7 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'pixiv',
 		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
-		linkRegExp			: /\bmember_illust\.php\?(?=.*\billust_id=)/i,
+		linkRegExp			: /\bmember_illust\.php\?.*\bmode=(?!manga)/i,
 		findImageRegExp		: /_(?:s|m|100)(?=\.\w+(?:\?.*)?$)/i,
 		replaceString		: '',
 		fallbackDefName		: 'pixiv-manga',
@@ -2105,10 +2105,9 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'pixiv-manga',
 		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
-		linkRegExp			: /\bmember_illust\.php\?(?=.*\b(illust_id=[^&]*))/i,
-		findImageRegExp		: /_(?:s|m|100)(?=\.\w+(?:\?.*)?$)/i,
-		linkReplaceString	: '/member_illust.php?mode=manga&$1',
-		imageInPageRegExp	: /\.unshift\('(http:\/\/img[^']*\.pixiv\.net\/img\/[^']*)'\)/ig,
+		linkRegExp			: /\bmember_illust\.php\?.*\b(illust_id=[^&]*)/i,
+		linkReplaceString	: 'member_illust.php?mode=manga&$1',
+		imageInPageRegExp	: /\.unshift\('(http:\/\/\w+\.pixiv\.net\/img[^']*)'\)/ig,
 		replaceString		: '$1',
 		captionXPath		: './h1/text()|..//h2//text()',
 		getExLinksFunction	: function(linkData) {
