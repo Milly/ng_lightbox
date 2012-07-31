@@ -1,4 +1,5 @@
 // header {{{1
+// vim: set ts=4 sw=4 noet:
 /****************************
 
 Next-generation Greased Lightbox
@@ -2230,7 +2231,6 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1'
 	},
 
-	// }}}2
 	// Minkara {{{2
 	{
 		name				: 'minkara',
@@ -2240,13 +2240,20 @@ ngLightbox.searchDefs = [
 		decodeURI   		: true
 	},
 
-	// }}}2
 	// 4Gamer.net {{{2
 	{
 		name				: '4gamer',
 		includeRegExp		: /^http:\/\/www\.4gamer\.net\//,
 		linkRegExp			: /\/screenshot\.html\?num=(\d+)$/,
 		replaceString		: '/SS/$1.jpg'
+	},
+
+	// famitsu.com {{{2
+	{
+		name				: 'famitsu',
+		includeRegExp		: /^http:\/\/www\.famitsu\.com\//,
+		linkRegExp			: /(\/images\/.*)\/([0-9a-f]+)\.html$/,
+		replaceString		: '/$1/l_$2.jpg'
 	}
 
 	// }}}2
