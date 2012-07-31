@@ -1735,10 +1735,10 @@ ngLightbox.searchDefs = [
 		replaceString		: '$1$2'
 	},
 
-	// Mycom journal (needs to come before 'show') {{{2
+	// Mynavi (needs to come before 'show') {{{2
 	{
-		name				: 'mycom',
-		includeRegExp		: /^http:\/\/journal\.mycom\.co\.jp\//,
+		name				: 'mynavi',
+		includeRegExp		: /^http:\/\/(?:[^\/]*\.)*mynavi\.jp\//,
 		linkRegExp			: /\/photo\//,
 		replaceString		: '/'
 	},
