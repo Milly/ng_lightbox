@@ -53,6 +53,8 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 // ngLightbox {{{1
 var ngLightbox = {
 
+	debug: false,
+
 // properties {{{2
 
 	// slide show interval time (user setting)
@@ -118,6 +120,17 @@ var ngLightbox = {
 
 // methods {{{2
 
+	log : function() {
+		if (ngLightbox.debug) {
+			var win = ('object' == typeof unsafeWindow) ? unsafeWindow : window,
+				args = Array.prototype.slice.call(arguments);
+			for (var i = 0; i < args.length; ++i)
+				if ('function' == typeof args[i])
+					args[i] = args[i].call(ngLightbox);
+			win.console.log.apply(win.console, args);
+		}
+	},
+
 	getSearchDef : function(name) {
 		var searchDefs = ngLightbox.searchDefs;
 		for (var i = 0; i < searchDefs.length; i++) {
@@ -163,6 +176,7 @@ var ngLightbox = {
 			var link = linkData['link'];
 			var searchDef = linkData['searchDef'];
 			var address = link.getAttribute('href');
+			ngLightbox.log('getImageByListener: address', address);
 
 			function hookListener(img) {
 				linkData['image'] = img;
@@ -213,6 +227,7 @@ var ngLightbox = {
 			url    : url,
 			onload : function(r) {
 				var html = r.responseText;
+				if (ngLightbox.debug) (('object' == typeof unsafeWindow) ? unsafeWindow : window).ngLightbox_html = html;
 				var reg = new RegExp(searchDef['imageInPageRegExp']);
 				var match, matches = [];
 				while (match = reg.exec(html)) {
@@ -223,6 +238,7 @@ var ngLightbox = {
 					}
 					if (!reg.global) break;
 				}
+				ngLightbox.log('loadPageAndFindImage: onload: matches', matches);
 				listener.apply(ngLightbox, matches);
 			}
 		});
@@ -1006,7 +1022,10 @@ var ngLightbox = {
 	// Initialize NG Lightbox.
 	init : function() {
 		// check setTimeout useable
-		setTimeout(function() { ngLightbox.timerEnabled = true; }, 0);
+		setTimeout(function() {
+			ngLightbox.timerEnabled = true;
+			ngLightbox.log('init: timerEnabled', true);
+		}, 0);
 
 		// set up list of searchDefs to use based on how includeRegExp matches window.location.href
 		var currentURL = window.location.href;
@@ -1018,6 +1037,8 @@ var ngLightbox = {
 			}
 		}
 		ngLightbox.searchDefsToUse = searchDefsToUse;
+		ngLightbox.log('init: currentURL', currentURL);
+		ngLightbox.log('init: searchDefsToUse', function() { var r = [], i = 0; for (;i < searchDefsToUse.length; ++i) r.push(searchDefsToUse[i].name); return r; });
 
 		if (searchDefsToUse.length) {
 			ngLightbox.text.init();
@@ -1374,6 +1395,7 @@ var ngLightbox = {
 		captureClick : function(event) {
 			if (!ngLightbox.isShowing && 0 == event.button) {
 				var link = ngLightbox.findLink(event);
+				ngLightbox.log('captureClick: link', link);
 				if (link && (ngLightbox.requireUpdate || !link.rel || !(/lightbox/i).test(link.rel))) {
 					if (ngLightbox.findSearchDefForLink(link)) {
 						ngLightbox.updateAllImageLinks();
