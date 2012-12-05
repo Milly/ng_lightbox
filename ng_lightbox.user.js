@@ -1812,7 +1812,15 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /./, // used on every page
 		linkRegExp			: /^(http:\/\/(?:www\.)?twitpic\.com\/\w+).*$/i,
 		linkReplaceString	: '$1/full',
-		imageInPageRegExp	: /<img\b(?=[^>]*\bsrc="(http:[^"]+)")(?:[^>"]|"[^"]*")*>/,
+		imageInPageRegExp	: /<img(?=[^>]*src="(http:[^"]*large[^"]*)").*?>/,
+		replaceString		: '$1'
+	},
+	{
+		name				: 'twitpic2',
+		includeRegExp		: /^http:\/\/(?:www\.)?twitpic\.com\//i,
+		linkRegExp			: /^(\/(?!(?:upload|photos|tag|account|logout)\b)\w+).*$/i,
+		linkReplaceString	: '$1/full',
+		imageInPageRegExp	: /<img(?=[^>]*src="(http:[^"]*large[^"]*)").*?>/,
 		replaceString		: '$1'
 	},
 
