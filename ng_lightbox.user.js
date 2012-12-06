@@ -48,6 +48,9 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 // @namespace		http://d.hatena.ne.jp/MillyC/
 // @description		Enhances browsing on websites that link to images such as Google Image Search, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page.
 // @include			*
+// @grant           GM_addStyle
+// @grant           GM_openInTab
+// @grant           GM_xmlhttpRequest
 // ==/UserScript==
 
 // ngLightbox {{{1
