@@ -47,7 +47,7 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 // @author			Milly
 // @namespace		http://d.hatena.ne.jp/MillyC/
 // @description		Enhances browsing on websites that link to images such as Google Image Search, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page.
-// @include			*
+// @include			http*
 // @grant           GM_addStyle
 // @grant           GM_openInTab
 // @grant           GM_xmlhttpRequest
@@ -123,14 +123,15 @@ var ngLightbox = {
 
 // methods {{{2
 
+	win : ('object' == typeof unsafeWindow) ? unsafeWindow : window,
+
 	log : function() {
-		if (ngLightbox.debug) {
-			var win = ('object' == typeof unsafeWindow) ? unsafeWindow : window,
-				args = Array.prototype.slice.call(arguments);
+		if (ngLightbox.debug && ngLightbox.win.console) {
+			var args = Array.prototype.slice.call(arguments);
 			for (var i = 0; i < args.length; ++i)
 				if ('function' == typeof args[i])
 					args[i] = args[i].call(ngLightbox);
-			win.console.log.apply(win.console, args);
+			ngLightbox.win.console.log.apply(ngLightbox.win.console, args);
 		}
 	},
 
@@ -230,7 +231,7 @@ var ngLightbox = {
 			url    : url,
 			onload : function(r) {
 				var html = r.responseText;
-				if (ngLightbox.debug) (('object' == typeof unsafeWindow) ? unsafeWindow : window).ngLightbox_html = html;
+				if (ngLightbox.debug) ngLightbox.win.ngLightbox_html = html;
 				var reg = new RegExp(searchDef['imageInPageRegExp']);
 				var match, matches = [];
 				while (match = reg.exec(html)) {
@@ -1053,7 +1054,7 @@ var ngLightbox = {
 			ngLightbox.addEvent(document, 'click', ngLightbox.eventListeners.captureClick, true);
 			ngLightbox.addEvent(document, 'load', ngLightbox.eventListeners.captureLoad, true);
 			/*
-			if (unsafeWindow.AutoPagerize && 'function' == unsafeWindow.AutoPagerize.addFilter) {
+			if (ngLightbox.win.AutoPagerize && 'function' == tnLightbox.win.AutoPagerize.addFilter) {
 				AutoPagerize.addFilter(function() { ngLightbox.requireUpdate = true; });
 			}
 			*/
