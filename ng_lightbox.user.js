@@ -1982,7 +1982,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^https?:\/\/(.*?\.)?flickr\.com/i,
 		linkRegExp			: /\/photos\/[^\/]+\/[0-9]+/i,
 		findImageRegExp		: /_[tsm]\.jpg/i,
-		replaceString		: '_z.jpg'
+		replaceString		: '_b.jpg'
 	},
 	{
 		name				: 'flickr2',
@@ -1990,7 +1990,7 @@ ngLightbox.searchDefs = [
 		linkRegExp			: /^(https?:\/\/(?:(?:.*?\.)?flickr\.com\/photos\/[^\/]+\/[0-9]+|flic\.kr\/p\/[a-z1-9]+$)).*$/i,
 		linkReplaceString	: '$1',
 		imageInPageRegExp	: /<div\b(?=[^>]*\b(?:class="photo-div"|id="allsizes-photo"))[\s\S]*?<img\b(?=[^>]*\bsrc="([^"]+?)(?:_[tsmbz]|)\.(jpg|png|gif)").*?>/,
-		replaceString		: '$1_z.$2'
+		replaceString		: '$1_b.$2'
 	},
 
 	// myspace {{{2
