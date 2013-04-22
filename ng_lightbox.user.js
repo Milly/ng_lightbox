@@ -53,6 +53,8 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 // @grant           GM_xmlhttpRequest
 // ==/UserScript==
 
+/*jshint sub:true, smarttabs:true, funcscope:true, shadow:true */
+
 // ngLightbox {{{1
 var ngLightbox = {
 
@@ -158,7 +160,7 @@ var ngLightbox = {
 				linkData['searchDef'] = ngLightbox.getSearchDef(searchDef['fallbackDefName']);
 				delete linkData['image'];
 				ngLightbox.showFrom(link);
-			}
+			};
 		}
 		var loaded = false;
 		ngLightbox.getImageByListener(linkData, function(img) {
@@ -176,52 +178,53 @@ var ngLightbox = {
 	getImageByListener : function(linkData, listener) {
 		if (linkData['image']) {
 			listener(linkData['image']);
-		} else {
-			var link = linkData['link'];
-			var searchDef = linkData['searchDef'];
-			var address = link.getAttribute('href');
-			ngLightbox.log('getImageByListener: address', address);
+			return;
+		}
 
-			function hookListener(img) {
-				linkData['image'] = img;
-				if (1 < arguments.length) {
-					var pos = ngLightbox.findImageLinkPosition(linkData['link']);
-					var spliceArgs = [pos + 1, 0];
-					for (var i = 1; i < arguments.length; ++i) {
-						spliceArgs.push({
-							image     : arguments[i],
-							link      : link,
-							searchDef : searchDef
-						});
-					}
-					Array.prototype.splice.apply(ngLightbox.allImageLinks, spliceArgs);
-				}
-				listener(img);
-			};
-			function replace(str, searchName, replaceName) {
-				str = str.replace(searchDef[searchName], searchDef[replaceName]);
-				if (searchDef['decodeURI']) str = decodeURIComponent(str);
-				return str;
-			};
+		var link = linkData['link'];
+		var searchDef = linkData['searchDef'];
+		var address = link.getAttribute('href');
+		ngLightbox.log('getImageByListener: address', address);
 
-			if (searchDef['findImageFunction'] || searchDef['imageInPageRegExp']) {
-				address = link.href;
-				if (searchDef.hasOwnProperty('linkReplaceString'))
-					address = replace(address, 'linkRegExp', 'linkReplaceString');
-				if (searchDef['findImageFunction']) {
-					searchDef['findImageFunction'].call(ngLightbox, address, searchDef, hookListener);
-				} else {
-					ngLightbox.loadPageAndFindImage(address, searchDef, hookListener);
+		function hookListener(img) {
+			linkData['image'] = img;
+			if (1 < arguments.length) {
+				var pos = ngLightbox.findImageLinkPosition(linkData['link']);
+				var spliceArgs = [pos + 1, 0];
+				for (var i = 1; i < arguments.length; ++i) {
+					spliceArgs.push({
+						image     : arguments[i],
+						link      : link,
+						searchDef : searchDef
+					});
 				}
-			} else if (searchDef['findImageRegExp']) {
-				hookListener(ngLightbox.containsThumb(link, searchDef, true));
-			} else if (searchDef.hasOwnProperty('linkReplaceString')) {
-				hookListener(replace(address, 'linkRegExp', 'linkReplaceString'));
-			} else if (searchDef.hasOwnProperty('replaceString')) {
-				hookListener(replace(address, 'linkRegExp', 'replaceString'));
-			} else {
-				hookListener(address);
+				Array.prototype.splice.apply(ngLightbox.allImageLinks, spliceArgs);
 			}
+			listener(img);
+		}
+		function replace(str, searchName, replaceName) {
+			str = str.replace(searchDef[searchName], searchDef[replaceName]);
+			if (searchDef['decodeURI']) str = decodeURIComponent(str);
+			return str;
+		}
+
+		if (searchDef['findImageFunction'] || searchDef['imageInPageRegExp']) {
+			address = link.href;
+			if (searchDef.hasOwnProperty('linkReplaceString'))
+				address = replace(address, 'linkRegExp', 'linkReplaceString');
+			if (searchDef['findImageFunction']) {
+				searchDef['findImageFunction'].call(ngLightbox, address, searchDef, hookListener);
+			} else {
+				ngLightbox.loadPageAndFindImage(address, searchDef, hookListener);
+			}
+		} else if (searchDef['findImageRegExp']) {
+			hookListener(ngLightbox.containsThumb(link, searchDef, true));
+		} else if (searchDef.hasOwnProperty('linkReplaceString')) {
+			hookListener(replace(address, 'linkRegExp', 'linkReplaceString'));
+		} else if (searchDef.hasOwnProperty('replaceString')) {
+			hookListener(replace(address, 'linkRegExp', 'replaceString'));
+		} else {
+			hookListener(address);
 		}
 	},
 
@@ -234,7 +237,7 @@ var ngLightbox = {
 				if (ngLightbox.debug) ngLightbox.win.ngLightbox_html = html;
 				var reg = new RegExp(searchDef['imageInPageRegExp']);
 				var match, matches = [];
-				while (match = reg.exec(html)) {
+				while ( (match = reg.exec(html)) ) {
 					if (searchDef.hasOwnProperty('replaceString')) {
 						matches.push(match[0].replace(new RegExp(reg), searchDef['replaceString']));
 					} else {
@@ -327,7 +330,7 @@ var ngLightbox = {
 
 	// Centers the object in the page
 	center : function(objToCenter, options) {
-		var options = options || {};
+		options = options || {};
 		var container = options.container || objToCenter;
 		var view = options.view || ngLightbox.getView();
 
@@ -409,11 +412,11 @@ var ngLightbox = {
 
 		if (!ngLightbox.isSlideShow && 'none' != objLoading.style.display) {
 			objLoading.style.display = 'none';
-// 			ngLightbox.scrollElement(objMenu, { bottom:-35 });
+//			ngLightbox.scrollElement(objMenu, { bottom:-35 });
 			if (ngLightbox.animationEnabled && ngLightbox.timerEnabled) {
 				var pos = 0;
 
-				function scroll() {
+				var scroll = function() {
 					pos -= 7;
 					if (pos <= -35) {
 						objMenu.style.bottom = '';
@@ -421,7 +424,7 @@ var ngLightbox = {
 						objMenu.style.bottom = pos + 'px';
 						setTimeout(scroll, 100);
 					}
-				}
+				};
 
 				setTimeout(scroll, 300);
 			} else {
@@ -485,7 +488,7 @@ var ngLightbox = {
 			ngLightbox.fadeElement(objBackground, { from:0.8, to:1, onfinish:function() {
 				ngLightbox.resize('=', true);
 				var interval = ngLightbox.slideShowIntervalTime * 1000; // msec
-				ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext() }, interval);
+				ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext(); }, interval);
 			} });
 		}
 	},
@@ -554,7 +557,7 @@ var ngLightbox = {
 				var steps = opt.steps || 5;
 				var step  = (newTop - top) / steps;
 
-				function scroll() {
+				var scroll = function() {
 					if (++i < steps) {
 						top += step;
 						window.scrollTo(view.left, top);
@@ -563,7 +566,7 @@ var ngLightbox = {
 						window.scrollTo(view.left, newTop);
 						if (opt.focus) element.focus();
 					}
-				}
+				};
 
 				ngLightbox.scrollTimerID = setInterval(scroll, opt.interval || 10);
 				scroll();
@@ -592,7 +595,7 @@ var ngLightbox = {
 
 	// make caption text
 	makeCaption : function(link, xpaths /* string or array */) {
-		var xpaths = ('string' == typeof xpaths) ? [xpaths] : (xpaths || []);
+		xpaths = ('string' == typeof xpaths) ? [xpaths] : (xpaths || []);
 		xpaths = xpaths.concat(['.//@title', './/img/@alt']);
 		for (var i = 0; i < xpaths.length; ++i) {
 			var res = ngLightbox.evaluateXPath(xpaths[i], link, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE);
@@ -609,7 +612,7 @@ var ngLightbox = {
 	// Show Hide flash movies that peek through the overlay
 	setOverlaysVisibility : function(visible) {
 		var visibility = visible ? 'visible' : 'hidden';
-		const xpath = '//object[not(starts-with(@id,"ngLightbox"))]|//embed|//iframe';
+		var xpath = '//object[not(starts-with(@id,"ngLightbox"))]|//embed|//iframe';
 		var obtrusives = document.evaluate(xpath, document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
 		for (var i = 0; i < obtrusives.snapshotLength; i++) {
 			var thisObtrusive = obtrusives.snapshotItem(i);
@@ -655,7 +658,7 @@ var ngLightbox = {
 				nextImage['searchDef'] = ngLightbox.getSearchDef(searchDef['fallbackDefName']);
 				delete nextImage['image'];
 				ngLightbox.prefetchNextImage();
-			}
+			};
 		}
 		ngLightbox.getImageByListener(nextImage, function(img) {
 			ngLightbox.prefetchedImage = null;
@@ -827,14 +830,14 @@ var ngLightbox = {
 			var steps    = opt.steps || 5;
 			var step     = (to - from) / steps;
 
-			function fade() {
+			var fade = function() {
 				opacity += step;
 				if (++i < steps) {
 					element.style.opacity = Math.max(0, Math.min(1, opacity));
 				} else {
 					ngLightbox.fadeTimerCloser();
 				}
-			}
+			};
 
 			timerID = setInterval(fade, opt.interval || 10);
 			fade();
@@ -877,7 +880,7 @@ var ngLightbox = {
 			var stepX    = (leftTo - left) / steps;
 			var stepY    = (topTo  - top ) / steps;
 
-			function scroll() {
+			var scroll = function() {
 				left += stepX;
 				top  += stepY;
 				if (++i < steps) {
@@ -886,7 +889,7 @@ var ngLightbox = {
 				} else {
 					ngLightbox.imageScrollTimerCloser();
 				}
-			}
+			};
 
 			timerID = setInterval(scroll, opt.interval || 10);
 			scroll();
@@ -978,9 +981,9 @@ var ngLightbox = {
 			href = href.replace(/^\/url\?(?=\bq=([^&]+)).*$/, '$1');
 		for (var i = 0; i < searchDefsToUse.length; ++i) {
 			var searchDef = searchDefsToUse[i];
-			if (searchDef['linkRegExp'].test(href)
-					&& (!searchDef['findImageRegExp'] || ngLightbox.containsThumb(link, searchDef))
-					&& (!searchDef['excludeLinkRegExp'] || !searchDef['excludeLinkRegExp'].test(href))) {
+			if ( searchDef['linkRegExp'].test(href) &&
+				 (!searchDef['findImageRegExp'] || ngLightbox.containsThumb(link, searchDef)) &&
+				 (!searchDef['excludeLinkRegExp'] || !searchDef['excludeLinkRegExp'].test(href)) ) {
 				return searchDef;
 			}
 		}
@@ -1220,8 +1223,8 @@ var ngLightbox = {
 		captureKeyDown : function(event) {
 			if (!ngLightbox.isShowing || event.altKey) return true;
 
-			const HANDLED        = 1;
-			const STOP_SLIDESHOW = 2;
+			var HANDLED        = 1;
+			var STOP_SLIDESHOW = 2;
 			var handled = false;
 			var keycode = event.keyCode;
 			var key_or_keycode = (48 <= keycode && keycode <= 57 || 65 <= keycode && keycode <= 90) ? String.fromCharCode(keycode).toLowerCase() : keycode;
@@ -1397,7 +1400,7 @@ var ngLightbox = {
 
 		// Handle global mouse click.
 		captureClick : function(event) {
-			if (!ngLightbox.isShowing && 0 == event.button) {
+			if (!ngLightbox.isShowing && 0 === event.button) {
 				var link = ngLightbox.findLink(event);
 				ngLightbox.log('captureClick: link', link);
 				if (link && (ngLightbox.requireUpdate || !link.rel || !(/lightbox/i).test(link.rel))) {
@@ -1413,7 +1416,7 @@ var ngLightbox = {
 		// checking Auto Pager, AutoPagerize or other dynamic loading page
 		captureLoad : function(event) {
 			var id = event.target.id || '';
-			if (0 != id.indexOf('ngLightbox')) {
+			if (0 !== id.indexOf('ngLightbox')) {
 				ngLightbox.requireUpdate = true;
 			}
 			return true;
@@ -1497,8 +1500,7 @@ var ngLightbox = {
 			event.target.blur();
 
 			// open link, if exists href attribute
-			if ('A' == event.target.nodeName.toUpperCase()
-					&& event.target.getAttribute('href')) {
+			if ( 'A' == event.target.nodeName.toUpperCase() && event.target.getAttribute('href') ) {
 				ngLightbox.stopSlideShow();
 				if (event.ctrlKey) {
 					GM_openInTab(event.target.href);
@@ -1511,7 +1513,7 @@ var ngLightbox = {
 		// Start image dragging.
 		imageDragStart : function(event) {
 			ngLightbox.stopSlideShow();
-			if (ngLightbox.isDragging || !event || 0 != event.button || event.ctrlKey || event.shiftKey) {
+			if (ngLightbox.isDragging || !event || 0 !== event.button || event.ctrlKey || event.shiftKey) {
 				ngLightbox.isDragMoved = true;
 				ngLightbox.eventListeners.imageDragEnd();
 				return true;
@@ -1540,7 +1542,7 @@ var ngLightbox = {
 
 		// End image dragging.
 		imageDragEnd : function(event) {
-			if (!event || 0 != event.button || !ngLightbox.isDragging) return true;
+			if (!event || 0 !== event.button || !ngLightbox.isDragging) return true;
 
 			ngLightbox.isDragging = false;
 			var objImage = document.getElementById('ngLightboxImage');
@@ -1606,13 +1608,13 @@ var ngLightbox = {
 				var objImages   = objLightbox.getElementsByClassName('ngLightboxArrowTransImage');
 				var objPreload  = document.getElementById('ngLightboxPreload');
 
-				function done() {
+				var done = function() {
 					objLightbox.style.display = 'none';
 					objImage.src = ngLightbox.currentImage;
 					for (var i = 0; i < objImages.length; ++i)
 						objImages[i].src = ngLightbox.currentImage;
 					objPreload.removeAttribute('src');
-				}
+				};
 
 				if (ngLightbox.isSlideShow && 'none' != objLightbox.style.display) {
 					ngLightbox.fadeElement(objLightbox, { from:1, onfinish:done });
@@ -1640,7 +1642,7 @@ var ngLightbox = {
 
 						if (ngLightbox.isSlideShow) {
 							var interval = ngLightbox.slideShowErrorSkipTime * 1000; // msec
-							ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext() }, interval);
+							ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext(); }, interval);
 						}
 					}
 				}
@@ -1696,7 +1698,7 @@ var ngLightbox = {
 				if (ngLightbox.isSlideShow) {
 					ngLightbox.fadeElement(objLightbox, { to:1, onfinish:function(){
 						var interval = ngLightbox.slideShowIntervalTime * 1000; // msec
-						ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext() }, interval);
+						ngLightbox.slideShowTimerID = setTimeout(function() { ngLightbox.showNext(); }, interval);
 					} });
 				} else {
 					objLightbox.style.visibility = 'visible';
@@ -1709,7 +1711,7 @@ var ngLightbox = {
 
 // }}}2
 
-}
+};
 
 // ngLightbox.searchDefs {{{1
 // searchDefs stores regular expressions used to find and execute functions for image links within the page.
@@ -2173,12 +2175,12 @@ ngLightbox.searchDefs = [
 				if (form) {
 					var data = [];
 					var reg = /<input(?=[^>]*\bname="([^"]*)")(?=[^>]*\bvalue="([^"]*)")[^>]*>/g;
-					while (m = reg.exec(form))
+					while ( (m = reg.exec(form)) )
 						data.push(encodeURIComponent(m[1]) + '=' + encodeURIComponent(m[2]));
 					send('POST', data.join('&'), function(r) {
 						var html = r.responseText;
 						var reg = /<img(?=[^>]*\bsrc="(http:\/\/img\.tinami\.com\/[^"]*)")(?=[^>]*\bclass="captify")[^>]*>/;
-						if (m = reg.exec(html)) matches.push(m[1]);
+						if ( (m = reg.exec(html)) ) matches.push(m[1]);
 						listener.apply(ngLightbox, matches);
 					});
 				} else {
@@ -2263,7 +2265,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^http:\/\/minkara\.carview\.co\.jp\//,
 		linkRegExp			: /^\/image\.aspx\?src=/,
 		replaceString		: '',
-		decodeURI   		: true
+		decodeURI			: true
 	},
 
 	// 4Gamer.net {{{2
@@ -2435,7 +2437,7 @@ ngLightbox.data = {
 
 	// }}}2
 
-}
+};
 
 // ngLightbox.text {{{1
 ngLightbox.text = {
@@ -2601,10 +2603,10 @@ ngLightbox.text = {
 			loadingSub		: "Napsauta kerran keskeytt\u00e4\u00e4ksesi",
 			context			: "N\u00e4yt\u00e4 kuva alkuper\u00e4isess\u00e4 kontekstissa",
 			error			: "Kuvaa ei saatavissa",
-			next     		: "Seuraava kuva (oikea nuolin\u00e4pp\u00e4in)",
-			previous 		: "Edellinen kuva (vasen nuolin\u00e4pp\u00e4in)",
-			magnify  		: "Suurenna kuvaa (+ n\u00e4pp\u00e4in)",
-			shrink   		: "Pienenn\u00e4 kuvaa (- n\u00e4pp\u00e4in)",
+			next			: "Seuraava kuva (oikea nuolin\u00e4pp\u00e4in)",
+			previous		: "Edellinen kuva (vasen nuolin\u00e4pp\u00e4in)",
+			magnify			: "Suurenna kuvaa (+ n\u00e4pp\u00e4in)",
+			shrink			: "Pienenn\u00e4 kuvaa (- n\u00e4pp\u00e4in)",
 			defaultSize		: "",
 			fitToScreen		: "",
 			rotateLeft		: "",
@@ -2783,7 +2785,7 @@ ngLightbox.text = {
 
 // }}}2
 
-}
+};
 
 // initialize {{{1
 if (document.body) ngLightbox.init();
