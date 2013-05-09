@@ -176,6 +176,7 @@ var ngLightbox = {
 
 	// get image url and call listener.
 	getImageByListener : function(linkData, listener) {
+		ngLightbox.log('getImageByListener: linkData.image', linkData['image']);
 		if (linkData['image']) {
 			listener(linkData['image']);
 			return;
@@ -2127,8 +2128,8 @@ ngLightbox.searchDefs = [
 	// Pixiv {{{2
 	{
 		name				: 'pixiv',
-		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
-		linkRegExp			: /\bmember_illust\.php\?.*\bmode=(?!manga)/i,
+		includeRegExp		: /^http:\/\/www\.pixiv\.net\/member_illust\.php/i,
+		linkRegExp			: /\bmember_illust\.php\?.*\bmode=(?!manga).*\billust_id=\d+/i,
 		findImageRegExp		: /_(?:s|m|100)(?=\.\w+(?:\?.*)?$)/i,
 		replaceString		: '',
 		fallbackDefName		: 'pixiv-manga',
@@ -2139,8 +2140,21 @@ ngLightbox.searchDefs = [
 		}
 	},
 	{
+		name				: 'pixiv-list',
+		includeRegExp		: /^http:\/\/www\.pixiv\.net\/(?!member_illust\.php)/i,
+		linkRegExp			: /\bmember_illust\.php\?.*\bmode=(?!manga).*\billust_id=\d+/i,
+		imageInPageRegExp	: /<img(?= )(?=[^>]* src="([^"]*\.pixiv\.net\/img[^"]*)_m(\.\w+(?:\?[^"]*)?)").*?>/,
+		replaceString		: '$1$2',
+		fallbackDefName		: 'pixiv-manga',
+		captionXPath		: './h1/text()|..//h2//text()',
+		getExLinksFunction	: function(linkData) {
+			var id = linkData['link'].href.match(/illust_id=(\d+)/)[1];
+			return [ { href:'/bookmark_add.php?type=illust&illust_id=' + id, text:'Bookmark', title:'Bookmark this illust.' } ];
+		}
+	},
+	{
 		name				: 'pixiv-manga',
-		includeRegExp		: /^http:\/\/www\.pixiv\.net(\/|$)/i,
+		includeRegExp		: /^http:\/\/www\.pixiv\.net\//i,
 		linkRegExp			: /\bmember_illust\.php\?.*\b(illust_id=[^&]*)/i,
 		linkReplaceString	: 'member_illust.php?mode=manga&$1',
 		imageInPageRegExp	: /\.unshift\('(http:\/\/\w+\.pixiv\.net\/img[^']*)'\)/ig,
