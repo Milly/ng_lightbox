@@ -164,8 +164,12 @@ var ngLightbox = {
 		}
 		var loaded = false;
 		ngLightbox.getImageByListener(linkData, function(img) {
-			loaded = true;
-			ngLightbox.show(link, img, address, caption, exLinks, fallbackFunction);
+			if (img) {
+				loaded = true;
+				ngLightbox.show(link, img, address, caption, exLinks, fallbackFunction);
+			} else if (fallbackFunction) {
+				fallbackFunction();
+			}
 		});
 		if (!loaded) {
 			ngLightbox.initControls();
@@ -663,8 +667,12 @@ var ngLightbox = {
 		}
 		ngLightbox.getImageByListener(nextImage, function(img) {
 			ngLightbox.prefetchedImage = null;
-			var objPrefetch = document.getElementById('ngLightboxPrefetch');
-			objPrefetch.src = img;
+			if (img) {
+				var objPrefetch = document.getElementById('ngLightboxPrefetch');
+				objPrefetch.src = img;
+			} else {
+				ngLightbox.eventListeners.prefetchError();
+			}
 		});
 	},
 
@@ -2128,7 +2136,7 @@ ngLightbox.searchDefs = [
 	// Pixiv {{{2
 	{
 		name				: 'pixiv',
-		includeRegExp		: /^http:\/\/www\.pixiv\.net\/member_illust\.php/i,
+		includeRegExp		: /^http:\/\/www\.pixiv\.net\/member_illust\.php\?.*\billust_id=\d+/i,
 		linkRegExp			: /\bmember_illust\.php\?.*\bmode=(?!manga).*\billust_id=\d+/i,
 		findImageRegExp		: /_(?:s|m|100)(?=\.\w+(?:\?.*)?$)/i,
 		replaceString		: '',
@@ -2141,7 +2149,7 @@ ngLightbox.searchDefs = [
 	},
 	{
 		name				: 'pixiv-list',
-		includeRegExp		: /^http:\/\/www\.pixiv\.net\/(?!member_illust\.php)/i,
+		includeRegExp		: /^http:\/\/www\.pixiv\.net\/(?!member_illust\.php\?.*\billust_id=\d+)/i,
 		linkRegExp			: /\bmember_illust\.php\?.*\bmode=(?!manga).*\billust_id=\d+/i,
 		imageInPageRegExp	: /<img(?= )(?=[^>]* src="([^"]*\.pixiv\.net\/img[^"]*)_m(\.\w+(?:\?[^"]*)?)").*?>/,
 		replaceString		: '$1$2',
