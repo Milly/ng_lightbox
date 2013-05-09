@@ -2217,7 +2217,7 @@ ngLightbox.searchDefs = [
 	{
 		name				: 'nicoseiga',
 		includeRegExp		: /^http:\/\/seiga\.nicovideo\.jp\//i,
-		linkRegExp			: /^(?:\/image\/source\?.*\bid=(\d+)\b|^\/seiga\/im(\d+)\b).*$/i,
+		linkRegExp			: /(?:^\/image\/source\?.*\bid=(\d+)\b|(?:.*\.jp)?\/seiga\/im(\d+)\b).*$/i,
 		replaceString		: '/image/source?id=$1$2',
 		captionXPath		: 'id("main")//div[@class="title_text"]/text()'
 	},
