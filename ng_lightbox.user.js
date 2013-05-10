@@ -2312,9 +2312,8 @@ ngLightbox.searchDefs = [
 		name				: 'sankakuchan',
 		includeRegExp		: /^http:\/\/chan\.sankakucomplex\.com\//,
 		linkRegExp			: /\/post\/show\/([0-9]+)$/,
-		findImageRegExp		: /^http:\/\/(c[0-9]+)\.sankakustatic\.com\/data\/preview\/(.*)\/([^\/]*)$/i,
-		replaceString		: 'http://$1.sankakustatic.com/data/sample/$2/preview$3'
-// 		replaceString		: 'http://chan.sankakustatic.com/data/$2/$3'
+		imageInPageRegExp	: /\b(?:src|href)="(http:\/\/cs\.sankakucomplex\.com\/data\/(?!preview)[^"]*)"/,
+		replaceString		: '$1'
 	}
 
 	// }}}2
