@@ -180,8 +180,8 @@ var ngLightbox = {
 
 	// get image url and call listener.
 	getImageByListener : function(linkData, listener) {
-		ngLightbox.log('getImageByListener: linkData.image', linkData['image']);
 		if (linkData['image']) {
+			ngLightbox.log('getImageByListener: result', linkData['image']);
 			listener(linkData['image']);
 			return;
 		}
@@ -205,6 +205,7 @@ var ngLightbox = {
 				}
 				Array.prototype.splice.apply(ngLightbox.allImageLinks, spliceArgs);
 			}
+			ngLightbox.log('getImageByListener: result', img);
 			listener(img);
 		}
 		function replace(str, searchName, replaceName) {
