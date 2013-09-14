@@ -43,7 +43,7 @@ Other translations by AltaVista Babel Fish (http://babelfish.altavista.com)
 
 // ==UserScript==
 // @name			NG Lightbox
-// @version			1.0.20120202
+// @version			1.0.20130915
 // @author			Milly
 // @namespace		http://d.hatena.ne.jp/MillyC/
 // @description		Enhances browsing on websites that link to images such as Google Image Search, Wikipedia, MySpace, deviantART, FFFFOUND!, and Blogger blogs. Use left and right arrow keys to cycle through images on page.
@@ -155,6 +155,7 @@ var ngLightbox = {
 		var caption = ngLightbox.makeCaption(link, searchDef['captionXPath']);
 		var exLinks = searchDef['getExLinksFunction'] && searchDef['getExLinksFunction'](linkData) || [];
 		var fallbackFunction = null;
+		ngLightbox.log('showFrom: searchDef', searchDef['name']);
 		if (searchDef.hasOwnProperty('fallbackDefName')) {
 			fallbackFunction = function() {
 				linkData['searchDef'] = ngLightbox.getSearchDef(searchDef['fallbackDefName']);
@@ -2166,7 +2167,7 @@ ngLightbox.searchDefs = [
 		includeRegExp		: /^http:\/\/www\.pixiv\.net\//i,
 		linkRegExp			: /\bmember_illust\.php\?.*\b(illust_id=[^&]*)/i,
 		linkReplaceString	: 'member_illust.php?mode=manga&$1',
-		imageInPageRegExp	: /\.unshift\('(http:\/\/\w+\.pixiv\.net\/img[^']*)'\)/ig,
+		imageInPageRegExp	: /\bdata-src="(http:\/\/\w+\.pixiv\.net\/img[^"]*)"/ig,
 		replaceString		: '$1',
 		captionXPath		: './h1/text()|..//h2//text()',
 		getExLinksFunction	: function(linkData) {
